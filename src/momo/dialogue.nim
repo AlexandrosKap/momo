@@ -1,11 +1,8 @@
 import tables, strutils, strformat
+export tables
 
 # TODO: I need to clean this. (copy-pasted lalia)
 # TODO: Change the API.
-
-const splitChar = '|'
-const variableChar = '$'
-const amoonguss = "_"
 
 type
   LineKind* = enum
@@ -20,7 +17,7 @@ type
     Procedure,
     Check,
 
-  Line* = ref object
+  Line* = object
     kind*: LineKind
     content*: string
 
@@ -34,19 +31,9 @@ type
     variables*: DialogueTable[string]
     procedures*: DialogueTable[DialogueProc]
 
-func lineKind*(str: string): LineKind =
-  case str:
-  of $Pause: Pause
-  of $Comment: Comment
-  of $Text: Text
-  of $Label: Label
-  of $Jump: Jump
-  of $Menu: Menu
-  of $Variable: Variable
-  of $Calculation: Calculation
-  of $Procedure: Procedure
-  of $Check: Check
-  else: Pause
+const splitChar = '|'
+const variableChar = '$'
+const amoonguss = "_"
 
 func isNameChar*(c: char): bool =
   ## Returns true if the character is a valid variable name character.
@@ -125,27 +112,47 @@ func calculate*(text: string): int =
     i += 1
   for item in stack: result += item
 
-func newLine*(kind: LineKind, content: string): Line =
+#
+
+func lineKind*(str: string): LineKind =
+  case str:
+  of $Pause: Pause
+  of $Comment: Comment
+  of $Text: Text
+  of $Label: Label
+  of $Jump: Jump
+  of $Menu: Menu
+  of $Variable: Variable
+  of $Calculation: Calculation
+  of $Procedure: Procedure
+  of $Check: Check
+  else: Pause
+
+#
+
+func line*(kind: LineKind, content: string): Line =
   ## Creates a new line.
   Line(kind: kind, content: content)
 
-func newLine*(data: openArray[string]): Line =
-  ## Creates a new line from an array.
-  if data.len == 2:
-    newLine(lineKind(data[0]), data[1])
+func line*(str: string): Line =
+  ## Creates a new line from a string.
+  ## A pause line is returned if the string can not be parsed.
+  let pos = str.find(',')
+  if pos != -1 and pos + 1 < str.len:
+    line(str[0 ..< pos].lineKind, str[pos + 1 .. ^1])
   else:
-    newLine(Pause, "")
+    line(Pause, "")
 
-func pause*(): Line = newLine(Pause, "")
-func comment*(content: string): Line = newLine(Comment, content)
-func text*(content: string): Line = newLine(Text, content)
-func label*(content: string): Line = newLine(Label, content)
-func jump*(content: string): Line = newLine(Jump, content)
-func menu*(content: string): Line = newLine(Menu, content)
-func variable*(content: string): Line = newLine(Variable, content)
-func calculation*(content: string): Line = newLine(Calculation, content)
-func procedure*(content: string): Line = newLine(Procedure, content)
-func check*(content: string): Line = newLine(Check, content)
+func isPause*(self: Line): bool = self.kind == Pause
+func isComment*(self: Line): bool = self.kind == Comment
+func isText*(self: Line): bool = self.kind == Text
+func isLabel*(self: Line): bool = self.kind == Label
+func isJump*(self: Line): bool = self.kind == Jump
+func isMenu*(self: Line): bool = self.kind == Menu
+func isVariable*(self: Line): bool = self.kind == Variable
+func isCalculation*(self: Line): bool = self.kind == Calculation
+func isProcedure*(self: Line): bool = self.kind == Procedure
+func isCheck*(self: Line): bool = self.kind == Check
 
 func len*(self: Line): int =
   ## Returns the length of the content.
@@ -163,19 +170,18 @@ func `$`*(self: Line): string =
   ## Returns a string from a line.
   &"{self.kind},\"{self.content}\""
 
-func initVariables(): DialogueTable[string] =
+#
+
+func defaultVariables(): DialogueTable[string] =
   ## Creates the default variables of a dialogue.
   result = DialogueTable[string]()
   result[amoonguss] = "0"
 
 func setIndex(self: Dialogue, value: int) =
   ## Sets the index to a new value.
-  if value >= self.lines.len:
-    self.index = self.lines.len - 1
-  elif value < 0:
-    self.index = 0
-  else:
-    self.index = value
+  if value >= self.lines.len: self.index = self.lines.len - 1
+  elif value < 0: self.index = 0
+  else: self.index = value
 
 proc refresh(self: Dialogue) =
   ## Reloads the current line until a valid line is found.
@@ -236,7 +242,7 @@ proc refresh(self: Dialogue) =
 
 proc newDialogue*(lines: varargs[Line]): Dialogue =
   ## Creates a new dialogue.
-  result = Dialogue(variables: initVariables())
+  result = Dialogue(variables: defaultVariables())
   for i, line in lines:
     result.lines.add(line)
     if line.kind == Label:
@@ -245,7 +251,7 @@ proc newDialogue*(lines: varargs[Line]): Dialogue =
       else:
         result.labels[line.content] = i
   if lines.len > 0 and lines[^1].kind != Pause:
-    result.lines.add(pause())
+    result.lines.add(line(Pause, ""))
   result.refresh()
 
 func index*(self: Dialogue): int =
@@ -294,11 +300,11 @@ proc jumpToEnd*(self: Dialogue) =
 
 func hasPause*(self: Dialogue): bool =
   ## Returns true if the current line is a stop line.
-  self.lines[self.index].kind == Pause
+  self.lines[self.index].isPause
 
 func hasMenu*(self: Dialogue): bool =
   ## Returns true if the current line is a menu line.
-  self.lines[self.index].kind == Menu
+  self.lines[self.index].isMenu
 
 func choices*(self: Dialogue): seq[string] =
   ## Returns the current choices.
@@ -327,11 +333,10 @@ proc choose*(self: Dialogue, choice: int) =
 proc reset*(self: Dialogue) =
   ## Resets the dialogue to its original state.
   ## All variables will be deleted and the index is set to the first valid line.
-  self.variables = initVariables()
+  self.variables = defaultVariables()
   self.jumpToStart()
 
 proc changeLines*(self: Dialogue, lines: varargs[Line]) =
-  ## Changes the lines of the dialogue.
   self.labels.clear()
   self.lines.setLen(0)
   for i, line in lines:
@@ -342,11 +347,10 @@ proc changeLines*(self: Dialogue, lines: varargs[Line]) =
       else:
         self.labels[line.content] = i
   if lines.len > 0 and lines[^1].kind != Pause:
-    self.lines.add(pause())
+    self.lines.add(line(Pause, ""))
   self.jumpToStart()
 
 func `$`*(self: Dialogue): string =
-  ## Returns a string from a dialogue.
   result = ""
   for i, line in self.lines:
     result.add($line)

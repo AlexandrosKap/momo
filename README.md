@@ -11,6 +11,7 @@ by almost anyone regardless of skill level.
 ## Modules
 
 * momo/color
+* momo/dialogue
 * momo/grid
 
 ## Documentation
