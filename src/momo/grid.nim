@@ -25,6 +25,10 @@ func newUGrid*(width, height: uint): UGrid = newGrid[uint32](width, height)
 func newFGrid*(width, height: uint): FGrid = newGrid[float32](width, height)
 func newDGrid*(width, height: uint): DGrid = newGrid[float64](width, height)
 
+func width*(self: Grid): uint = self.width
+func height*(self: Grid): uint = self.height
+func cells*(self: Grid): uint = self.cells
+
 func len*(self: Grid) = self.width * self.height
 
 func id*(self: Grid, x, y: uint): uint = y * self.width + x
