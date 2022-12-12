@@ -13,10 +13,11 @@ type
 
 func point*(x, y: uint): Point = (x, y)
 func point*(value: uint): Point = (value, value)
+func point*(): Point = (0u, 0u)
 
 func newGrid*[T](width, height: uint): Grid[T] =
   result = Grid[T](width: width, height: height)
-  for i in 0 .. width * height:
+  for i in 0 ..< width * height:
     result.cells.add(T.default)
 
 func newBGrid*(width, height: uint): BGrid = newGrid[bool](width, height)
@@ -27,9 +28,9 @@ func newDGrid*(width, height: uint): DGrid = newGrid[float64](width, height)
 
 func width*(self: Grid): uint = self.width
 func height*(self: Grid): uint = self.height
-func cells*(self: Grid): uint = self.cells
+func cells*[T](self: Grid[T]): seq[T] = self.cells
 
-func len*(self: Grid) = self.width * self.height
+func len*(self: Grid): uint = self.width * self.height
 
 func id*(self: Grid, x, y: uint): uint = y * self.width + x
 func id*(self: Grid, p: Point): uint = self.id(p.x, p.y)
@@ -57,11 +58,11 @@ func swap*(self: Grid, p1, p2: Point) =
   self.swap(p1.x, p1.y, p2.x, p2.y)
 
 func fill*[T](self: Grid[T], value: T) =
-  for i in 0 .. self.len:
+  for i in 0 ..< self.len:
     self.cells[i] = value
 
 func fill*[T](self: Grid[T], id1, id2: uint, value: T) =
-  let ida, idb: uint
+  var ida, idb: uint
   if id1 > id2:
     ida = id1
     idb = id2
@@ -72,7 +73,7 @@ func fill*[T](self: Grid[T], id1, id2: uint, value: T) =
     self.set(i, value)
 
 func fill*[T](self: Grid[T], x1, y1, x2, y2: uint, value: T) =
-  let xa, ya, xb, yb: uint
+  var xa, ya, xb, yb: uint
   if x1 > x2:
     xa = x1
     xb = x2
