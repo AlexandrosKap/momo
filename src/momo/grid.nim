@@ -1,9 +1,9 @@
 type
   Point* = tuple
-    x, y: uint
+    x, y: int
   Grid*[T] = ref object
-    width: uint
-    height: uint
+    width: int
+    height: int
     cells: seq[T]
   BGrid* = Grid[bool]
   IGrid* = Grid[int32]
@@ -11,47 +11,47 @@ type
   FGrid* = Grid[float32]
   DGrid* = Grid[float64]
 
-func point*(x, y: uint): Point = (x, y)
-func point*(value: uint): Point = (value, value)
-func point*(): Point = (0u, 0u)
+func point*(x, y: int): Point = (x, y)
+func point*(value: int): Point = (value, value)
+func point*(): Point = (0, 0)
 
-func newGrid*[T](width, height: uint): Grid[T] =
+func newGrid*[T](width, height: int): Grid[T] =
   result = Grid[T](width: width, height: height)
   for i in 0 ..< width * height:
     result.cells.add(T.default)
 
-func newBGrid*(width, height: uint): BGrid = newGrid[bool](width, height)
-func newIGrid*(width, height: uint): IGrid = newGrid[int32](width, height)
-func newUGrid*(width, height: uint): UGrid = newGrid[uint32](width, height)
-func newFGrid*(width, height: uint): FGrid = newGrid[float32](width, height)
-func newDGrid*(width, height: uint): DGrid = newGrid[float64](width, height)
+func newBGrid*(width, height: int): BGrid = newGrid[bool](width, height)
+func newIGrid*(width, height: int): IGrid = newGrid[int32](width, height)
+func newUGrid*(width, height: int): UGrid = newGrid[uint32](width, height)
+func newFGrid*(width, height: int): FGrid = newGrid[float32](width, height)
+func newDGrid*(width, height: int): DGrid = newGrid[float64](width, height)
 
-func width*(self: Grid): uint = self.width
-func height*(self: Grid): uint = self.height
+func width*(self: Grid): int = self.width
+func height*(self: Grid): int = self.height
 func cells*[T](self: Grid[T]): seq[T] = self.cells
 
-func len*(self: Grid): uint = self.width * self.height
+func len*(self: Grid): int = self.width * self.height
 
-func id*(self: Grid, x, y: uint): uint = y * self.width + x
-func id*(self: Grid, p: Point): uint = self.id(p.x, p.y)
+func id*(self: Grid, x, y: int): int = y * self.width + x
+func id*(self: Grid, p: Point): int = self.id(p.x, p.y)
 
-func point*(self: Grid, id: uint): Point =
+func point*(self: Grid, id: int): Point =
   (id mod self.width, id div self.width)
 
-func set*[T](self: Grid[T], id: uint, value: T) = self.cells[id] = value
-func set*[T](self: Grid[T], x, y: uint, value: T) = self.set(self.id(x, y), value)
+func set*[T](self: Grid[T], id: int, value: T) = self.cells[id] = value
+func set*[T](self: Grid[T], x, y: int, value: T) = self.set(self.id(x, y), value)
 func set*[T](self: Grid[T], p: Point, value: T) = self.set(p.x, p.y, value)
 
-func get*[T](self: Grid[T], id: uint): T = self.cells[id]
-func get*[T](self: Grid[T], x, y: uint): T = self.get(self.id(x, y))
+func get*[T](self: Grid[T], id: int): T = self.cells[id]
+func get*[T](self: Grid[T], x, y: int): T = self.get(self.id(x, y))
 func get*[T](self: Grid[T], p: Point): T = self.get(p.x, p.y)
 
-func swap*(self: Grid, id1, id2: uint) =
+func swap*(self: Grid, id1, id2: int) =
   let temp = self.get(id1)
   self.set(id1, self.get(id2))
   self.set(id2, temp)
 
-func swap*(self: Grid, x1, y1, x2, y2: uint) =
+func swap*(self: Grid, x1, y1, x2, y2: int) =
   self.swap(self.id(x1, y1), self.id(x2, y2))
 
 func swap*(self: Grid, p1, p2: Point) =
@@ -61,9 +61,9 @@ func fill*[T](self: Grid[T], value: T) =
   for i in 0 ..< self.len:
     self.cells[i] = value
 
-func fill*[T](self: Grid[T], id1, id2: uint, value: T) =
-  var ida, idb: uint
-  if id1 > id2:
+func fill*[T](self: Grid[T], id1, id2: int, value: T) =
+  var ida, idb: int
+  if id1 < id2:
     ida = id1
     idb = id2
   else:
@@ -72,15 +72,15 @@ func fill*[T](self: Grid[T], id1, id2: uint, value: T) =
   for i in ida .. idb:
     self.set(i, value)
 
-func fill*[T](self: Grid[T], x1, y1, x2, y2: uint, value: T) =
-  var xa, ya, xb, yb: uint
-  if x1 > x2:
+func fill*[T](self: Grid[T], x1, y1, x2, y2: int, value: T) =
+  var xa, ya, xb, yb: int
+  if x1 < x2:
     xa = x1
     xb = x2
   else:
     xa = x2
     xb = x1
-  if y1 > y2:
+  if y1 < y2:
     ya = y1
     yb = y2
   else:
@@ -91,24 +91,27 @@ func fill*[T](self: Grid[T], x1, y1, x2, y2: uint, value: T) =
     for x in xa .. xb:
       self.set(x, y, value)
 
-func fill*[T](self: Grid[T], p1, p2: Point) =
-  self.fill(p1.x, p1.y, p2.x, p2.y)
+func fill*[T](self: Grid[T], p1, p2: Point, value: T) =
+  self.fill(p1.x, p1.y, p2.x, p2.y, value)
 
 func clear*[T](self: Grid[T]) =
   self.fill(T.default)
 
-func clear*[T](self: Grid[T], x1, y1, x2, y2: uint) =
+func clear*[T](self: Grid[T], id1, id2: int) =
+  self.fill(id1, id2, T.default)
+
+func clear*[T](self: Grid[T], x1, y1, x2, y2: int) =
   self.fill(x1, y1, x2, y2, T.default)
 
 func clear*[T](self: Grid[T], p1, p2: Point) =
   self.fill(p1, p2, T.default)
 
-func isEmpty*[T](self: Grid[T], id: uint): bool = self.get(id) == T.default
-func isEmpty*[T](self: Grid[T], x, y: uint): bool = self.isEmpty(self.id(x, y))
+func isEmpty*[T](self: Grid[T], id: int): bool = self.get(id) == T.default
+func isEmpty*[T](self: Grid[T], x, y: int): bool = self.isEmpty(self.id(x, y))
 func isEmpty*[T](self: Grid[T], p: Point): bool = self.isEmpty(p.x, p.y)
 
-func isInside*[T](self: Grid[T], id: uint): bool = id < self.len
-func isInside*[T](self: Grid[T], x, y: uint): bool = x * y < self.len
+func isInside*[T](self: Grid[T], id: int): bool = id >= 0 and id < self.len
+func isInside*[T](self: Grid[T], x, y: int): bool = self.isInside(self.id(x, y))
 func isInside*[T](self: Grid[T], p: Point): bool = self.isInside(p.x, p.y)
 
 func `$`*[T](self: Grid[T]): string =
@@ -125,18 +128,6 @@ iterator items*[T](self: Grid[T]): T =
   for a in self.cells:
     yield a
 
-iterator pairs*[T](self: Grid[T]): tuple[a: uint, b: T] =
+iterator pairs*[T](self: Grid[T]): tuple[a: int, b: T] =
   for a, b in self.cells:
     yield (a, b)
-
-iterator row*[T](self: Grid[T], n: uint): T =
-  var i = 0
-  while i < self.width:
-    yield self.get(i, n)
-    i += 1
-
-iterator column*[T](self: Grid[T], n: uint): T =
-  var i = 0
-  while i < self.height:
-    yield self.get(n, i)
-    i += 1
