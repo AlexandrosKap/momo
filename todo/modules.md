@@ -3,13 +3,14 @@
 A file to track modules.
 
 A module is considered complete when
-there is nothing else to add to it and it has tests.
+no major functionality is missing and it has tests.
 
 ## Considered Complete
 
 * [x] momo/color
 * [ ] momo/dialogue
 * [x] momo/grid
+* [ ] momo/vector
 
 ## Comments
 
