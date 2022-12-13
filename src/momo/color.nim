@@ -1,7 +1,7 @@
 from strutils import fromHex
 
 type
-  Color* = object
+  Color* = tuple
     r, g, b, a: uint8
   Palette* = seq[Color]
   Grayscale* = seq[uint8]
@@ -12,9 +12,10 @@ func toByte*(hex: string): uint8 =
   except ValueError:
     uint8.low
 
-func color*(r, g, b, a: uint8): Color = Color(r: r, g: g, b: b, a: a)
+func color*(r, g, b, a: uint8): Color = (r, g, b, a)
 func color*(r, g, b: uint8): Color = color(r, g, b, uint8.high)
 func color*(gray: uint8): Color = color(gray, gray, gray)
+func color*(): Color = color(0)
 func color*(hex: string): Color =
   let str =
     if hex.len > 1 and hex[0] == '#': hex[1 ..< hex.len]

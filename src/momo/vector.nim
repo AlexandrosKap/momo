@@ -23,6 +23,8 @@ type
   Vec4* = GVec4[float32]
   DVec4* = GVec4[float64]
 
+# Constructors for GVec2
+
 func gvec2*[T](x, y: T): GVec2[T] = (x, y)
 func bvec2*(x, y: bool): BVec2 = (x, y)
 func ivec2*(x, y: int32): IVec2 = (x, y)
@@ -31,6 +33,24 @@ func vec2*(x, y: float32): Vec2 = (x, y)
 func dvec2*(x, y: float64): DVec2 = (x, y)
 
 #
+
+func gvec2*[T](x: T): GVec2[T] = (x, x)
+func bvec2*(x: bool): BVec2 = (x, x)
+func ivec2*(x: int32): IVec2 = (x, x)
+func uvec2*(x: uint32): UVec2 = (x, x)
+func vec2*(x: float32): Vec2 = (x, x)
+func dvec2*(x: float64): DVec2 = (x, x)
+
+#
+
+func gvec2*[T](): GVec2[T] = (T.default, T.default)
+func bvec2*(): BVec2 = (false, false)
+func ivec2*(): IVec2 = (0i32, 0i32)
+func uvec2*(): UVec2 = (0u32, 0u32)
+func vec2*(): Vec2 = (0f32, 0f32)
+func dvec2*(): DVec2 = (0f64, 0f64)
+
+# Constructors for GVec3
 
 func gvec3*[T](x, y, z: T): GVec3[T] = (x, y, z)
 func bvec3*(x, y, z: bool): BVec3 = (x, y, z)
@@ -41,6 +61,24 @@ func dvec3*(x, y, z: float64): DVec3 = (x, y, z)
 
 #
 
+func gvec3*[T](x: T): GVec3[T] = (x, x, x)
+func bvec3*(x: bool): BVec3 = (x, x, x)
+func ivec3*(x: int32): IVec3 = (x, x, x)
+func uvec3*(x: uint32): UVec3 = (x, x, x)
+func vec3*(x: float32): Vec3 = (x, x, x)
+func dvec3*(x: float64): DVec3 = (x, x, x)
+
+#
+
+func gvec3*[T](): GVec3[T] = (T.default, T.default, T.default)
+func bvec3*(): BVec3 = (false, false, false)
+func ivec3*(): IVec3 = (0i32, 0i32, 0i32)
+func uvec3*(): UVec3 = (0u32, 0u32, 0u32)
+func vec3*(): Vec3 = (0f32, 0f32, 0f32)
+func dvec3*(): DVec3 = (0f64, 0f64, 0f64)
+
+# Constructors for GVec4
+
 func gvec4*[T](x, y, z, w: T): GVec4[T] = (x, y, z, w)
 func bvec4*(x, y, z, w: bool): BVec4 = (x, y, z, w)
 func ivec4*(x, y, z, w: int32): IVec4 = (x, y, z, w)
@@ -49,6 +87,24 @@ func vec4*(x, y, z, w: float32): Vec4 = (x, y, z, w)
 func dvec4*(x, y, z, w: float64): DVec4 = (x, y, z, w)
 
 #
+
+func gvec4*[T](x: T): GVec4[T] = (x, x, x, x)
+func bvec4*(x: bool): BVec4 = (x, x, x, x)
+func ivec4*(x: int32): IVec4 = (x, x, x, x)
+func uvec4*(x: uint32): UVec4 = (x, x, x, x)
+func vec4*(x: float32): Vec4 = (x, x, x, x)
+func dvec4*(x: float64): DVec4 = (x, x, x, x)
+
+#
+
+func gvec4*[T](): GVec4[T] = (T.default, T.default, T.default, T.default)
+func bvec4*(): BVec4 = (false, false, false, false)
+func ivec4*(): IVec4 = (0i32, 0i32, 0i32, 0i32)
+func uvec4*(): UVec4 = (0u32, 0u32, 0u32, 0u32)
+func vec4*(): Vec4 = (0f32, 0f32, 0f32, 0f32)
+func dvec4*(): DVec4 = (0f64, 0f64, 0f64, 0f64)
+
+# Operators for GVec2
 
 func `+`*[T](a, b: GVec2[T]): GVec2[T] =
   (a.x + b.x, a.y + b.y)
@@ -71,7 +127,7 @@ func `mod`*[T](a, b: GVec2[T]): GVec2[T] =
 func `div`*[T](a, b: GVec2[T]): GVec2[T] =
   (a.x div b.x, a.y div b.y)
 
-#
+# Operators for GVec3
 
 func `+`*[T](a, b: GVec3[T]): GVec3[T] =
   (a.x + b.x, a.y + b.y, a.z + b.z)
@@ -94,7 +150,7 @@ func `mod`*[T](a, b: GVec3[T]): GVec3[T] =
 func `div`*[T](a, b: GVec3[T]): GVec3[T] =
   (a.x div b.x, a.y div b.y, a.z div b.z)
 
-#
+# Operators for GVec4
 
 func `+`*[T](a, b: GVec4[T]): GVec4[T] =
   (a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w)
