@@ -11,7 +11,7 @@ const cells = array[area, bool].default
 test "Grid":
   check point(2, 4) == Point(x: 2, y: 4)
   check point(1) == point(1, 1)
-  check point() == point(0, 0)
+  check point() == point(0)
 
   var grid = newBGrid(width, height, true)
   check grid.width == width

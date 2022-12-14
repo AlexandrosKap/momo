@@ -1,4 +1,5 @@
 import vector
+export vector
 
 type
   Point* = Gvec2[int]
@@ -14,7 +15,7 @@ type
 
 func point*(x, y: int): Point = gvec2(x, y)
 func point*(x: int): Point = gvec2(x)
-func point*(): Point = point(0)
+func point*(): Point = gvec2(0)
 
 func newGrid*[T](width, height: int, value: T): Grid[T] =
   result = Grid[T](width: width, height: height)
@@ -22,7 +23,9 @@ func newGrid*[T](width, height: int, value: T): Grid[T] =
     result.cells.add(value.deepCopy)
 
 func newGrid*[T](width, height: int): Grid[T] =
-  newGrid(width, height, T.default)
+  result = Grid[T](width: width, height: height)
+  for i in 0 ..< width * height:
+    result.cells.add(T.default)
 
 func newBGrid*(width, height: int, value: bool): BGrid =
   newGrid[bool](width, height, value)

@@ -13,6 +13,7 @@ by almost anyone regardless of skill level.
 * momo/color
 * momo/dialogue
 * momo/grid
+* momo/tween
 * momo/vector
 
 ## Documentation
