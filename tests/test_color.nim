@@ -5,7 +5,7 @@ test "Color":
   check toByte("") == uint8.low
   check toByte("-") == uint8.low
   check toByte("67") != uint8.low
-  check color(0, 0, 0, 0) == (0u8, 0u8, 0u8, 0u8)
+  check color(0, 0, 0, 0) == Color(r: 0, g: 0, b: 0, a: 0)
   check color(0, 0, 0) == black
   check color(0) == black
   check color() == black

@@ -4,19 +4,21 @@ import momo/grid
 const width = 2
 const height = 2
 const area = width * height
-const firstPoint = (0, 0)
-const secondPoint = (1, 0)
-const lastPoint = (width - 1, height - 1)
+const firstPoint = point(0, 0)
+const lastPoint = point(width - 1, height - 1)
 const cells = array[area, bool].default
 
-proc grid(): BGrid = newBGrid(width, height)
-
 test "Grid":
-  let grid = grid()
-  check point(2, 4) == (2, 4)
-  check point(1) == (1, 1)
-  check point() == (0, 0)
+  check point(2, 4) == Point(x: 2, y: 4)
+  check point(1) == point(1, 1)
+  check point() == point(0, 0)
 
+  var grid = newBGrid(width, height, true)
+  check grid.width == width
+  check grid.height == height
+  check grid.cells != cells
+  check grid.len == area
+  grid = newBGrid(width, height)
   check grid.width == width
   check grid.height == height
   check grid.cells == cells
@@ -40,7 +42,7 @@ test "Grid":
   check grid.get(0) == false
   grid.swap(0, 0, 1, 0)
   check grid.get(0) == true
-  grid.swap(firstPoint, secondPoint)
+  grid.swap(firstPoint, lastPoint)
   check grid.get(0) == false
 
   grid.fill(true)
@@ -89,13 +91,10 @@ test "Grid":
   check grid.isInside(-1, 0) == false
   check grid.isInside(width, height) == false
   check grid.isInside(firstPoint) == true
-  check grid.isInside((-1, 0)) == false
-  check grid.isInside((width, height)) == false
+  check grid.isInside(point(width, height)) == false
+  check grid.isInside(point(-1, 0)) == false
 
   for cell in grid:
     check cell == false
-  var count = 0
   for i, cell in grid:
-    check (i, cell) == (count, false)
-    count += 1
-  count = 0
+    check cell == false

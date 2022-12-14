@@ -1,6 +1,7 @@
+import vector
+
 type
-  Point* = tuple
-    x, y: int
+  Point* = Gvec2[int]
   Grid*[T] = ref object
     width: int
     height: int
@@ -11,20 +12,39 @@ type
   FGrid* = Grid[float32]
   DGrid* = Grid[float64]
 
-func point*(x, y: int): Point = (x, y)
-func point*(value: int): Point = (value, value)
-func point*(): Point = (0, 0)
+func point*(x, y: int): Point = gvec2(x, y)
+func point*(x: int): Point = gvec2(x)
+func point*(): Point = point(0)
 
-func newGrid*[T](width, height: int): Grid[T] =
+func newGrid*[T](width, height: int, value: T): Grid[T] =
   result = Grid[T](width: width, height: height)
   for i in 0 ..< width * height:
-    result.cells.add(T.default)
+    result.cells.add(value.deepCopy)
 
-func newBGrid*(width, height: int): BGrid = newGrid[bool](width, height)
-func newIGrid*(width, height: int): IGrid = newGrid[int32](width, height)
-func newUGrid*(width, height: int): UGrid = newGrid[uint32](width, height)
-func newFGrid*(width, height: int): FGrid = newGrid[float32](width, height)
-func newDGrid*(width, height: int): DGrid = newGrid[float64](width, height)
+func newGrid*[T](width, height: int): Grid[T] =
+  newGrid(width, height, T.default)
+
+func newBGrid*(width, height: int, value: bool): BGrid =
+  newGrid[bool](width, height, value)
+func newIGrid*(width, height: int, value: int32): IGrid =
+  newGrid[int32](width, height, value)
+func newUGrid*(width, height: int, value: uint32): UGrid =
+  newGrid[uint32](width, height, value)
+func newFGrid*(width, height: int, value: float32): FGrid =
+  newGrid[float32](width, height, value)
+func newDGrid*(width, height: int, value: float64): DGrid =
+  newGrid[float64](width, height, value)
+
+func newBGrid*(width, height: int): BGrid =
+  newGrid[bool](width, height)
+func newIGrid*(width, height: int): IGrid =
+  newGrid[int32](width, height)
+func newUGrid*(width, height: int): UGrid =
+  newGrid[uint32](width, height)
+func newFGrid*(width, height: int): FGrid =
+  newGrid[float32](width, height)
+func newDGrid*(width, height: int): DGrid =
+  newGrid[float64](width, height)
 
 func width*(self: Grid): int = self.width
 func height*(self: Grid): int = self.height
@@ -36,7 +56,7 @@ func id*(self: Grid, x, y: int): int = y * self.width + x
 func id*(self: Grid, p: Point): int = self.id(p.x, p.y)
 
 func point*(self: Grid, id: int): Point =
-  (id mod self.width, id div self.width)
+  point(id mod self.width, id div self.width)
 
 func set*[T](self: Grid[T], id: int, value: T) = self.cells[id] = value
 func set*[T](self: Grid[T], x, y: int, value: T) = self.set(self.id(x, y), value)

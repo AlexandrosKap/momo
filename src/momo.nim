@@ -1,2 +1,2 @@
-import momo/color, momo/dialogue, momo/grid
+import momo/[color, dialogue, grid]
 export color, dialogue, grid
