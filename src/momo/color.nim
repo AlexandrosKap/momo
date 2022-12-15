@@ -41,18 +41,17 @@ const blank* = color(0, 0, 0, 0)
 const black* = color(0)
 const white* = color(255)
 
+# Palette from: https://lospec.com/palette-list/2-bit-grayscale
 const bitbit* = static([
   color("000000"), color("676767"), color("b6b6b6"), color("ffffff"),
 ])
 
+# Palette from: https://lospec.com/palette-list/grafxkid-gameboy-pocket-gray
 const pocket* = static([
   color("2b2b26"), color("706b66"), color("a89f94"), color("e0dbcd"),
 ])
 
+# Palette from: https://lospec.com/palette-list/nintendo-gameboy-bgb
 const gameboy* = static([
   color("081820"), color("346856"), color("88c070"), color("e0f8d0"),
-])
-
-const pokemon* = static([
-  color("181010"), color("84739c"), color("f7b58c"), color("ffefff"),
 ])
