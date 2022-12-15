@@ -27,8 +27,8 @@ type
 
 # Helper functions
 
-func `div`(a, b: float32): float32 = (a / b).floor
-func `div`(a, b: float64): float64 = (a / b).floor
+func `div`(a, b: SomeFloat): SomeFloat = (a / b).floor
+func `/`(a, b: SomeInteger): SomeInteger = a div b
 func `+`(a, b: bool): bool = a or b
 func `*`(a, b: bool): bool = a and b
 
@@ -41,16 +41,12 @@ func uvec2*(x, y: uint32): UVec2 = gvec2(x, y)
 func vec2*(x, y: float32): Vec2 = gvec2(x, y)
 func dvec2*(x, y: float64): DVec2 = gvec2(x, y)
 
-#
-
 func gvec2*[T](x: T): GVec2[T] = gvec2(x, x)
 func bvec2*(x: bool): BVec2 = gvec2(x)
 func ivec2*(x: int32): IVec2 = gvec2(x)
 func uvec2*(x: uint32): UVec2 = gvec2(x)
 func vec2*(x: float32): Vec2 = gvec2(x)
 func dvec2*(x: float64): DVec2 = gvec2(x)
-
-#
 
 func gvec2*[T](): GVec2[T] = gvec2(T.default, T.default)
 func bvec2*(): BVec2 = gvec2(false, false)
@@ -68,16 +64,12 @@ func uvec3*(x, y, z: uint32): UVec3 = gvec3(x, y, z)
 func vec3*(x, y, z: float32): Vec3 = gvec3(x, y, z)
 func dvec3*(x, y, z: float64): DVec3 = gvec3(x, y, z)
 
-#
-
 func gvec3*[T](x: T): GVec3[T] = gvec3(x, x, x)
 func bvec3*(x: bool): BVec3 = gvec3(x)
 func ivec3*(x: int32): IVec3 = gvec3(x)
 func uvec3*(x: uint32): UVec3 = gvec3(x)
 func vec3*(x: float32): Vec3 = gvec3(x)
 func dvec3*(x: float64): DVec3 = gvec3(x)
-
-#
 
 func gvec3*[T](): GVec3[T] = gvec3(T.default, T.default, T.default)
 func bvec3*(): BVec3 = gvec3(false, false, false)
@@ -95,16 +87,12 @@ func uvec4*(x, y, z, w: uint32): UVec4 = gvec4(x, y, z, w)
 func vec4*(x, y, z, w: float32): Vec4 = gvec4(x, y, z, w)
 func dvec4*(x, y, z, w: float64): DVec4 = gvec4(x, y, z, w)
 
-#
-
 func gvec4*[T](x: T): GVec4[T] = gvec4(x, x, x, x)
 func bvec4*(x: bool): BVec4 = gvec4(x)
 func ivec4*(x: int32): IVec4 = gvec4(x)
 func uvec4*(x: uint32): UVec4 = gvec4(x)
 func vec4*(x: float32): Vec4 = gvec4(x)
 func dvec4*(x: float64): DVec4 = gvec4(x)
-
-#
 
 func gvec4*[T](): GVec4[T] = gvec4(T.default, T.default, T.default, T.default)
 func bvec4*(): BVec4 = gvec4(false, false, false, false)

@@ -35,3 +35,14 @@ test "Vector":
 
   check bvec2(false) + bvec2(true) == bvec2(true)
   check bvec2(false) * bvec2(true) == bvec2(false)
+
+  check ivec2(2, 2) == IVec2(x: 2, y: 2)
+  check ivec2(1) == ivec2(1, 1)
+  check ivec2() == ivec2(0)
+  check ivec2(4) + ivec2(2) == ivec2(6)
+  check -ivec2(2) == ivec2(-2)
+  check ivec2(4) - ivec2(2) == ivec2(2)
+  check ivec2(4) * ivec2(2) == ivec2(8)
+  check ivec2(4) / ivec2(2) == ivec2(2)
+  check ivec2(4) div ivec2(2) == ivec2(2)
+  check ivec2(4) mod ivec2(2) == ivec2(0)

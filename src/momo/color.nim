@@ -10,10 +10,10 @@ func toByte*(hex: string): uint8 =
   try:
     fromHex[uint8](hex)
   except ValueError:
-    uint8.low
+    0
 
 func color*(r, g, b, a: uint8): Color = Color(r: r, g: g, b: b, a: a)
-func color*(r, g, b: uint8): Color = color(r, g, b, uint8.high)
+func color*(r, g, b: uint8): Color = color(r, g, b, 255)
 func color*(gray: uint8): Color = color(gray, gray, gray)
 func color*(): Color = color(0)
 func color*(hex: string): Color =

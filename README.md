@@ -10,6 +10,7 @@ by almost anyone regardless of skill level.
 
 ## Modules
 
+* momo/animation
 * momo/color
 * momo/dialogue
 * momo/grid

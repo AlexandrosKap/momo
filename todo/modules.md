@@ -7,6 +7,7 @@ no major functionality is missing and it has tests.
 
 ## Considered Complete
 
+* [ ] momo/animation
 * [x] momo/color
 * [ ] momo/dialogue
 * [x] momo/grid
