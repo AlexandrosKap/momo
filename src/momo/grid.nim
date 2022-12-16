@@ -1,7 +1,9 @@
 import vector
 
 type
-  Point* = Gvec2[int]
+  CPoint* = CVec2[int]
+  Point* = GVec2[int]
+
   Grid*[T] = ref object
     width: int
     height: int
@@ -55,18 +57,18 @@ func cells*[T](self: Grid[T]): seq[T] = self.cells
 func len*(self: Grid): int = self.width * self.height
 
 func id*(self: Grid, x, y: int): int = y * self.width + x
-func id*(self: Grid, p: Point): int = self.id(p.x, p.y)
+func id*(self: Grid, p: CPoint): int = self.id(p.x, p.y)
 
 func point*(self: Grid, id: int): Point =
   point(id mod self.width, id div self.width)
 
 func set*[T](self: Grid[T], id: int, value: T) = self.cells[id] = value
 func set*[T](self: Grid[T], x, y: int, value: T) = self.set(self.id(x, y), value)
-func set*[T](self: Grid[T], p: Point, value: T) = self.set(p.x, p.y, value)
+func set*[T](self: Grid[T], p: CPoint, value: T) = self.set(p.x, p.y, value)
 
 func get*[T](self: Grid[T], id: int): T = self.cells[id]
 func get*[T](self: Grid[T], x, y: int): T = self.get(self.id(x, y))
-func get*[T](self: Grid[T], p: Point): T = self.get(p.x, p.y)
+func get*[T](self: Grid[T], p: CPoint): T = self.get(p.x, p.y)
 
 func swap*(self: Grid, id1, id2: int) =
   let temp = self.get(id1)
@@ -76,7 +78,7 @@ func swap*(self: Grid, id1, id2: int) =
 func swap*(self: Grid, x1, y1, x2, y2: int) =
   self.swap(self.id(x1, y1), self.id(x2, y2))
 
-func swap*(self: Grid, p1, p2: Point) =
+func swap*(self: Grid, p1, p2: CPoint) =
   self.swap(p1.x, p1.y, p2.x, p2.y)
 
 func fill*[T](self: Grid[T], value: T) =
@@ -113,7 +115,7 @@ func fill*[T](self: Grid[T], x1, y1, x2, y2: int, value: T) =
     for x in xa .. xb:
       self.set(x, y, value)
 
-func fill*[T](self: Grid[T], p1, p2: Point, value: T) =
+func fill*[T](self: Grid[T], p1, p2: CPoint, value: T) =
   self.fill(p1.x, p1.y, p2.x, p2.y, value)
 
 func clear*[T](self: Grid[T]) =
@@ -125,16 +127,16 @@ func clear*[T](self: Grid[T], id1, id2: int) =
 func clear*[T](self: Grid[T], x1, y1, x2, y2: int) =
   self.fill(x1, y1, x2, y2, T.default)
 
-func clear*[T](self: Grid[T], p1, p2: Point) =
+func clear*[T](self: Grid[T], p1, p2: CPoint) =
   self.fill(p1, p2, T.default)
 
 func isEmpty*[T](self: Grid[T], id: int): bool = self.get(id) == T.default
 func isEmpty*[T](self: Grid[T], x, y: int): bool = self.isEmpty(self.id(x, y))
-func isEmpty*[T](self: Grid[T], p: Point): bool = self.isEmpty(p.x, p.y)
+func isEmpty*[T](self: Grid[T], p: CPoint): bool = self.isEmpty(p.x, p.y)
 
 func isInside*[T](self: Grid[T], id: int): bool = id >= 0 and id < self.len
 func isInside*[T](self: Grid[T], x, y: int): bool = self.isInside(self.id(x, y))
-func isInside*[T](self: Grid[T], p: Point): bool = self.isInside(p.x, p.y)
+func isInside*[T](self: Grid[T], p: CPoint): bool = self.isInside(p.x, p.y)
 
 func `$`*[T](self: Grid[T]): string =
   result = ""

@@ -1,6 +1,9 @@
 from math import `mod`, floor
 
 type
+  CVec2*[T] = concept vec
+    vec.x is T
+    vec.y is T
   GVec2*[T] = object
     x*, y*: T
   BVec2* = GVec2[bool]
@@ -9,6 +12,10 @@ type
   Vec2* = GVec2[float32]
   DVec2* = GVec2[float64]
 
+  CVec3*[T] = concept vec
+    vec.x is T
+    vec.y is T
+    vec.z is T
   GVec3*[T] = object
     x*, y*, z*: T
   BVec3* = GVec3[bool]
@@ -17,6 +24,11 @@ type
   Vec3* = GVec3[float32]
   DVec3* = GVec3[float64]
 
+  CVec4*[T] = concept vec
+    vec.x is T
+    vec.y is T
+    vec.z is T
+    vec.w is T
   GVec4*[T] = object
     x*, y*, z*, w*: T
   BVec4* = GVec4[bool]

@@ -6,25 +6,25 @@ type EasingFunc* = proc(x: float): float {.noSideEffect.}
 func ease*[T](function: EasingFunc, first, last: T, time: float): T =
   if time < 0.0: return first
   elif time > 1.0: return last
-  when T is GVec2:
+  when T is CVec2:
     gvec2(
       ease(function, first.x, last.x, time),
       ease(function, first.y, last.y, time)
     )
-  elif T is GVec3:
+  elif T is CVec3:
     gvec3(
       ease(function, first.x, last.x, time),
       ease(function, first.y, last.y, time),
       ease(function, first.z, last.z, time)
     )
-  elif T is GVec4:
+  elif T is CVec4:
     gvec4(
       ease(function, first.x, last.x, time),
       ease(function, first.y, last.y, time),
       ease(function, first.z, last.z, time),
       ease(function, first.w, last.w, time)
     )
-  elif T is Color:
+  elif T is CColor:
     color(
       ease(function, first.r, last.r, time),
       ease(function, first.g, last.g, time),

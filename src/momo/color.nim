@@ -1,8 +1,14 @@
 from strutils import fromHex
 
 type
+  CColor* = concept color
+    color.r is uint8
+    color.g is uint8
+    color.b is uint8
+    color.a is uint8
   Color* = object
     r*, g*, b*, a*: uint8
+
   Palette* = seq[Color]
   Grayscale* = seq[uint8]
 
