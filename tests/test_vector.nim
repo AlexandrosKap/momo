@@ -46,3 +46,15 @@ test "Vector":
   check ivec2(4) / ivec2(2) == ivec2(2)
   check ivec2(4) div ivec2(2) == ivec2(2)
   check ivec2(4) mod ivec2(2) == ivec2(0)
+
+  var v2 = vec2(1)
+  v2 += vec2(2)
+  check v2 == vec2(3)
+
+  var v3 = vec3(1)
+  v3 += vec3(2)
+  check v3 == vec3(3)
+
+  var v4 = vec4(1)
+  v4 += vec4(2)
+  check v4 == vec4(3)

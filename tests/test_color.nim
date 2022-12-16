@@ -23,3 +23,7 @@ test "Color":
   check color(4) / color(2) == color(2)
   check color(4) div color(2) == color(2)
   check color(4) mod color(2) == color(0)
+
+  var c = color(1)
+  c += color(2)
+  check c == color(3)

@@ -1,7 +1,7 @@
 import tables, strutils, strformat
 export tables
 
-# TODO: WORKING ON IT BRO
+# TODO: WORKING ON IT UWU
 # TODO: I need to clean this. (copy-pasted lalia)
 # TODO: Change the API.
 

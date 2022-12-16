@@ -52,6 +52,24 @@ func `mod`*(a, b: Color): Color =
 func `div`*(a, b: Color): Color =
   color(a.r div b.r, a.g div b.g, a.b div b.b, if a.a > b.a: a.a else: b.a)
 
+func `+=`*(a: var Color, b: Color) =
+  a = a + b
+
+func `-=`*(a: var Color, b: Color) =
+  a = a - b
+
+func `*=`*(a: var Color, b: Color) =
+  a = a * b
+
+func `/=`*(a: var Color, b: Color) =
+  a = a / b
+
+func `mod=`*(a: var Color, b: Color) =
+  a = a mod b
+
+func `div=`*(a: var Color, b: Color) =
+  a = a div b
+
 const red* = color(255, 0, 0)
 const green* = color(0, 255, 0)
 const blue* = color(0, 0, 255)
