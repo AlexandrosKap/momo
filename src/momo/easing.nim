@@ -1,35 +1,39 @@
 from math import PI, sqrt, pow, cos, sin
-import color, vector
+from color import CColor
+from vector import CVec2, CVec3, CVec4
 
-type EasingFunc* = proc(x: float): float {.noSideEffect.}
+type
+  EasingFunc* = proc(x: float): float {.noSideEffect.}
+
+func linear*(x: float): float = x
 
 func ease*[T](function: EasingFunc, first, last: T, time: float): T =
   if time < 0.0: return first
   elif time > 1.0: return last
   when T is CVec2:
-    gvec2(
-      ease(function, first.x, last.x, time),
-      ease(function, first.y, last.y, time)
+    T(
+      x: ease(function, first.x, last.x, time),
+      y: ease(function, first.y, last.y, time)
     )
   elif T is CVec3:
-    gvec3(
-      ease(function, first.x, last.x, time),
-      ease(function, first.y, last.y, time),
-      ease(function, first.z, last.z, time)
+    T(
+      x: ease(function, first.x, last.x, time),
+      y: ease(function, first.y, last.y, time),
+      z: ease(function, first.z, last.z, time)
     )
   elif T is CVec4:
-    gvec4(
-      ease(function, first.x, last.x, time),
-      ease(function, first.y, last.y, time),
-      ease(function, first.z, last.z, time),
-      ease(function, first.w, last.w, time)
+    T(
+      x: ease(function, first.x, last.x, time),
+      y: ease(function, first.y, last.y, time),
+      z: ease(function, first.z, last.z, time),
+      w: ease(function, first.w, last.w, time)
     )
   elif T is CColor:
-    color(
-      ease(function, first.r, last.r, time),
-      ease(function, first.g, last.g, time),
-      ease(function, first.b, last.b, time),
-      ease(function, first.a, last.a, time)
+    T(
+      r: ease(function, first.r, last.r, time),
+      g: ease(function, first.g, last.g, time),
+      b: ease(function, first.b, last.b, time),
+      a: ease(function, first.a, last.a, time)
     )
   elif T is SomeInteger:
     first + ((last - first).float * function(time)).T
@@ -44,9 +48,13 @@ func ease*[T](function: EasingFunc, first, last: T, time, maxTime: float): T =
     if time < 0.0: 0.0 elif time > maxTime: 1.0 else: time / maxTime
   )
 
-# Easing functions
+func lerp*[T](first, last: T, time: float): T =
+  ease(linear, first, last, time)
 
-func linear*(x: float): float = x
+func lerp*[T](first, last: T, time, maxTime: float): T =
+  ease(linear, first, last, time, maxTime)
+
+# Easing functions
 
 func easeInSine*(x: float): float = 1 - cos((x * PI) / 2.0)
 func easeOutSine*(x: float): float = sin((x * PI) / 2.0)
