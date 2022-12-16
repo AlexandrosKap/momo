@@ -6,4 +6,5 @@ const command = "nimpretty "
 for file in walkDirRec("."):
   if file.len >= 4 and file[^4 .. ^1] == ".nim":
     let err = execCmd(command & file)
-    if err != 0: echo "Failed!"
+    if err != 0: echo "Failed: " & file
+    else: echo "Done: " & file

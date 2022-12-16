@@ -1,6 +1,6 @@
 import easing
 
-# TODO: WORKING ON IT BRO
+# TODO: WORKING ON IT UWU
 
 type
   Keyframe*[T] = object

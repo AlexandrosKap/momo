@@ -1,3 +1,4 @@
+from strformat import `&`
 from math import `mod`, floor
 
 type
@@ -235,3 +236,54 @@ func `mod=`*[T](a: var GVec4[T], b: GVec4[T]) =
 
 func `div=`*[T](a: var GVec4[T], b: GVec4[T]) =
   a = a div b
+
+# String functions for GVec2
+
+func `$`*(self: BVec2): string =
+  &"bvec2({self.x}, {self.y})"
+
+func `$`*(self: IVec2): string =
+  &"ivec2({self.x}, {self.y})"
+
+func `$`*(self: UVec2): string =
+  &"uvec2({self.x}, {self.y})"
+
+func `$`*(self: Vec2): string =
+  &"vec2({self.x}, {self.y})"
+
+func `$`*(self: DVec2): string =
+  &"dvec2({self.x}, {self.y})"
+
+# String functions for GVec3
+
+func `$`*(self: BVec3): string =
+  &"bvec3({self.x}, {self.y}, {self.z})"
+
+func `$`*(self: IVec3): string =
+  &"ivec3({self.x}, {self.y}, {self.z})"
+
+func `$`*(self: UVec3): string =
+  &"uvec3({self.x}, {self.y}, {self.z})"
+
+func `$`*(self: Vec3): string =
+  &"vec3({self.x}, {self.y}, {self.z})"
+
+func `$`*(self: DVec3): string =
+  &"dvec3({self.x}, {self.y}, {self.z})"
+
+# String functions for GVec4
+
+func `$`*(self: BVec4): string =
+  &"bvec4({self.x}, {self.y}, {self.z}, {self.w})"
+
+func `$`*(self: IVec4): string =
+  &"ivec4({self.x}, {self.y}, {self.z}, {self.w})"
+
+func `$`*(self: UVec4): string =
+  &"uvec4({self.x}, {self.y}, {self.z}, {self.w})"
+
+func `$`*(self: Vec4): string =
+  &"vec4({self.x}, {self.y}, {self.z}, {self.w})"
+
+func `$`*(self: DVec4): string =
+  &"dvec4({self.x}, {self.y}, {self.z}, {self.w})"

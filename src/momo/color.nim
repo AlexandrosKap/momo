@@ -1,3 +1,4 @@
+from strformat import `&`
 from strutils import fromHex
 
 type
@@ -75,6 +76,9 @@ func `mod=`*(a: var Color, b: Color) =
 
 func `div=`*(a: var Color, b: Color) =
   a = a div b
+
+func `$`*(self: Color): string =
+  &"color({self.r}, {self.g}, {self.b}, {self.a})"
 
 const red* = color(255, 0, 0)
 const green* = color(0, 255, 0)
