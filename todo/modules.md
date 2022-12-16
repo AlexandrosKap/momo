@@ -10,7 +10,7 @@ no major functionality is missing and it has tests.
 * [ ] momo/animation
 * [x] momo/color
 * [ ] momo/dialogue
-* [ ] momo/easing
+* [x] momo/easing
 * [x] momo/grid
 * [ ] momo/tween
 * [x] momo/vector
