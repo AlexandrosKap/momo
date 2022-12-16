@@ -1,5 +1,4 @@
 import vector
-export vector
 
 type
   Point* = Gvec2[int]

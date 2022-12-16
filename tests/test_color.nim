@@ -6,9 +6,9 @@ test "Color":
   check toByte("-") == 0
   check toByte("67") != 0
   check color(0, 0, 0, 0) == Color(r: 0, g: 0, b: 0, a: 0)
-  check color(0, 0, 0) == Color(r: 0, g: 0, b: 0, a: 255)
-  check color(0) == Color(r: 0, g: 0, b: 0, a: 255)
-  check color() == Color(r: 0, g: 0, b: 0, a: 255)
+  check color(0, 0, 0) == color(0, 0, 0, 255)
+  check color(0) == color(0, 0, 0)
+  check color() == color(0)
   check color("") == color()
   check color("-") == color()
   check color("67") == color()
