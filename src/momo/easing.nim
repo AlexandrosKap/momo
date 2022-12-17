@@ -7,42 +7,42 @@ type
 
 func linear*(x: float): float = x
 
-func ease*[T](function: EasingFunc, first, last: T, time: float): T =
+func ease*[T](easingFunc: EasingFunc, first, last: T, time: float): T =
   if time < 0.0: return first
   elif time > 1.0: return last
   when T is CVec2:
     T(
-      x: ease(function, first.x, last.x, time),
-      y: ease(function, first.y, last.y, time)
+      x: ease(easingFunc, first.x, last.x, time),
+      y: ease(easingFunc, first.y, last.y, time)
     )
   elif T is CVec3:
     T(
-      x: ease(function, first.x, last.x, time),
-      y: ease(function, first.y, last.y, time),
-      z: ease(function, first.z, last.z, time)
+      x: ease(easingFunc, first.x, last.x, time),
+      y: ease(easingFunc, first.y, last.y, time),
+      z: ease(easingFunc, first.z, last.z, time)
     )
   elif T is CVec4:
     T(
-      x: ease(function, first.x, last.x, time),
-      y: ease(function, first.y, last.y, time),
-      z: ease(function, first.z, last.z, time),
-      w: ease(function, first.w, last.w, time)
+      x: ease(easingFunc, first.x, last.x, time),
+      y: ease(easingFunc, first.y, last.y, time),
+      z: ease(easingFunc, first.z, last.z, time),
+      w: ease(easingFunc, first.w, last.w, time)
     )
   elif T is CColor:
     T(
-      r: ease(function, first.r, last.r, time),
-      g: ease(function, first.g, last.g, time),
-      b: ease(function, first.b, last.b, time),
-      a: ease(function, first.a, last.a, time)
+      r: ease(easingFunc, first.r, last.r, time),
+      g: ease(easingFunc, first.g, last.g, time),
+      b: ease(easingFunc, first.b, last.b, time),
+      a: ease(easingFunc, first.a, last.a, time)
     )
   elif T is SomeInteger:
-    first + ((last - first).float * function(time)).T
+    first + ((last - first).float * easingFunc(time)).T
   else:
-    first + (last - first) * function(time)
+    first + (last - first) * easingFunc(time)
 
-func ease*[T](function: EasingFunc, first, last: T, time, maxTime: float): T =
+func ease*[T](easingFunc: EasingFunc, first, last: T, time, maxTime: float): T =
   ease(
-    function,
+    easingFunc,
     first,
     last,
     if time < 0.0: 0.0 elif time > maxTime: 1.0 else: time / maxTime

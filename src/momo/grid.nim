@@ -1,3 +1,4 @@
+from strformat import `&`
 import vector
 
 type
@@ -17,6 +18,9 @@ type
 func point*(x, y: int): Point = gvec2(x, y)
 func point*(x: int): Point = gvec2(x)
 func point*(): Point = gvec2(0)
+
+func `$`*(self: Point): string =
+  &"point({self.x}, {self.y})"
 
 func newGrid*[T](width, height: int, value: T): Grid[T] =
   result = Grid[T](width: width, height: height)
