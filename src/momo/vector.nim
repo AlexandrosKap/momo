@@ -116,6 +116,12 @@ func dvec4*(): DVec4 = gvec4(0f64, 0f64, 0f64, 0f64)
 
 # Operators for GVec2
 
+func `==`*[T](a, b: GVec2[T]): bool =
+  a.x == b.x and a.y == b.y
+
+func `!=`*[T](a, b: GVec2[T]): bool =
+  not (a == b)
+
 func `+`*[T](a, b: GVec2[T]): GVec2[T] =
   gvec2(a.x + b.x, a.y + b.y)
 
@@ -157,6 +163,12 @@ func `div=`*[T](a: var GVec2[T], b: GVec2[T]) =
 
 # Operators for GVec3
 
+func `==`*[T](a, b: GVec3[T]): bool =
+  a.x == b.x and a.y == b.y and a.z == b.z
+
+func `!=`*[T](a, b: GVec3[T]): bool =
+  not (a == b)
+
 func `+`*[T](a, b: GVec3[T]): GVec3[T] =
   gvec3(a.x + b.x, a.y + b.y, a.z + b.z)
 
@@ -197,6 +209,12 @@ func `div=`*[T](a: var GVec3[T], b: GVec3[T]) =
   a = a div b
 
 # Operators for GVec4
+
+func `==`*[T](a, b: GVec4[T]): bool =
+  a.x == b.x and a.y == b.y and a.z == b.z and a.w == b.w
+
+func `!=`*[T](a, b: GVec4[T]): bool =
+  not (a == b)
 
 func `+`*[T](a, b: GVec4[T]): GVec4[T] =
   gvec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w)

@@ -24,8 +24,16 @@ func point*(x, y: int): Point = gvec2(x, y)
 func point*(x: int): Point = gvec2(x)
 func point*(): Point = gvec2(0)
 
+# Functions for Point
+
 func `$`*(self: Point): string =
   &"point({self.x}, {self.y})"
+
+func `==`*(a, b: Point): bool =
+  a.x == b.x and a.y == b.y
+
+func `!=`*(a, b: Point): bool =
+  not (a == b)
 
 # Constructors for Grid
 
@@ -41,23 +49,31 @@ func newGrid*[T](width, height: int): Grid[T] =
 
 func newBGrid*(width, height: int, value: bool): BGrid =
   newGrid[bool](width, height, value)
+
 func newIGrid*(width, height: int, value: int32): IGrid =
   newGrid[int32](width, height, value)
+
 func newUGrid*(width, height: int, value: uint32): UGrid =
   newGrid[uint32](width, height, value)
+
 func newFGrid*(width, height: int, value: float32): FGrid =
   newGrid[float32](width, height, value)
+
 func newDGrid*(width, height: int, value: float64): DGrid =
   newGrid[float64](width, height, value)
 
 func newBGrid*(width, height: int): BGrid =
   newGrid[bool](width, height)
+
 func newIGrid*(width, height: int): IGrid =
   newGrid[int32](width, height)
+
 func newUGrid*(width, height: int): UGrid =
   newGrid[uint32](width, height)
+
 func newFGrid*(width, height: int): FGrid =
   newGrid[float32](width, height)
+
 func newDGrid*(width, height: int): DGrid =
   newGrid[float64](width, height)
 
@@ -66,7 +82,6 @@ func newDGrid*(width, height: int): DGrid =
 func width*(self: Grid): int = self.width
 func height*(self: Grid): int = self.height
 func cells*[T](self: Grid[T]): seq[T] = self.cells
-
 func len*(self: Grid): int = self.width * self.height
 
 func id*(self: Grid, x, y: int): int = y * self.width + x
@@ -112,7 +127,6 @@ func fill*[T](self: Grid[T], x1, y1, x2, y2: int, value: T) =
   else:
     ya = y2
     yb = y1
-
   for y in ya .. yb:
     for x in xa .. xb:
       self.set(x, y, value)
@@ -122,6 +136,15 @@ func fill*[T](self: Grid[T], p1, p2: CPoint, value: T) =
 
 func fill*[T](self: Grid[T], id1, id2: int, value: T) =
   self.fill(self.point(id1), self.point(id2), value)
+
+func enclose*[T](self: Grid[T], value: T) =
+  for y in 0 ..< self.height:
+    if y == 0 or y == self.height - 1:
+      for x in 0 ..< self.width:
+        self.set(x, y, value)
+    else:
+      self.set(0, y, value)
+      self.set(self.width - 1, y, value)
 
 func enclose*[T](self: Grid[T], x1, y1, x2, y2: int, value: T) =
   var xa, ya, xb, yb: int
@@ -137,13 +160,13 @@ func enclose*[T](self: Grid[T], x1, y1, x2, y2: int, value: T) =
   else:
     ya = y2
     yb = y1
-
   for y in ya .. yb:
-    self.set(xa, y, value)
-    self.set(xb, y, value)
-  for x in xa .. xb:
-    self.set(x, ya, value)
-    self.set(x, yb, value)
+    if y == ya or y == yb:
+      for x in xa .. xb:
+        self.set(x, y, value)
+    else:
+      self.set(xa, y, value)
+      self.set(xb, y, value)
 
 func enclose*[T](self: Grid[T], p1, p2: CPoint, value: T) =
   self.enclose(p1.x, p1.y, p2.x, p2.y, value)
@@ -184,6 +207,12 @@ func `$`*[T](self: Grid[T]): string =
         result.add(' ')
     if y != self.height - 1:
       result.add('\n')
+
+func `==`*[T](a, b: Grid[T]): bool =
+  a.cells == b.cells
+
+func `!=`*[T](a, b: Grid[T]): bool =
+  not a == b
 
 iterator items*[T](self: Grid[T]): T =
   for a in self.cells:
