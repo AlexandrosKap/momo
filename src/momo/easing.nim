@@ -62,37 +62,47 @@ func easeInOutSine*(x: float): float = -(cos(PI * x) - 1.0) / 2.0
 
 func easeInQuad*(x: float): float =
   x * x
+
 func easeOutQuad*(x: float): float =
   1.0 - (1.0 - x) * (1.0 - x)
+
 func easeInOutQuad*(x: float): float =
   if x < 0.5: 2.0 * x * x else: 1.0 - pow(-2.0 * x + 2.0, 2.0) / 2.0
 
 func easeInCubic*(x: float): float =
   x * x * x
+
 func easeOutCubic*(x: float): float =
   1.0 - pow(1.0 - x, 3.0)
+
 func easeInOutCubic*(x: float): float =
   if x < 0.5: 4.0 * x * x * x else: 1.0 - pow(-2.0 * x + 2.0, 3.0) / 2.0
 
 func easeInQuart*(x: float): float =
   x * x * x * x
+
 func easeOutQuart*(x: float): float =
   1.0 - pow(1.0 - x, 4.0)
+
 func easeInOutQuart*(x: float): float =
   if x < 0.5: 8.0 * x * x * x * x else: 1.0 - pow(-2.0 * x + 2.0, 4.0) / 2.0
 
 func easeInQuint*(x: float): float =
   x * x * x * x * x
+
 func easeOutQuint*(x: float): float =
   1.0 - pow(1.0 - x, 5.0)
+
 func easeInOutQuint*(x: float): float =
   if x < 0.5: 16.0 * x * x * x * x * x
   else: 1.0 - pow(-2.0 * x + 2.0, 5.0) / 2.0
 
 func easeInExpo*(x: float): float =
   if x == 0.0: 0.0 else: pow(2.0, 10.0 * x - 10.0)
+
 func easeOutExpo*(x: float): float =
   if x == 1.0: 1.0 else: 1.0 - pow(2.0, -10.0 * x)
+
 func easeInOutExpo*(x: float): float =
   if x == 0.0: 0.0
   elif x == 1.0: 1.0
@@ -101,8 +111,10 @@ func easeInOutExpo*(x: float): float =
 
 func easeInCirc*(x: float): float =
   1.0 - sqrt(1.0 - pow(x, 2.0))
+
 func easeOutCirc*(x: float): float =
   sqrt(1.0 - pow(x - 1.0, 2.0))
+
 func easeInOutCirc*(x: float): float =
   if x < 0.5: (1.0 - sqrt(1.0 - pow(2.0 * x, 2.0))) / 2.0
   else: (sqrt(1.0 - pow(-2.0 * x + 2.0, 2.0)) + 1.0) / 2.0
@@ -111,10 +123,12 @@ func easeInBack*(x: float): float =
   const c1 = 1.70158
   const c3 = c1 + 1.0
   c3 * x * x * x - c1 * x * x
+
 func easeOutBack*(x: float): float =
   const c1 = 1.70158
   const c3 = c1 + 1.0
   1.0 + c3 * pow(x - 1.0, 3.0) + c1 * pow(x - 1.0, 2.0)
+
 func easeInOutBack*(x: float): float =
   const c2 = 1.70158 * 1.525
   if x < 0.5:
@@ -127,11 +141,13 @@ func easeInElastic*(x: float): float =
   if x == 0.0: 0.0
   elif x == 1.0: 1.0
   else: -pow(2.0, 10.0 * x - 10.0) * sin((x * 10.0 - 10.75) * c4)
+
 func easeOutElastic*(x: float): float =
   const c4 = (2.0 * PI) / 3.0
   if x == 0.0: 0.0
   elif x == 1.0: 1.0
   else: pow(2.0, -10.0 * x) * sin((x * 10.0 - 0.75) * c4) + 1.0
+
 func easeInOutElastic*(x: float): float =
   const c5 = (2.0 * PI) / 4.5
   if x == 0.0:
@@ -157,8 +173,10 @@ func easeOutBounce*(x: float): float =
   else:
     let tx = x - 2.625
     n1 * (tx / d1) * tx + 0.984375
+
 func easeInBounce*(x: float): float =
   1.0 - easeOutBounce(1.0 - x)
+
 func easeInOutBounce*(x: float): float =
   if x < 0.5: (1.0 - easeOutBounce(1.0 - 2.0 * x)) / 2.0
   else: (1.0 + easeOutBounce(2.0 * x - 1.0)) / 2.0

@@ -41,6 +41,12 @@ func color*(hex: string): Color =
   )
   else: color(0)
 
+func `==`*(a, b: Color): bool =
+  a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a
+
+func `!=`*(a, b: Color): bool =
+  not (a == b)
+
 func `+`*(a, b: Color): Color =
   color(a.r + b.r, a.g + b.g, a.b + b.b, if a.a > b.a: a.a else: b.a)
 
