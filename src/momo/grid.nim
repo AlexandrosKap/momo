@@ -1,6 +1,9 @@
 from strformat import `&`
 import vector
 
+const falseChar = '-'
+const trueChar = '#'
+
 type
   CPoint* = CVec2[int]
   Point* = GVec2[int]
@@ -15,12 +18,16 @@ type
   FGrid* = Grid[float32]
   DGrid* = Grid[float64]
 
+# Constructors for Point
+
 func point*(x, y: int): Point = gvec2(x, y)
 func point*(x: int): Point = gvec2(x)
 func point*(): Point = gvec2(0)
 
 func `$`*(self: Point): string =
   &"point({self.x}, {self.y})"
+
+# Constructors for Grid
 
 func newGrid*[T](width, height: int, value: T): Grid[T] =
   result = Grid[T](width: width, height: height)
@@ -53,6 +60,8 @@ func newFGrid*(width, height: int): FGrid =
   newGrid[float32](width, height)
 func newDGrid*(width, height: int): DGrid =
   newGrid[float64](width, height)
+
+# Functions for Grid
 
 func width*(self: Grid): int = self.width
 func height*(self: Grid): int = self.height
@@ -89,17 +98,6 @@ func fill*[T](self: Grid[T], value: T) =
   for i in 0 ..< self.len:
     self.cells[i] = value
 
-func fill*[T](self: Grid[T], id1, id2: int, value: T) =
-  var ida, idb: int
-  if id1 < id2:
-    ida = id1
-    idb = id2
-  else:
-    ida = id2
-    idb = id1
-  for i in ida .. idb:
-    self.set(i, value)
-
 func fill*[T](self: Grid[T], x1, y1, x2, y2: int, value: T) =
   var xa, ya, xb, yb: int
   if x1 < x2:
@@ -122,17 +120,48 @@ func fill*[T](self: Grid[T], x1, y1, x2, y2: int, value: T) =
 func fill*[T](self: Grid[T], p1, p2: CPoint, value: T) =
   self.fill(p1.x, p1.y, p2.x, p2.y, value)
 
+func fill*[T](self: Grid[T], id1, id2: int, value: T) =
+  self.fill(self.point(id1), self.point(id2), value)
+
+func enclose*[T](self: Grid[T], x1, y1, x2, y2: int, value: T) =
+  var xa, ya, xb, yb: int
+  if x1 < x2:
+    xa = x1
+    xb = x2
+  else:
+    xa = x2
+    xb = x1
+  if y1 < y2:
+    ya = y1
+    yb = y2
+  else:
+    ya = y2
+    yb = y1
+
+  for y in ya .. yb:
+    self.set(xa, y, value)
+    self.set(xb, y, value)
+  for x in xa .. xb:
+    self.set(x, ya, value)
+    self.set(x, yb, value)
+
+func enclose*[T](self: Grid[T], p1, p2: CPoint, value: T) =
+  self.enclose(p1.x, p1.y, p2.x, p2.y, value)
+
+func enclose*[T](self: Grid[T], id1, id2: int, value: T) =
+  self.enclose(self.point(id1), self.point(id2), value)
+
 func clear*[T](self: Grid[T]) =
   self.fill(T.default)
-
-func clear*[T](self: Grid[T], id1, id2: int) =
-  self.fill(id1, id2, T.default)
 
 func clear*[T](self: Grid[T], x1, y1, x2, y2: int) =
   self.fill(x1, y1, x2, y2, T.default)
 
 func clear*[T](self: Grid[T], p1, p2: CPoint) =
   self.fill(p1, p2, T.default)
+
+func clear*[T](self: Grid[T], id1, id2: int) =
+  self.fill(id1, id2, T.default)
 
 func isEmpty*[T](self: Grid[T], id: int): bool = self.get(id) == T.default
 func isEmpty*[T](self: Grid[T], x, y: int): bool = self.isEmpty(self.id(x, y))
@@ -146,7 +175,11 @@ func `$`*[T](self: Grid[T]): string =
   result = ""
   for y in 0 ..< self.height:
     for x in 0 ..< self.width:
-      result.add($self.get(x, y))
+      let value = self.get(x, y)
+      when T is bool:
+        result.add(if value: trueChar else: falseChar)
+      else:
+        result.add($value)
       if x != self.width - 1:
         result.add(' ')
     if y != self.height - 1:
