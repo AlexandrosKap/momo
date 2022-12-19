@@ -1,5 +1,5 @@
 from strformat import `&`
-from math import `mod`, floor
+import common
 
 type
   CVec2*[T] = concept vec
@@ -38,13 +38,6 @@ type
   Vec4* = GVec4[float32]
   DVec4* = GVec4[float64]
 
-# Helper functions
-
-func `div`(a, b: SomeFloat): SomeFloat = (a / b).floor
-func `/`(a, b: SomeInteger): SomeInteger = a div b
-func `+`(a, b: bool): bool = a or b
-func `*`(a, b: bool): bool = a and b
-
 # Constructors for GVec2
 
 func gvec2*[T](x, y: T): GVec2[T] = GVec2[T](x: x, y: y)
@@ -62,57 +55,11 @@ func vec2*(x: float32): Vec2 = gvec2(x)
 func dvec2*(x: float64): DVec2 = gvec2(x)
 
 func gvec2*[T](): GVec2[T] = gvec2(T.default, T.default)
-func bvec2*(): BVec2 = gvec2(false, false)
-func ivec2*(): IVec2 = gvec2(0i32, 0i32)
-func uvec2*(): UVec2 = gvec2(0u32, 0u32)
-func vec2*(): Vec2 = gvec2(0f32, 0f32)
-func dvec2*(): DVec2 = gvec2(0f64, 0f64)
-
-# Constructors for GVec3
-
-func gvec3*[T](x, y, z: T): GVec3[T] = GVec3[T](x: x, y: y, z: z)
-func bvec3*(x, y, z: bool): BVec3 = gvec3(x, y, z)
-func ivec3*(x, y, z: int32): IVec3 = gvec3(x, y, z)
-func uvec3*(x, y, z: uint32): UVec3 = gvec3(x, y, z)
-func vec3*(x, y, z: float32): Vec3 = gvec3(x, y, z)
-func dvec3*(x, y, z: float64): DVec3 = gvec3(x, y, z)
-
-func gvec3*[T](x: T): GVec3[T] = gvec3(x, x, x)
-func bvec3*(x: bool): BVec3 = gvec3(x)
-func ivec3*(x: int32): IVec3 = gvec3(x)
-func uvec3*(x: uint32): UVec3 = gvec3(x)
-func vec3*(x: float32): Vec3 = gvec3(x)
-func dvec3*(x: float64): DVec3 = gvec3(x)
-
-func gvec3*[T](): GVec3[T] = gvec3(T.default, T.default, T.default)
-func bvec3*(): BVec3 = gvec3(false, false, false)
-func ivec3*(): IVec3 = gvec3(0i32, 0i32, 0i32)
-func uvec3*(): UVec3 = gvec3(0u32, 0u32, 0u32)
-func vec3*(): Vec3 = gvec3(0f32, 0f32, 0f32)
-func dvec3*(): DVec3 = gvec3(0f64, 0f64, 0f64)
-
-# Constructors for GVec4
-
-func gvec4*[T](x, y, z, w: T): GVec4[T] = GVec4[T](x: x, y: y, z: z, w: w)
-func bvec4*(x, y, z, w: bool): BVec4 = gvec4(x, y, z, w)
-func ivec4*(x, y, z, w: int32): IVec4 = gvec4(x, y, z, w)
-func uvec4*(x, y, z, w: uint32): UVec4 = gvec4(x, y, z, w)
-func vec4*(x, y, z, w: float32): Vec4 = gvec4(x, y, z, w)
-func dvec4*(x, y, z, w: float64): DVec4 = gvec4(x, y, z, w)
-
-func gvec4*[T](x: T): GVec4[T] = gvec4(x, x, x, x)
-func bvec4*(x: bool): BVec4 = gvec4(x)
-func ivec4*(x: int32): IVec4 = gvec4(x)
-func uvec4*(x: uint32): UVec4 = gvec4(x)
-func vec4*(x: float32): Vec4 = gvec4(x)
-func dvec4*(x: float64): DVec4 = gvec4(x)
-
-func gvec4*[T](): GVec4[T] = gvec4(T.default, T.default, T.default, T.default)
-func bvec4*(): BVec4 = gvec4(false, false, false, false)
-func ivec4*(): IVec4 = gvec4(0i32, 0i32, 0i32, 0i32)
-func uvec4*(): UVec4 = gvec4(0u32, 0u32, 0u32, 0u32)
-func vec4*(): Vec4 = gvec4(0f32, 0f32, 0f32, 0f32)
-func dvec4*(): DVec4 = gvec4(0f64, 0f64, 0f64, 0f64)
+func bvec2*(): BVec2 = gvec2[bool]()
+func ivec2*(): IVec2 = gvec2[int32]()
+func uvec2*(): UVec2 = gvec2[uint32]()
+func vec2*(): Vec2 = gvec2[float32]()
+func dvec2*(): DVec2 = gvec2[float64]()
 
 # Operators for GVec2
 
@@ -123,25 +70,28 @@ func `!=`*[T](a, b: GVec2[T]): bool =
   not (a == b)
 
 func `+`*[T](a, b: GVec2[T]): GVec2[T] =
-  gvec2(a.x + b.x, a.y + b.y)
+  gvec2[T](a.x + b.x, a.y + b.y)
 
 func `-`*[T](a: GVec2[T]): GVec2[T] =
-  gvec2(-a.x, -a.y)
+  gvec2[T](-a.x, -a.y)
 
 func `-`*[T](a, b: GVec2[T]): GVec2[T] =
-  gvec2(a.x - b.x, a.y - b.y)
+  gvec2[T](a.x - b.x, a.y - b.y)
+
+func `*`*[T](a: GVec2[T], b: SomeFloat): GVec2[T] =
+  gvec2[T](a.x * b, a.y * b)
 
 func `*`*[T](a, b: GVec2[T]): GVec2[T] =
-  gvec2(a.x * b.x, a.y * b.y)
+  gvec2[T](a.x * b.x, a.y * b.y)
 
 func `/`*[T](a, b: GVec2[T]): GVec2[T] =
-  gvec2(a.x / b.x, a.y / b.y)
-
-func `mod`*[T](a, b: GVec2[T]): GVec2[T] =
-  gvec2(a.x mod b.x, a.y mod b.y)
+  gvec2[T](a.x / b.x, a.y / b.y)
 
 func `div`*[T](a, b: GVec2[T]): GVec2[T] =
-  gvec2(a.x div b.x, a.y div b.y)
+  gvec2[T](a.x div b.x, a.y div b.y)
+
+func `mod`*[T](a, b: GVec2[T]): GVec2[T] =
+  gvec2[T](a.x mod b.x, a.y mod b.y)
 
 func `+=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a + b
@@ -149,111 +99,20 @@ func `+=`*[T](a: var GVec2[T], b: GVec2[T]) =
 func `-=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a - b
 
+func `*=`*[T](a: var GVec2[T], b: SomeFloat) =
+  a = a * b
+
 func `*=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a * b
 
 func `/=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a / b
 
-func `mod=`*[T](a: var GVec2[T], b: GVec2[T]) =
-  a = a mod b
-
 func `div=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a div b
 
-# Operators for GVec3
-
-func `==`*[T](a, b: GVec3[T]): bool =
-  a.x == b.x and a.y == b.y and a.z == b.z
-
-func `!=`*[T](a, b: GVec3[T]): bool =
-  not (a == b)
-
-func `+`*[T](a, b: GVec3[T]): GVec3[T] =
-  gvec3(a.x + b.x, a.y + b.y, a.z + b.z)
-
-func `-`*[T](a: GVec3[T]): GVec3[T] =
-  gvec3(-a.x, -a.y, -a.z)
-
-func `-`*[T](a, b: GVec3[T]): GVec3[T] =
-  gvec3(a.x - b.x, a.y - b.y, a.z - b.z)
-
-func `*`*[T](a, b: GVec3[T]): GVec3[T] =
-  gvec3(a.x * b.x, a.y * b.y, a.z * b.z)
-
-func `/`*[T](a, b: GVec3[T]): GVec3[T] =
-  gvec3(a.x / b.x, a.y / b.y, a.z / b.z)
-
-func `mod`*[T](a, b: GVec3[T]): GVec3[T] =
-  gvec3(a.x mod b.x, a.y mod b.y, a.z mod b.z)
-
-func `div`*[T](a, b: GVec3[T]): GVec3[T] =
-  gvec3(a.x div b.x, a.y div b.y, a.z div b.z)
-
-func `+=`*[T](a: var GVec3[T], b: GVec3[T]) =
-  a = a + b
-
-func `-=`*[T](a: var GVec3[T], b: GVec3[T]) =
-  a = a - b
-
-func `*=`*[T](a: var GVec3[T], b: GVec3[T]) =
-  a = a * b
-
-func `/=`*[T](a: var GVec3[T], b: GVec3[T]) =
-  a = a / b
-
-func `mod=`*[T](a: var GVec3[T], b: GVec3[T]) =
+func `mod=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a mod b
-
-func `div=`*[T](a: var GVec3[T], b: GVec3[T]) =
-  a = a div b
-
-# Operators for GVec4
-
-func `==`*[T](a, b: GVec4[T]): bool =
-  a.x == b.x and a.y == b.y and a.z == b.z and a.w == b.w
-
-func `!=`*[T](a, b: GVec4[T]): bool =
-  not (a == b)
-
-func `+`*[T](a, b: GVec4[T]): GVec4[T] =
-  gvec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w)
-
-func `-`*[T](a: GVec4[T]): GVec4[T] =
-  gvec4(-a.x, -a.y, -a.z, -a.w)
-
-func `-`*[T](a, b: GVec4[T]): GVec4[T] =
-  gvec4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w)
-
-func `*`*[T](a, b: GVec4[T]): GVec4[T] =
-  gvec4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w)
-
-func `/`*[T](a, b: GVec4[T]): GVec4[T] =
-  gvec4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w)
-
-func `mod`*[T](a, b: GVec4[T]): GVec4[T] =
-  gvec4(a.x mod b.x, a.y mod b.y, a.z mod b.z, a.w mod b.w)
-
-func `div`*[T](a, b: GVec4[T]): GVec4[T] =
-  gvec4(a.x div b.x, a.y div b.y, a.z div b.z, a.w div b.w)
-
-func `+=`*[T](a: var GVec4[T], b: GVec4[T]) =
-  a = a + b
-
-func `-=`*[T](a: var GVec4[T], b: GVec4[T]) =
-  a = a - b
-
-func `*=`*[T](a: var GVec4[T], b: GVec4[T]) =
-  a = a * b
-
-func `/=`*[T](a: var GVec4[T], b: GVec4[T]) =
-  a = a / b
-
-func `mod=`*[T](a: var GVec4[T], b: GVec4[T]) =
-  a = a mod b
-
-func `div=`*[T](a: var GVec4[T], b: GVec4[T]) =
-  a = a div b
 
 # String functions for GVec2
 
@@ -272,6 +131,82 @@ func `$`*(self: Vec2): string =
 func `$`*(self: DVec2): string =
   &"dvec2({self.x}, {self.y})"
 
+# Constructors for GVec3
+
+func gvec3*[T](x, y, z: T): GVec3[T] = GVec3[T](x: x, y: y, z: z)
+func bvec3*(x, y, z: bool): BVec3 = gvec3(x, y, z)
+func ivec3*(x, y, z: int32): IVec3 = gvec3(x, y, z)
+func uvec3*(x, y, z: uint32): UVec3 = gvec3(x, y, z)
+func vec3*(x, y, z: float32): Vec3 = gvec3(x, y, z)
+func dvec3*(x, y, z: float64): DVec3 = gvec3(x, y, z)
+
+func gvec3*[T](x: T): GVec3[T] = gvec3(x, x, x)
+func bvec3*(x: bool): BVec3 = gvec3(x)
+func ivec3*(x: int32): IVec3 = gvec3(x)
+func uvec3*(x: uint32): UVec3 = gvec3(x)
+func vec3*(x: float32): Vec3 = gvec3(x)
+func dvec3*(x: float64): DVec3 = gvec3(x)
+
+func gvec3*[T](): GVec3[T] = gvec3(T.default, T.default, T.default)
+func bvec3*(): BVec3 = gvec3[bool]()
+func ivec3*(): IVec3 = gvec3[int32]()
+func uvec3*(): UVec3 = gvec3[uint32]()
+func vec3*(): Vec3 = gvec3[float32]()
+func dvec3*(): DVec3 = gvec3[float64]()
+
+# Operators for GVec3
+
+func `==`*[T](a, b: GVec3[T]): bool =
+  a.x == b.x and a.y == b.y and a.z == b.z
+
+func `!=`*[T](a, b: GVec3[T]): bool =
+  not (a == b)
+
+func `+`*[T](a, b: GVec3[T]): GVec3[T] =
+  gvec3[T](a.x + b.x, a.y + b.y, a.z + b.z)
+
+func `-`*[T](a: GVec3[T]): GVec3[T] =
+  gvec3[T](-a.x, -a.y, -a.z)
+
+func `-`*[T](a, b: GVec3[T]): GVec3[T] =
+  gvec3[T](a.x - b.x, a.y - b.y, a.z - b.z)
+
+func `*`*[T](a: GVec3[T], b: SomeFloat): GVec3[T] =
+  gvec3[T](a.x * b, a.y * b, a.z * b)
+
+func `*`*[T](a, b: GVec3[T]): GVec3[T] =
+  gvec3[T](a.x * b.x, a.y * b.y, a.z * b.z)
+
+func `/`*[T](a, b: GVec3[T]): GVec3[T] =
+  gvec3[T](a.x / b.x, a.y / b.y, a.z / b.z)
+
+func `div`*[T](a, b: GVec3[T]): GVec3[T] =
+  gvec3[T](a.x div b.x, a.y div b.y, a.z div b.z)
+
+func `mod`*[T](a, b: GVec3[T]): GVec3[T] =
+  gvec3[T](a.x mod b.x, a.y mod b.y, a.z mod b.z)
+
+func `+=`*[T](a: var GVec3[T], b: GVec3[T]) =
+  a = a + b
+
+func `-=`*[T](a: var GVec3[T], b: GVec3[T]) =
+  a = a - b
+
+func `*=`*[T](a: var GVec3[T], b: SomeFloat) =
+  a = a * b
+
+func `*=`*[T](a: var GVec3[T], b: GVec3[T]) =
+  a = a * b
+
+func `/=`*[T](a: var GVec3[T], b: GVec3[T]) =
+  a = a / b
+
+func `div=`*[T](a: var GVec3[T], b: GVec3[T]) =
+  a = a div b
+
+func `mod=`*[T](a: var GVec3[T], b: GVec3[T]) =
+  a = a mod b
+
 # String functions for GVec3
 
 func `$`*(self: BVec3): string =
@@ -288,6 +223,82 @@ func `$`*(self: Vec3): string =
 
 func `$`*(self: DVec3): string =
   &"dvec3({self.x}, {self.y}, {self.z})"
+
+# Constructors for GVec4
+
+func gvec4*[T](x, y, z, w: T): GVec4[T] = GVec4[T](x: x, y: y, z: z, w: w)
+func bvec4*(x, y, z, w: bool): BVec4 = gvec4(x, y, z, w)
+func ivec4*(x, y, z, w: int32): IVec4 = gvec4(x, y, z, w)
+func uvec4*(x, y, z, w: uint32): UVec4 = gvec4(x, y, z, w)
+func vec4*(x, y, z, w: float32): Vec4 = gvec4(x, y, z, w)
+func dvec4*(x, y, z, w: float64): DVec4 = gvec4(x, y, z, w)
+
+func gvec4*[T](x: T): GVec4[T] = gvec4(x, x, x, x)
+func bvec4*(x: bool): BVec4 = gvec4(x)
+func ivec4*(x: int32): IVec4 = gvec4(x)
+func uvec4*(x: uint32): UVec4 = gvec4(x)
+func vec4*(x: float32): Vec4 = gvec4(x)
+func dvec4*(x: float64): DVec4 = gvec4(x)
+
+func gvec4*[T](): GVec4[T] = gvec4(T.default, T.default, T.default, T.default)
+func bvec4*(): BVec4 = gvec4[bool]()
+func ivec4*(): IVec4 = gvec4[int32]()
+func uvec4*(): UVec4 = gvec4[uint32]()
+func vec4*(): Vec4 = gvec4[float32]()
+func dvec4*(): DVec4 = gvec4[float64]()
+
+# Operators for GVec4
+
+func `==`*[T](a, b: GVec4[T]): bool =
+  a.x == b.x and a.y == b.y and a.z == b.z and a.w == b.w
+
+func `!=`*[T](a, b: GVec4[T]): bool =
+  not (a == b)
+
+func `+`*[T](a, b: GVec4[T]): GVec4[T] =
+  gvec4[T](a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w)
+
+func `-`*[T](a: GVec4[T]): GVec4[T] =
+  gvec4[T](-a.x, -a.y, -a.z, -a.w)
+
+func `-`*[T](a, b: GVec4[T]): GVec4[T] =
+  gvec4[T](a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w)
+
+func `*`*[T](a: GVec4[T], b: SomeFloat): GVec4[T] =
+  gvec4[T](a.x * b, a.y * b, a.z * b, a.w * b)
+
+func `*`*[T](a, b: GVec4[T]): GVec4[T] =
+  gvec4[T](a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w)
+
+func `/`*[T](a, b: GVec4[T]): GVec4[T] =
+  gvec4[T](a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w)
+
+func `div`*[T](a, b: GVec4[T]): GVec4[T] =
+  gvec4[T](a.x div b.x, a.y div b.y, a.z div b.z, a.w div b.w)
+
+func `mod`*[T](a, b: GVec4[T]): GVec4[T] =
+  gvec4[T](a.x mod b.x, a.y mod b.y, a.z mod b.z, a.w mod b.w)
+
+func `+=`*[T](a: var GVec4[T], b: GVec4[T]) =
+  a = a + b
+
+func `-=`*[T](a: var GVec4[T], b: GVec4[T]) =
+  a = a - b
+
+func `*=`*[T](a: var GVec4[T], b: SomeFloat) =
+  a = a * b
+
+func `*=`*[T](a: var GVec4[T], b: GVec4[T]) =
+  a = a * b
+
+func `/=`*[T](a: var GVec4[T], b: GVec4[T]) =
+  a = a / b
+
+func `div=`*[T](a: var GVec4[T], b: GVec4[T]) =
+  a = a div b
+
+func `mod=`*[T](a: var GVec4[T], b: GVec4[T]) =
+  a = a mod b
 
 # String functions for GVec4
 

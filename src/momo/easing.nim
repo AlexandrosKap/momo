@@ -1,52 +1,26 @@
 from math import PI, sqrt, pow, cos, sin
-from color import CColor
-from vector import CVec2, CVec3, CVec4
+import common
 
 type
   EasingFunc* = proc(x: float): float {.noSideEffect.}
 
 func linear*(x: float): float = x
 
-func ease*[T](easingFunc: EasingFunc, first, last: T, time: float): T =
-  if time < 0.0: return first
-  elif time > 1.0: return last
-  when T is CVec2:
-    T(
-      x: ease(easingFunc, first.x, last.x, time),
-      y: ease(easingFunc, first.y, last.y, time)
-    )
-  elif T is CVec3:
-    T(
-      x: ease(easingFunc, first.x, last.x, time),
-      y: ease(easingFunc, first.y, last.y, time),
-      z: ease(easingFunc, first.z, last.z, time)
-    )
-  elif T is CVec4:
-    T(
-      x: ease(easingFunc, first.x, last.x, time),
-      y: ease(easingFunc, first.y, last.y, time),
-      z: ease(easingFunc, first.z, last.z, time),
-      w: ease(easingFunc, first.w, last.w, time)
-    )
-  elif T is CColor:
-    T(
-      r: ease(easingFunc, first.r, last.r, time),
-      g: ease(easingFunc, first.g, last.g, time),
-      b: ease(easingFunc, first.b, last.b, time),
-      a: ease(easingFunc, first.a, last.a, time)
-    )
-  elif T is SomeInteger:
-    first + ((last - first).float * easingFunc(time)).T
+func ease*[T](function: EasingFunc, first, last: T, time: float): T =
+  if time < 0.0:
+    first
+  elif time > 1.0:
+    last
   else:
-    first + (last - first) * easingFunc(time)
+    first + (last - first) * function(time)
 
-func ease*[T](easingFunc: EasingFunc, first, last: T, time, maxTime: float): T =
-  ease(
-    easingFunc,
-    first,
-    last,
-    if time < 0.0: 0.0 elif time > maxTime: 1.0 else: time / maxTime
-  )
+func ease*[T](function: EasingFunc, first, last: T, time, maxTime: float): T =
+  if time < 0.0:
+    ease(function, first, last, 0.0)
+  elif time > maxTime:
+    ease(function, first, last, 1.0)
+  else:
+    ease(function, first, last, time / maxTime)
 
 func lerp*[T](first, last: T, time: float): T =
   ease(linear, first, last, time)
@@ -56,9 +30,14 @@ func lerp*[T](first, last: T, time, maxTime: float): T =
 
 # Easing functions
 
-func easeInSine*(x: float): float = 1 - cos((x * PI) / 2.0)
-func easeOutSine*(x: float): float = sin((x * PI) / 2.0)
-func easeInOutSine*(x: float): float = -(cos(PI * x) - 1.0) / 2.0
+func easeInSine*(x: float): float =
+  1 - cos((x * PI) / 2.0)
+
+func easeOutSine*(x: float): float =
+  sin((x * PI) / 2.0)
+
+func easeInOutSine*(x: float): float =
+  -(cos(PI * x) - 1.0) / 2.0
 
 func easeInQuad*(x: float): float =
   x * x
@@ -67,7 +46,10 @@ func easeOutQuad*(x: float): float =
   1.0 - (1.0 - x) * (1.0 - x)
 
 func easeInOutQuad*(x: float): float =
-  if x < 0.5: 2.0 * x * x else: 1.0 - pow(-2.0 * x + 2.0, 2.0) / 2.0
+  if x < 0.5:
+    2.0 * x * x
+  else:
+    1.0 - pow(-2.0 * x + 2.0, 2.0) / 2.0
 
 func easeInCubic*(x: float): float =
   x * x * x
@@ -76,7 +58,10 @@ func easeOutCubic*(x: float): float =
   1.0 - pow(1.0 - x, 3.0)
 
 func easeInOutCubic*(x: float): float =
-  if x < 0.5: 4.0 * x * x * x else: 1.0 - pow(-2.0 * x + 2.0, 3.0) / 2.0
+  if x < 0.5:
+    4.0 * x * x * x
+  else:
+    1.0 - pow(-2.0 * x + 2.0, 3.0) / 2.0
 
 func easeInQuart*(x: float): float =
   x * x * x * x
@@ -85,7 +70,10 @@ func easeOutQuart*(x: float): float =
   1.0 - pow(1.0 - x, 4.0)
 
 func easeInOutQuart*(x: float): float =
-  if x < 0.5: 8.0 * x * x * x * x else: 1.0 - pow(-2.0 * x + 2.0, 4.0) / 2.0
+  if x < 0.5:
+    8.0 * x * x * x * x
+  else:
+    1.0 - pow(-2.0 * x + 2.0, 4.0) / 2.0
 
 func easeInQuint*(x: float): float =
   x * x * x * x * x
@@ -94,20 +82,32 @@ func easeOutQuint*(x: float): float =
   1.0 - pow(1.0 - x, 5.0)
 
 func easeInOutQuint*(x: float): float =
-  if x < 0.5: 16.0 * x * x * x * x * x
-  else: 1.0 - pow(-2.0 * x + 2.0, 5.0) / 2.0
+  if x < 0.5:
+    16.0 * x * x * x * x * x
+  else:
+    1.0 - pow(-2.0 * x + 2.0, 5.0) / 2.0
 
 func easeInExpo*(x: float): float =
-  if x == 0.0: 0.0 else: pow(2.0, 10.0 * x - 10.0)
+  if x == 0.0:
+    0.0
+  else:
+    pow(2.0, 10.0 * x - 10.0)
 
 func easeOutExpo*(x: float): float =
-  if x == 1.0: 1.0 else: 1.0 - pow(2.0, -10.0 * x)
+  if x == 1.0:
+    1.0
+  else:
+    1.0 - pow(2.0, -10.0 * x)
 
 func easeInOutExpo*(x: float): float =
-  if x == 0.0: 0.0
-  elif x == 1.0: 1.0
-  elif x < 0.5: pow(2.0, 20.0 * x - 10.0) / 2.0
-  else: (2.0 - pow(2.0, -20.0 * x + 10.0)) / 2.0
+  if x == 0.0:
+    0.0
+  elif x == 1.0:
+    1.0
+  elif x < 0.5:
+    pow(2.0, 20.0 * x - 10.0) / 2.0
+  else:
+    (2.0 - pow(2.0, -20.0 * x + 10.0)) / 2.0
 
 func easeInCirc*(x: float): float =
   1.0 - sqrt(1.0 - pow(x, 2.0))
@@ -116,8 +116,10 @@ func easeOutCirc*(x: float): float =
   sqrt(1.0 - pow(x - 1.0, 2.0))
 
 func easeInOutCirc*(x: float): float =
-  if x < 0.5: (1.0 - sqrt(1.0 - pow(2.0 * x, 2.0))) / 2.0
-  else: (sqrt(1.0 - pow(-2.0 * x + 2.0, 2.0)) + 1.0) / 2.0
+  if x < 0.5:
+    (1.0 - sqrt(1.0 - pow(2.0 * x, 2.0))) / 2.0
+  else:
+    (sqrt(1.0 - pow(-2.0 * x + 2.0, 2.0)) + 1.0) / 2.0
 
 func easeInBack*(x: float): float =
   const c1 = 1.70158
@@ -138,15 +140,21 @@ func easeInOutBack*(x: float): float =
 
 func easeInElastic*(x: float): float =
   const c4 = (2.0 * PI) / 3.0
-  if x == 0.0: 0.0
-  elif x == 1.0: 1.0
-  else: -pow(2.0, 10.0 * x - 10.0) * sin((x * 10.0 - 10.75) * c4)
+  if x == 0.0:
+    0.0
+  elif x == 1.0:
+    1.0
+  else:
+    -pow(2.0, 10.0 * x - 10.0) * sin((x * 10.0 - 10.75) * c4)
 
 func easeOutElastic*(x: float): float =
   const c4 = (2.0 * PI) / 3.0
-  if x == 0.0: 0.0
-  elif x == 1.0: 1.0
-  else: pow(2.0, -10.0 * x) * sin((x * 10.0 - 0.75) * c4) + 1.0
+  if x == 0.0:
+    0.0
+  elif x == 1.0:
+    1.0
+  else:
+    pow(2.0, -10.0 * x) * sin((x * 10.0 - 0.75) * c4) + 1.0
 
 func easeInOutElastic*(x: float): float =
   const c5 = (2.0 * PI) / 4.5
@@ -178,5 +186,7 @@ func easeInBounce*(x: float): float =
   1.0 - easeOutBounce(1.0 - x)
 
 func easeInOutBounce*(x: float): float =
-  if x < 0.5: (1.0 - easeOutBounce(1.0 - 2.0 * x)) / 2.0
-  else: (1.0 + easeOutBounce(2.0 * x - 1.0)) / 2.0
+  if x < 0.5:
+    (1.0 - easeOutBounce(1.0 - 2.0 * x)) / 2.0
+  else:
+    (1.0 + easeOutBounce(2.0 * x - 1.0)) / 2.0

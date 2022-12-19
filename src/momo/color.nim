@@ -1,5 +1,6 @@
 from strformat import `&`
 from strutils import fromHex
+import common
 
 type
   CColor* = concept color
@@ -53,17 +54,20 @@ func `+`*(a, b: Color): Color =
 func `-`*(a, b: Color): Color =
   color(a.r - b.r, a.g - b.g, a.b - b.b, if a.a > b.a: a.a else: b.a)
 
+func `*`*(a: Color, b: SomeFloat): Color =
+  color(a.r * b, a.g * b, a.b * b, a.a)
+
 func `*`*(a, b: Color): Color =
   color(a.r * b.r, a.g * b.g, a.b * b.b, if a.a > b.a: a.a else: b.a)
 
 func `/`*(a, b: Color): Color =
+  color(a.r / b.r, a.g / b.g, a.b / b.b, if a.a > b.a: a.a else: b.a)
+
+func `div`*(a, b: Color): Color =
   color(a.r div b.r, a.g div b.g, a.b div b.b, if a.a > b.a: a.a else: b.a)
 
 func `mod`*(a, b: Color): Color =
   color(a.r mod b.r, a.g mod b.g, a.b mod b.b, if a.a > b.a: a.a else: b.a)
-
-func `div`*(a, b: Color): Color =
-  color(a.r div b.r, a.g div b.g, a.b div b.b, if a.a > b.a: a.a else: b.a)
 
 func `+=`*(a: var Color, b: Color) =
   a = a + b
@@ -71,17 +75,20 @@ func `+=`*(a: var Color, b: Color) =
 func `-=`*(a: var Color, b: Color) =
   a = a - b
 
+func `*=`*(a: var Color, b: SomeFloat) =
+  a = a * b
+
 func `*=`*(a: var Color, b: Color) =
   a = a * b
 
 func `/=`*(a: var Color, b: Color) =
   a = a / b
 
-func `mod=`*(a: var Color, b: Color) =
-  a = a mod b
-
 func `div=`*(a: var Color, b: Color) =
   a = a div b
+
+func `mod=`*(a: var Color, b: Color) =
+  a = a mod b
 
 func `$`*(self: Color): string =
   &"color({self.r}, {self.g}, {self.b}, {self.a})"
