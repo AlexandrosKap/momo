@@ -5,25 +5,26 @@ import easing
 
 type
   Keyframe*[T] = object
+    easingFunc*: EasingFunc
     value*: T
     time*: float
-    easingFunc*: EasingFunc
   Animation*[T] = ref object
     keyframes*: seq[Keyframe[T]]
-    time*: float
+    index: uint
+    time: float
 
-func keyframe*[T](value: T, time: float, easingFunc: EasingFunc): Keyframe[T] =
+func keyframe*[T](easingFunc: EasingFunc, value: T, time: float): Keyframe[T] =
   Keyframe[T](
+    easingFunc: easingFunc,
     value: value,
     time: if time < 0.0: 0.0 else: time,
-    easingFunc: easingFunc
   )
 
 func keyframe*[T](value: T, time: float): Keyframe[T] =
   Keyframe[T](
+    easingFunc: linear,
     value: value,
     time: time,
-    easingFunc: linear
   )
 
 func ease*[T](self: Keyframe[T], last: Keyframe[T], time: float): T =
@@ -47,16 +48,32 @@ func newAnimation*[T](keyframes: varargs[Keyframe[T]]): Animation[T] =
   for keyframe in keyframes:
     result.keyframes.add(keyframe)
 
+func len*(self: Animation): int =
+  self.keyframes.len
+
 func duration*(self: Animation): float =
   if self.keyframes.len != 0:
     self.keyframes[^1].time
   else:
     0.0
 
+func setTime(self: Animation, time: float) =
+  if time < 0.0: self.time = 0.0
+  elif time > self.duration: self.time = self.duration
+  else: self.time = time
+
+func updateIndex(self: Animation) =
+  let duration = self.duration
+  if duration > 0.0:
+    if self.time == 0:
+      self.index = 0
+    elif self.time == duration:
+      self.index = self.len - 1
+    # TODO: JDAWJDODJO
+
 func advance*(self: Animation, time: float) =
-  self.time += time
-  if self.time > self.duration:
-    self.time = self.duration
+  self.setTime(self.time + time)
+  self.updateIndex()
 
 func `$`*(self: Animation): string =
   result = ""

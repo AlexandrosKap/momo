@@ -9,3 +9,5 @@ type
     target: T
     getter: TweenGetter
     setter: TweenSetter
+    first, last: V
+    time: float
