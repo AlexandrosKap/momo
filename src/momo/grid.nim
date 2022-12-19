@@ -40,7 +40,10 @@ func `!=`*(a, b: Point): bool =
 func newGrid*[T](width, height: int, value: T): Grid[T] =
   result = Grid[T](width: width, height: height)
   for i in 0 ..< width * height:
-    result.cells.add(value.deepCopy)
+    when defined(js):
+      result.cells.add(value)
+    else:
+      result.cells.add(value.deepCopy)
 
 func newGrid*[T](width, height: int): Grid[T] =
   result = Grid[T](width: width, height: height)

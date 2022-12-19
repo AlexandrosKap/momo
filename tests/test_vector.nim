@@ -46,6 +46,7 @@ test "Vector":
   check -ivec2(2) == ivec2(-2)
   check ivec2(4) - ivec2(2) == ivec2(2)
   check ivec2(4) * 0.5 == ivec2(2)
+  check 0.5 * ivec2(4) == ivec2(2)
   check ivec2(4) * ivec2(2) == ivec2(8)
   check ivec2(4) / ivec2(2) == ivec2(2)
   check ivec2(4) div ivec2(2) == ivec2(2)
