@@ -2,7 +2,7 @@ from strformat import `&`
 import common
 
 type
-  CVec2*[T] = concept vec
+  SomeVec2*[T] = concept vec
     vec.x is T
     vec.y is T
   GVec2*[T] = object
@@ -13,7 +13,7 @@ type
   Vec2* = GVec2[float32]
   DVec2* = GVec2[float64]
 
-  CVec3*[T] = concept vec
+  SomeVec3*[T] = concept vec
     vec.x is T
     vec.y is T
     vec.z is T
@@ -25,7 +25,7 @@ type
   Vec3* = GVec3[float32]
   DVec3* = GVec3[float64]
 
-  CVec4*[T] = concept vec
+  SomeVec4*[T] = concept vec
     vec.x is T
     vec.y is T
     vec.z is T
@@ -37,6 +37,8 @@ type
   UVec4* = GVec4[uint32]
   Vec4* = GVec4[float32]
   DVec4* = GVec4[float64]
+
+  SomeVec*[T] = SomeVec2[T] | SomeVec3[T] | SomeVec4[T]
 
 # Constructors for GVec2
 
@@ -78,38 +80,14 @@ func `-`*[T](a: GVec2[T]): GVec2[T] =
 func `-`*[T](a, b: GVec2[T]): GVec2[T] =
   gvec2[T](a.x - b.x, a.y - b.y)
 
-func `*`*[T](a: GVec2[T], b: SomeNumber): GVec2[T] =
-  gvec2[T](a.x * b, a.y * b)
-
-func `*`*[T](a: SomeNumber, b: GVec2[T]): GVec2[T] =
-  gvec2[T](b.x * a, b.y * a)
-
 func `*`*[T](a, b: GVec2[T]): GVec2[T] =
   gvec2[T](a.x * b.x, a.y * b.y)
-
-func `/`*[T](a: GVec2[T], b: SomeNumber): GVec2[T] =
-  gvec2[T](a.x / b, a.y / b)
-
-func `/`*[T](a: SomeNumber, b: GVec2[T]): GVec2[T] =
-  gvec2[T](b.x / a, b.y / a)
 
 func `/`*[T](a, b: GVec2[T]): GVec2[T] =
   gvec2[T](a.x / b.x, a.y / b.y)
 
-func `div`*[T](a: GVec2[T], b: SomeNumber): GVec2[T] =
-  gvec2[T](a.x div b, a.y div b)
-
-func `div`*[T](a: SomeNumber, b: GVec2[T]): GVec2[T] =
-  gvec2[T](b.x div a, b.y div a)
-
 func `div`*[T](a, b: GVec2[T]): GVec2[T] =
   gvec2[T](a.x div b.x, a.y div b.y)
-
-func `mod`*[T](a: GVec2[T], b: SomeNumber): GVec2[T] =
-  gvec2[T](a.x mod b, a.y mod b)
-
-func `mod`*[T](a: SomeNumber, b: GVec2[T]): GVec2[T] =
-  gvec2[T](b.x mod a, b.y mod a)
 
 func `mod`*[T](a, b: GVec2[T]): GVec2[T] =
   gvec2[T](a.x mod b.x, a.y mod b.y)
@@ -120,26 +98,14 @@ func `+=`*[T](a: var GVec2[T], b: GVec2[T]) =
 func `-=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a - b
 
-func `*=`*[T](a: var GVec2[T], b: SomeNumber) =
-  a = a * b
-
 func `*=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a * b
-
-func `/=`*[T](a: var GVec2[T], b: SomeNumber) =
-  a = a / b
 
 func `/=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a / b
 
-func `div=`*[T](a: var GVec2[T], b: SomeNumber) =
-  a = a div b
-
 func `div=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a div b
-
-func `mod=`*[T](a: var GVec2[T], b: SomeNumber) =
-  a = a mod b
 
 func `mod=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a mod b
@@ -201,38 +167,14 @@ func `-`*[T](a: GVec3[T]): GVec3[T] =
 func `-`*[T](a, b: GVec3[T]): GVec3[T] =
   gvec3[T](a.x - b.x, a.y - b.y, a.z - b.z)
 
-func `*`*[T](a: GVec3[T], b: SomeNumber): GVec3[T] =
-  gvec3[T](a.x * b, a.y * b, a.z * b)
-
-func `*`*[T](a: SomeNumber, b: GVec3[T]): GVec3[T] =
-  gvec3[T](b.x * a, b.y * a, b.z * a)
-
 func `*`*[T](a, b: GVec3[T]): GVec3[T] =
   gvec3[T](a.x * b.x, a.y * b.y, a.z * b.z)
-
-func `/`*[T](a: GVec3[T], b: SomeNumber): GVec3[T] =
-  gvec3[T](a.x / b, a.y / b, a.z / b)
-
-func `/`*[T](a: SomeNumber, b: GVec3[T]): GVec3[T] =
-  gvec3[T](b.x / a, b.y / a, b.z / a)
 
 func `/`*[T](a, b: GVec3[T]): GVec3[T] =
   gvec3[T](a.x / b.x, a.y / b.y, a.z / b.z)
 
-func `div`*[T](a: GVec3[T], b: SomeNumber): GVec3[T] =
-  gvec3[T](a.x div b, a.y div b, a.z div b)
-
-func `div`*[T](a: SomeNumber, b: GVec3[T]): GVec3[T] =
-  gvec3[T](b.x div a, b.y div a, b.z div a)
-
 func `div`*[T](a, b: GVec3[T]): GVec3[T] =
   gvec3[T](a.x div b.x, a.y div b.y, a.z div b.z)
-
-func `mod`*[T](a: GVec3[T], b: SomeNumber): GVec3[T] =
-  gvec3[T](a.x mod b, a.y mod b, a.z mod b)
-
-func `mod`*[T](a: SomeNumber, b: GVec3[T]): GVec3[T] =
-  gvec3[T](b.x mod a, b.y mod a, b.z mod a)
 
 func `mod`*[T](a, b: GVec3[T]): GVec3[T] =
   gvec3[T](a.x mod b.x, a.y mod b.y, a.z mod b.z)
@@ -243,26 +185,14 @@ func `+=`*[T](a: var GVec3[T], b: GVec3[T]) =
 func `-=`*[T](a: var GVec3[T], b: GVec3[T]) =
   a = a - b
 
-func `*=`*[T](a: var GVec3[T], b: SomeNumber) =
-  a = a * b
-
 func `*=`*[T](a: var GVec3[T], b: GVec3[T]) =
   a = a * b
-
-func `/=`*[T](a: var GVec3[T], b: SomeNumber) =
-  a = a / b
 
 func `/=`*[T](a: var GVec3[T], b: GVec3[T]) =
   a = a / b
 
-func `div=`*[T](a: var GVec3[T], b: SomeNumber) =
-  a = a div b
-
 func `div=`*[T](a: var GVec3[T], b: GVec3[T]) =
   a = a div b
-
-func `mod=`*[T](a: var GVec3[T], b: SomeNumber) =
-  a = a mod b
 
 func `mod=`*[T](a: var GVec3[T], b: GVec3[T]) =
   a = a mod b
@@ -324,38 +254,14 @@ func `-`*[T](a: GVec4[T]): GVec4[T] =
 func `-`*[T](a, b: GVec4[T]): GVec4[T] =
   gvec4[T](a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w)
 
-func `*`*[T](a: GVec4[T], b: SomeNumber): GVec4[T] =
-  gvec4[T](a.x * b, a.y * b, a.z * b, a.w * b)
-
-func `*`*[T](a: SomeNumber, b: GVec4[T]): GVec4[T] =
-  gvec4[T](b.x * a, b.y * a, b.z * a, b.w * a)
-
 func `*`*[T](a, b: GVec4[T]): GVec4[T] =
   gvec4[T](a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w)
-
-func `/`*[T](a: GVec4[T], b: SomeNumber): GVec4[T] =
-  gvec4[T](a.x / b, a.y / b, a.z / b, a.w / b)
-
-func `/`*[T](a: SomeNumber, b: GVec4[T]): GVec4[T] =
-  gvec4[T](b.x / a, b.y / a, b.z / a, b.w / a)
 
 func `/`*[T](a, b: GVec4[T]): GVec4[T] =
   gvec4[T](a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w)
 
-func `div`*[T](a: GVec4[T], b: SomeNumber): GVec4[T] =
-  gvec4[T](a.x div b, a.y div b, a.z div b, a.w div b)
-
-func `div`*[T](a: SomeNumber, b: GVec4[T]): GVec4[T] =
-  gvec4[T](b.x div a, b.y div a, b.z div a, b.w div a)
-
 func `div`*[T](a, b: GVec4[T]): GVec4[T] =
   gvec4[T](a.x div b.x, a.y div b.y, a.z div b.z, a.w div b.w)
-
-func `mod`*[T](a: GVec4[T], b: SomeNumber): GVec4[T] =
-  gvec4[T](a.x mod b, a.y mod b, a.z mod b, a.w mod b)
-
-func `mod`*[T](a: SomeNumber, b: GVec4[T]): GVec4[T] =
-  gvec4[T](b.x mod a, b.y mod a, b.z mod a, b.w mod a)
 
 func `mod`*[T](a, b: GVec4[T]): GVec4[T] =
   gvec4[T](a.x mod b.x, a.y mod b.y, a.z mod b.z, a.w mod b.w)
@@ -366,26 +272,14 @@ func `+=`*[T](a: var GVec4[T], b: GVec4[T]) =
 func `-=`*[T](a: var GVec4[T], b: GVec4[T]) =
   a = a - b
 
-func `*=`*[T](a: var GVec4[T], b: SomeNumber) =
-  a = a * b
-
 func `*=`*[T](a: var GVec4[T], b: GVec4[T]) =
   a = a * b
-
-func `/=`*[T](a: var GVec4[T], b: SomeNumber) =
-  a = a / b
 
 func `/=`*[T](a: var GVec4[T], b: GVec4[T]) =
   a = a / b
 
-func `div=`*[T](a: var GVec4[T], b: SomeNumber) =
-  a = a div b
-
 func `div=`*[T](a: var GVec4[T], b: GVec4[T]) =
   a = a div b
-
-func `mod=`*[T](a: var GVec4[T], b: SomeNumber) =
-  a = a mod b
 
 func `mod=`*[T](a: var GVec4[T], b: GVec4[T]) =
   a = a mod b

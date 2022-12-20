@@ -1,18 +1,78 @@
 from math import PI, sqrt, pow, cos, sin
-import common
+import color, vector
 
 type
   EasingFunc* = proc(x: float): float {.noSideEffect.}
 
 func linear*(x: float): float = x
 
-func ease*[T](function: EasingFunc, first, last: T, time: float): T =
+func ease*[T: SomeNumber | SomeColor | SomeVec](
+  function: EasingFunc, first, last: T, time: float
+): T =
   if time < 0.0:
     first
   elif time > 1.0:
     last
   else:
-    first + (last - first) * function(time)
+    when T is SomeFloat:
+      first + (last - first) * function(time)
+    elif T is SomeInteger:
+      first + ((last - first).float * function(time)).T
+    elif T is SomeVec2:
+      when T is tuple:
+        (
+          x: ease(function, first.x, last.x, time),
+          y: ease(function, first.y, last.y, time)
+        )
+      else:
+        T(
+          x: ease(function, first.x, last.x, time),
+          y: ease(function, first.y, last.y, time)
+        )
+    elif T is SomeVec3:
+      when T is tuple:
+        (
+          x: ease(function, first.x, last.x, time),
+          y: ease(function, first.y, last.y, time),
+          z: ease(function, first.z, last.z, time)
+        )
+      else:
+        T(
+          x: ease(function, first.x, last.x, time),
+          y: ease(function, first.y, last.y, time),
+          z: ease(function, first.z, last.z, time)
+        )
+    elif T is SomeVec4:
+      when T is tuple:
+        (
+          x: ease(function, first.x, last.x, time),
+          y: ease(function, first.y, last.y, time),
+          z: ease(function, first.z, last.z, time),
+          w: ease(function, first.w, last.w, time)
+        )
+      else:
+        T(
+          x: ease(function, first.x, last.x, time),
+          y: ease(function, first.y, last.y, time),
+          z: ease(function, first.z, last.z, time),
+          w: ease(function, first.w, last.w, time)
+        )
+    elif T is SomeColor:
+      when T is tuple:
+        (
+          r: ease(function, first.r, last.r, time),
+          g: ease(function, first.g, last.g, time),
+          b: ease(function, first.b, last.b, time),
+          a: ease(function, first.a, last.a, time)
+        )
+      else:
+        T(
+          r: ease(function, first.r, last.r, time),
+          g: ease(function, first.g, last.g, time),
+          b: ease(function, first.b, last.b, time),
+          a: ease(function, first.a, last.a, time)
+        )
+
 
 func ease*[T](function: EasingFunc, first, last: T, time, maxTime: float): T =
   if time < 0.0:

@@ -19,9 +19,7 @@ test "Color":
 
   check color(4) + color(2) == color(6)
   check color(4) - color(2) == color(2)
-  check color(4) * 0.5 == color(2)
   check color(4) * color(2) == color(8)
-  check color(4) / 2 == color(2)
   check color(4) / color(2) == color(2)
   check color(4) div color(2) == color(2)
   check color(4) mod color(2) == color(0)
