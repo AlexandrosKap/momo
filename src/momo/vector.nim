@@ -2,9 +2,9 @@ from strformat import `&`
 import common
 
 type
-  SomeVec2*[T] = concept vec
-    vec.x is T
-    vec.y is T
+  SomeVec2* = concept vec
+    vec.x
+    vec.y
   GVec2*[T] = object
     x*, y*: T
   BVec2* = GVec2[bool]
@@ -13,10 +13,10 @@ type
   Vec2* = GVec2[float32]
   DVec2* = GVec2[float64]
 
-  SomeVec3*[T] = concept vec
-    vec.x is T
-    vec.y is T
-    vec.z is T
+  SomeVec3* = concept vec
+    vec.x
+    vec.y
+    vec.z
   GVec3*[T] = object
     x*, y*, z*: T
   BVec3* = GVec3[bool]
@@ -25,11 +25,11 @@ type
   Vec3* = GVec3[float32]
   DVec3* = GVec3[float64]
 
-  SomeVec4*[T] = concept vec
-    vec.x is T
-    vec.y is T
-    vec.z is T
-    vec.w is T
+  SomeVec4* = concept vec
+    vec.x
+    vec.y
+    vec.z
+    vec.w
   GVec4*[T] = object
     x*, y*, z*, w*: T
   BVec4* = GVec4[bool]
@@ -38,7 +38,7 @@ type
   Vec4* = GVec4[float32]
   DVec4* = GVec4[float64]
 
-  SomeVec*[T] = SomeVec2[T] | SomeVec3[T] | SomeVec4[T]
+  SomeVec* = SomeVec2 | SomeVec3 | SomeVec4
 
 # Constructors for GVec2
 

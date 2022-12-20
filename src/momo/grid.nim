@@ -5,7 +5,9 @@ const falseChar = '-'
 const trueChar = '#'
 
 type
-  SomePoint* = SomeVec2[int]
+  SomePoint* = concept vec
+    vec.x is int
+    vec.y is int
   Point* = GVec2[int]
 
   Grid*[T] = ref object

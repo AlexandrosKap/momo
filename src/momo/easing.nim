@@ -73,8 +73,8 @@ func ease*[T: SomeNumber | SomeColor | SomeVec](
           a: ease(function, first.a, last.a, time)
         )
 
-
-func ease*[T](function: EasingFunc, first, last: T, time, maxTime: float): T =
+func ease*[T: SomeNumber | SomeColor | SomeVec](function: EasingFunc, first,
+    last: T, time, maxTime: float): T =
   if time < 0.0:
     ease(function, first, last, 0.0)
   elif time > maxTime:
@@ -82,10 +82,12 @@ func ease*[T](function: EasingFunc, first, last: T, time, maxTime: float): T =
   else:
     ease(function, first, last, time / maxTime)
 
-func lerp*[T](first, last: T, time: float): T =
+func lerp*[T: SomeNumber | SomeColor | SomeVec](first, last: T,
+    time: float): T =
   ease(linear, first, last, time)
 
-func lerp*[T](first, last: T, time, maxTime: float): T =
+func lerp*[T: SomeNumber | SomeColor | SomeVec](first, last: T, time,
+    maxTime: float): T =
   ease(linear, first, last, time, maxTime)
 
 # Easing functions

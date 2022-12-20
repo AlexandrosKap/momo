@@ -1,12 +1,29 @@
 from math import `mod`, floor
 
-# Functions that make math stuff easy.
+# Functions for bool
 
 func `+`*(a, b: bool): bool =
   a or b
 
+func `-`*(a: bool): bool =
+  not a
+
+func `-`*(a, b: bool): bool =
+  a or not b
+
 func `*`*(a, b: bool): bool =
   a and b
+
+func `/`*(a, b: bool): bool =
+  a and not b
+
+func `div`*(a, b: bool): bool =
+  a / b
+
+func `mod`*(a, b: bool): bool =
+  a / b
+
+# Functions for numbers
 
 func `/`*(a, b: SomeInteger): SomeInteger =
   a div b

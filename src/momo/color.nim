@@ -4,10 +4,10 @@ import common
 
 type
   SomeColor* = concept color
-    color.r is uint8
-    color.g is uint8
-    color.b is uint8
-    color.a is uint8
+    color.r
+    color.g
+    color.b
+    color.a
   Color* = object
     r*, g*, b*, a*: uint8
 
