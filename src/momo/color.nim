@@ -24,6 +24,7 @@ func color*(r, g, b, a: uint8): Color = Color(r: r, g: g, b: b, a: a)
 func color*(r, g, b: uint8): Color = color(r, g, b, 255)
 func color*(gray: uint8): Color = color(gray, gray, gray)
 func color*(): Color = color(0)
+
 func color*(hex: string): Color =
   let str =
     if hex.len > 1 and hex[0] == '#': hex[1 ..< hex.len]
@@ -54,17 +55,38 @@ func `+`*(a, b: Color): Color =
 func `-`*(a, b: Color): Color =
   color(a.r - b.r, a.g - b.g, a.b - b.b, if a.a > b.a: a.a else: b.a)
 
-func `*`*(a: Color, b: SomeFloat): Color =
+func `*`*(a: Color, b: SomeNumber): Color =
   color(a.r * b, a.g * b, a.b * b, a.a)
+
+func `*`*(a: SomeNumber, b: Color): Color =
+  color(b.r * a, b.g * a, b.b * a, b.a)
 
 func `*`*(a, b: Color): Color =
   color(a.r * b.r, a.g * b.g, a.b * b.b, if a.a > b.a: a.a else: b.a)
 
+func `/`*(a: Color, b: SomeNumber): Color =
+  color(a.r / b, a.g / b, a.b / b, a.a)
+
+func `/`*(a: SomeNumber, b: Color): Color =
+  color(b.r / a, b.g / a, b.b / a, b.a)
+
 func `/`*(a, b: Color): Color =
   color(a.r / b.r, a.g / b.g, a.b / b.b, if a.a > b.a: a.a else: b.a)
 
+func `div`*(a: Color, b: SomeNumber): Color =
+  color(a.r div b, a.g div b, a.b div b, a.a)
+
+func `div`*(a: SomeNumber, b: Color): Color =
+  color(b.r div a, b.g div a, b.b div a, b.a)
+
 func `div`*(a, b: Color): Color =
   color(a.r div b.r, a.g div b.g, a.b div b.b, if a.a > b.a: a.a else: b.a)
+
+func `mod`*(a: Color, b: SomeNumber): Color =
+  color(a.r mod b, a.g mod b, a.b mod b, a.a)
+
+func `mod`*(a: SomeNumber, b: Color): Color =
+  color(b.r mod a, b.g mod a, b.b mod a, b.a)
 
 func `mod`*(a, b: Color): Color =
   color(a.r mod b.r, a.g mod b.g, a.b mod b.b, if a.a > b.a: a.a else: b.a)
@@ -75,17 +97,26 @@ func `+=`*(a: var Color, b: Color) =
 func `-=`*(a: var Color, b: Color) =
   a = a - b
 
-func `*=`*(a: var Color, b: SomeFloat) =
+func `*=`*(a: var Color, b: SomeNumber) =
   a = a * b
 
 func `*=`*(a: var Color, b: Color) =
   a = a * b
 
+func `/=`*(a: var Color, b: SomeNumber) =
+  a = a / b
+
 func `/=`*(a: var Color, b: Color) =
   a = a / b
 
+func `div=`*(a: var Color, b: SomeNumber) =
+  a = a div b
+
 func `div=`*(a: var Color, b: Color) =
   a = a div b
+
+func `mod=`*(a: var Color, b: SomeNumber) =
+  a = a mod b
 
 func `mod=`*(a: var Color, b: Color) =
   a = a mod b
