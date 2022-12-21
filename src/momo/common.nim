@@ -25,11 +25,11 @@ func `mod`*(a, b: bool): bool =
 
 # Functions for numbers
 
-func `/`*(a, b: SomeInteger): SomeInteger =
+func `/`*[T: SomeInteger](a, b: T): T =
   a div b
 
-func `div`*(a, b: SomeFloat): SomeFloat =
+func `div`*[T: SomeFloat](a, b: T): T =
   (a / b).floor
 
-func `mod`*(a, b: SomeFloat): SomeFloat =
+func `mod`*[T: SomeFloat](a, b: T): T =
   a mod b

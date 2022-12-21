@@ -2,10 +2,9 @@ from strformat import `&`
 import common
 
 type
-  SomeVec2* = concept vec
-    vec.x
-    vec.y
-  GVec2*[T] = object
+  SomeVecType* = SomeNumber | bool
+
+  GVec2*[T: SomeVecType] = object
     x*, y*: T
   BVec2* = GVec2[bool]
   IVec2* = GVec2[int32]
@@ -13,11 +12,7 @@ type
   Vec2* = GVec2[float32]
   DVec2* = GVec2[float64]
 
-  SomeVec3* = concept vec
-    vec.x
-    vec.y
-    vec.z
-  GVec3*[T] = object
+  GVec3*[T: SomeVecType] = object
     x*, y*, z*: T
   BVec3* = GVec3[bool]
   IVec3* = GVec3[int32]
@@ -25,12 +20,7 @@ type
   Vec3* = GVec3[float32]
   DVec3* = GVec3[float64]
 
-  SomeVec4* = concept vec
-    vec.x
-    vec.y
-    vec.z
-    vec.w
-  GVec4*[T] = object
+  GVec4*[T: SomeVecType] = object
     x*, y*, z*, w*: T
   BVec4* = GVec4[bool]
   IVec4* = GVec4[int32]
@@ -38,7 +28,7 @@ type
   Vec4* = GVec4[float32]
   DVec4* = GVec4[float64]
 
-  SomeVec* = SomeVec2 | SomeVec3 | SomeVec4
+  SomeVec*[T] = GVec2[T] | GVec3[T] | GVec4[T]
 
 # Constructors for GVec2
 
@@ -74,7 +64,7 @@ func `!=`*[T](a, b: GVec2[T]): bool =
 func `+`*[T](a, b: GVec2[T]): GVec2[T] =
   gvec2[T](a.x + b.x, a.y + b.y)
 
-func `-`*[T](a: GVec2[T]): GVec2[T] =
+func `-`*[T: SomeSignedInt | SomeFloat](a: GVec2[T]): GVec2[T] =
   gvec2[T](-a.x, -a.y)
 
 func `-`*[T](a, b: GVec2[T]): GVec2[T] =
@@ -109,6 +99,15 @@ func `div=`*[T](a: var GVec2[T], b: GVec2[T]) =
 
 func `mod=`*[T](a: var GVec2[T], b: GVec2[T]) =
   a = a mod b
+
+func `*`*[T, V: SomeNumber](a: GVec2[T], b: V): GVec2[T] =
+  when T is V:
+    gvec2[T](a.x * b, a.y * b)
+  else:
+    gvec2[T]((a.x.V * b).T, (a.y.V * b).T)
+
+func `*`*[T, V: SomeNumber](a: V, b: GVec2[T]): GVec2[T] =
+  b * a
 
 # String functions for GVec2
 
@@ -161,7 +160,7 @@ func `!=`*[T](a, b: GVec3[T]): bool =
 func `+`*[T](a, b: GVec3[T]): GVec3[T] =
   gvec3[T](a.x + b.x, a.y + b.y, a.z + b.z)
 
-func `-`*[T](a: GVec3[T]): GVec3[T] =
+func `-`*[T: SomeSignedInt | SomeFloat](a: GVec3[T]): GVec3[T] =
   gvec3[T](-a.x, -a.y, -a.z)
 
 func `-`*[T](a, b: GVec3[T]): GVec3[T] =
@@ -196,6 +195,15 @@ func `div=`*[T](a: var GVec3[T], b: GVec3[T]) =
 
 func `mod=`*[T](a: var GVec3[T], b: GVec3[T]) =
   a = a mod b
+
+func `*`*[T, V: SomeNumber](a: GVec3[T], b: V): GVec3[T] =
+  when T is V:
+    gvec3[T](a.x * b, a.y * b, a.z * b)
+  else:
+    gvec3[T]((a.x.V * b).T, (a.y.V * b).T, (a.z.V * b).T)
+
+func `*`*[T, V: SomeNumber](a: V, b: GVec3[T]): GVec3[T] =
+  b * a
 
 # String functions for GVec3
 
@@ -248,7 +256,7 @@ func `!=`*[T](a, b: GVec4[T]): bool =
 func `+`*[T](a, b: GVec4[T]): GVec4[T] =
   gvec4[T](a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w)
 
-func `-`*[T](a: GVec4[T]): GVec4[T] =
+func `-`*[T: SomeSignedInt | SomeFloat](a: GVec4[T]): GVec4[T] =
   gvec4[T](-a.x, -a.y, -a.z, -a.w)
 
 func `-`*[T](a, b: GVec4[T]): GVec4[T] =
@@ -283,6 +291,15 @@ func `div=`*[T](a: var GVec4[T], b: GVec4[T]) =
 
 func `mod=`*[T](a: var GVec4[T], b: GVec4[T]) =
   a = a mod b
+
+func `*`*[T, V: SomeNumber](a: GVec4[T], b: V): GVec4[T] =
+  when T is V:
+    gvec4[T](a.x * b, a.y * b, a.z * b, a.w * b)
+  else:
+    gvec4[T]((a.x.V * b).T, (a.y.V * b).T, (a.z.V * b).T, (a.w.V * b).T)
+
+func `*`*[T, V: SomeNumber](a: V, b: GVec4[T]): GVec4[T] =
+  b * a
 
 # String functions for GVec4
 

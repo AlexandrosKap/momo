@@ -12,7 +12,10 @@ test "Vector":
   check vec2(4) / vec2(2) == vec2(2)
   check vec2(4) div vec2(2) == vec2(2)
   check vec2(4) mod vec2(2) == vec2(0)
+  check vec2(4) * 0.5 == vec2(2)
+  check vec2(4) * 2 == vec2(8)
 
+  check vec3(2, 2, 2) == Vec3(x: 2, y: 2, z: 2)
   check vec3(1) == vec3(1, 1, 1)
   check vec3() == vec3(0)
   check vec3(4) + vec3(2) == vec3(6)
@@ -22,7 +25,10 @@ test "Vector":
   check vec3(4) / vec3(2) == vec3(2)
   check vec3(4) div vec3(2) == vec3(2)
   check vec3(4) mod vec3(2) == vec3(0)
+  check vec3(4) * 0.5 == vec3(2)
+  check vec3(4) * 2 == vec3(8)
 
+  check vec4(2, 2, 2, 2) == Vec4(x: 2, y: 2, z: 2, w: 2)
   check vec4(1) == vec4(1, 1, 1, 1)
   check vec4() == vec4(0)
   check vec4(4) + vec4(2) == vec4(6)
@@ -32,6 +38,8 @@ test "Vector":
   check vec4(4) / vec4(2) == vec4(2)
   check vec4(4) div vec4(2) == vec4(2)
   check vec4(4) mod vec4(2) == vec4(0)
+  check vec4(4) * 0.5 == vec4(2)
+  check vec4(4) * 2 == vec4(8)
 
   check bvec2(false) + bvec2(true) == bvec2(true)
   check bvec2(false) * bvec2(true) == bvec2(false)
@@ -46,6 +54,8 @@ test "Vector":
   check ivec2(4) / ivec2(2) == ivec2(2)
   check ivec2(4) div ivec2(2) == ivec2(2)
   check ivec2(4) mod ivec2(2) == ivec2(0)
+  check ivec2(4) * 0.5 == ivec2(2)
+  check ivec2(4) * 2 == ivec2(8)
 
   check uvec2(2, 2) == UVec2(x: 2, y: 2)
   check uvec2(1) == uvec2(1, 1)
@@ -56,6 +66,8 @@ test "Vector":
   check uvec2(4) / uvec2(2) == uvec2(2)
   check uvec2(4) div uvec2(2) == uvec2(2)
   check uvec2(4) mod uvec2(2) == uvec2(0)
+  check uvec2(4) * 0.5 == uvec2(2)
+  check uvec2(4) * 2 == uvec2(8)
 
   var v2 = vec2(1)
   v2 += vec2(2)

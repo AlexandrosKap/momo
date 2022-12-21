@@ -5,65 +5,65 @@ const width = 4
 const height = 4
 
 test "Grid":
-  check point(0, 0) == Point(x: 0, y: 0)
-  check point(0) == point(0, 0)
-  check point() == point(0)
+  check gridPoint(0, 0) == GridPoint(x: 0, y: 0)
+  check gridPoint(0) == gridPoint(0, 0)
+  check gridPoint() == gridPoint(0)
 
   check newBGrid(1, 1, true).cells == @[true]
   check newBGrid(1, 1).cells == @[false]
 
-  var grid = newBGrid(width, height)
-  check grid.width == width
-  check grid.height == height
-  check grid.cells == newSeq[bool](width * height)
-  check grid.len == width * height
+  var g = newBGrid(width, height)
+  check g.width == width
+  check g.height == height
+  check g.cells == newSeq[bool](width * height)
+  check g.len == width * height
 
-  check grid.id(0, 0) == 0
-  check grid.id(point()) == 0
+  check g.id(0, 0) == 0
+  check g.id(gridPoint()) == 0
 
-  check grid.point(0) == point()
+  check g.point(0) == gridPoint()
 
-  grid.set(0, true)
-  grid.set(0, 0, true)
-  grid.set(point(), true)
-  check grid.get(0) == true
-  check grid.get(0, 0) == true
-  check grid.get(point()) == true
+  g.set(0, true)
+  g.set(0, 0, true)
+  g.set(gridPoint(), true)
+  check g.get(0) == true
+  check g.get(0, 0) == true
+  check g.get(gridPoint()) == true
 
-  grid.swap(0, grid.len - 1)
-  grid.swap(0, 0, grid.width - 1, grid.height - 1)
-  grid.swap(point(), point(grid.width - 1, grid.height - 1))
-  check grid.get(grid.width - 1, grid.height - 1) == true
+  g.swap(0, g.len - 1)
+  g.swap(0, 0, g.width - 1, g.height - 1)
+  g.swap(gridPoint(), gridPoint(g.width - 1, g.height - 1))
+  check g.get(g.width - 1, g.height - 1) == true
 
-  grid.fill(false)
-  grid.fill(0, 0, grid.width - 1, grid.height - 1, false)
-  grid.fill(point(), point(grid.width - 1, grid.height - 1), false)
-  grid.fill(0, grid.len - 1, false)
-  check grid.get(grid.width - 1, grid.height - 1) == false
+  g.fill(false)
+  g.fill(0, 0, g.width - 1, g.height - 1, false)
+  g.fill(gridPoint(), gridPoint(g.width - 1, g.height - 1), false)
+  g.fill(0, g.len - 1, false)
+  check g.get(g.width - 1, g.height - 1) == false
 
-  grid.enclose(true)
-  grid.enclose(0, 0, grid.width - 1, grid.height - 1, true)
-  grid.enclose(point(), point(grid.width - 1, grid.height - 1), true)
-  grid.enclose(0, grid.len - 1, true)
-  check grid.get(0) == true
+  g.enclose(true)
+  g.enclose(0, 0, g.width - 1, g.height - 1, true)
+  g.enclose(gridPoint(), gridPoint(g.width - 1, g.height - 1), true)
+  g.enclose(0, g.len - 1, true)
+  check g.get(0) == true
 
-  grid.clear()
-  grid.clear(0, 0, grid.width - 1, grid.height - 1)
-  grid.clear(point(), point(grid.width - 1, grid.height - 1))
-  grid.clear(0, grid.len - 1)
-  check grid.get(0) == false
+  g.clear()
+  g.clear(0, 0, g.width - 1, g.height - 1)
+  g.clear(gridPoint(), gridPoint(g.width - 1, g.height - 1))
+  g.clear(0, g.len - 1)
+  check g.get(0) == false
 
-  check grid.isEmpty(0) == true
-  check grid.isEmpty(0, 0) == true
-  check grid.isEmpty(point()) == true
+  check g.isEmpty(0) == true
+  check g.isEmpty(0, 0) == true
+  check g.isEmpty(gridPoint()) == true
 
-  check grid.isInside(0) == true
-  check grid.isInside(0, 0) == true
-  check grid.isInside(point()) == true
+  check g.isInside(0) == true
+  check g.isInside(0, 0) == true
+  check g.isInside(gridPoint()) == true
 
-  check grid == newBGrid(width, height)
+  check g == newBGrid(width, height)
 
-  for cell in grid:
+  for cell in g:
     check cell == false
-  for i, cell in grid:
+  for i, cell in g:
     check cell == false

@@ -3,11 +3,6 @@ from strutils import fromHex
 import common
 
 type
-  SomeColor* = concept color
-    color.r
-    color.g
-    color.b
-    color.a
   Color* = object
     r*, g*, b*, a*: uint8
 
@@ -84,6 +79,15 @@ func `div=`*(a: var Color, b: Color) =
 
 func `mod=`*(a: var Color, b: Color) =
   a = a mod b
+
+func `*`*[T: SomeNumber](a: Color, b: T): Color =
+  when T is uint8:
+    color(a.r * b, a.g * b, a.b * b, a.a)
+  else:
+    color((a.r.T * b).uint8, (a.g.T * b).uint8, (a.b.T * b).uint8, a.a)
+
+func `*`*[T: SomeFloat](a: T, b: Color): Color =
+  b * a
 
 func `$`*(self: Color): string =
   &"color({self.r}, {self.g}, {self.b}, {self.a})"

@@ -1,12 +1,13 @@
 from math import PI, sqrt, pow, cos, sin
-import color, vector
+import color, shape, vector
 
 type
+  SomeEasingType* = SomeNumber | SomeVec | SomeShape | Color
   EasingFunc* = proc(x: float): float {.noSideEffect.}
 
 func linear*(x: float): float = x
 
-func ease*[T: SomeNumber | SomeColor | SomeVec](
+func ease*[T: SomeEasingType](
   function: EasingFunc, first, last: T, time: float
 ): T =
   if time < 0.0:
@@ -14,81 +15,30 @@ func ease*[T: SomeNumber | SomeColor | SomeVec](
   elif time > 1.0:
     last
   else:
-    when T is SomeFloat:
-      first + (last - first) * function(time)
-    elif T is SomeInteger:
+    when T is SomeInteger:
       first + ((last - first).float * function(time)).T
-    elif T is SomeVec2:
-      when T is tuple:
-        (
-          x: ease(function, first.x, last.x, time),
-          y: ease(function, first.y, last.y, time)
-        )
-      else:
-        T(
-          x: ease(function, first.x, last.x, time),
-          y: ease(function, first.y, last.y, time)
-        )
-    elif T is SomeVec3:
-      when T is tuple:
-        (
-          x: ease(function, first.x, last.x, time),
-          y: ease(function, first.y, last.y, time),
-          z: ease(function, first.z, last.z, time)
-        )
-      else:
-        T(
-          x: ease(function, first.x, last.x, time),
-          y: ease(function, first.y, last.y, time),
-          z: ease(function, first.z, last.z, time)
-        )
-    elif T is SomeVec4:
-      when T is tuple:
-        (
-          x: ease(function, first.x, last.x, time),
-          y: ease(function, first.y, last.y, time),
-          z: ease(function, first.z, last.z, time),
-          w: ease(function, first.w, last.w, time)
-        )
-      else:
-        T(
-          x: ease(function, first.x, last.x, time),
-          y: ease(function, first.y, last.y, time),
-          z: ease(function, first.z, last.z, time),
-          w: ease(function, first.w, last.w, time)
-        )
-    elif T is SomeColor:
-      when T is tuple:
-        (
-          r: ease(function, first.r, last.r, time),
-          g: ease(function, first.g, last.g, time),
-          b: ease(function, first.b, last.b, time),
-          a: ease(function, first.a, last.a, time)
-        )
-      else:
-        T(
-          r: ease(function, first.r, last.r, time),
-          g: ease(function, first.g, last.g, time),
-          b: ease(function, first.b, last.b, time),
-          a: ease(function, first.a, last.a, time)
-        )
+    else:
+      first + (last - first) * function(time)
 
-func ease*[T: SomeNumber | SomeColor | SomeVec](function: EasingFunc, first,
-    last: T, time, maxTime: float): T =
+func ease*[T: SomeEasingType](
+  function: EasingFunc, first, last: T, time, maxTime: float
+): T =
   if time < 0.0:
-    ease(function, first, last, 0.0)
+    ease[T](function, first, last, 0.0)
   elif time > maxTime:
-    ease(function, first, last, 1.0)
+    ease[T](function, first, last, 1.0)
   else:
-    ease(function, first, last, time / maxTime)
+    ease[T](function, first, last, time / maxTime)
 
-func lerp*[T: SomeNumber | SomeColor | SomeVec](first, last: T,
-    time: float): T =
-  ease(linear, first, last, time)
+func lerp*[T: SomeEasingType](
+  first, last: T, time: float
+): T =
+  ease[T](linear, first, last, time)
 
-func lerp*[T: SomeNumber | SomeColor | SomeVec](first, last: T, time,
-    maxTime: float): T =
-  ease(linear, first, last, time, maxTime)
+func lerp*[T: SomeEasingType](
+  first, last: T, time, maxTime: float
+): T =
+  ease[T](linear, first, last, time, maxTime)
 
 # Easing functions
 
