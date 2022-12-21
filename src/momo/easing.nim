@@ -2,7 +2,7 @@ from math import PI, sqrt, pow, cos, sin
 import color, shape, vector
 
 type
-  SomeEasingType* = SomeNumber | SomeVec | SomeShape | Color
+  SomeEasingType* = SomeNumber | SomeNVec | SomeShape | Color
   EasingFunc* = proc(x: float): float {.noSideEffect.}
 
 func linear*(x: float): float = x

@@ -28,7 +28,8 @@ type
   Vec4* = GVec4[float32]
   DVec4* = GVec4[float64]
 
-  SomeVec*[T] = GVec2[T] | GVec3[T] | GVec4[T]
+  SomeVec*[T: SomeVecType] = GVec2[T] | GVec3[T] | GVec4[T]
+  SomeNVec*[T: SomeNumber] = GVec2[T] | GVec3[T] | GVec4[T]
 
 # Constructors for GVec2
 
@@ -64,7 +65,7 @@ func `!=`*[T](a, b: GVec2[T]): bool =
 func `+`*[T](a, b: GVec2[T]): GVec2[T] =
   gvec2[T](a.x + b.x, a.y + b.y)
 
-func `-`*[T: SomeSignedInt | SomeFloat](a: GVec2[T]): GVec2[T] =
+func `-`*[T: SomeSignedInt | SomeFloat | bool](a: GVec2[T]): GVec2[T] =
   gvec2[T](-a.x, -a.y)
 
 func `-`*[T](a, b: GVec2[T]): GVec2[T] =
@@ -160,7 +161,7 @@ func `!=`*[T](a, b: GVec3[T]): bool =
 func `+`*[T](a, b: GVec3[T]): GVec3[T] =
   gvec3[T](a.x + b.x, a.y + b.y, a.z + b.z)
 
-func `-`*[T: SomeSignedInt | SomeFloat](a: GVec3[T]): GVec3[T] =
+func `-`*[T: SomeSignedInt | SomeFloat | bool](a: GVec3[T]): GVec3[T] =
   gvec3[T](-a.x, -a.y, -a.z)
 
 func `-`*[T](a, b: GVec3[T]): GVec3[T] =
@@ -256,7 +257,7 @@ func `!=`*[T](a, b: GVec4[T]): bool =
 func `+`*[T](a, b: GVec4[T]): GVec4[T] =
   gvec4[T](a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w)
 
-func `-`*[T: SomeSignedInt | SomeFloat](a: GVec4[T]): GVec4[T] =
+func `-`*[T: SomeSignedInt | SomeFloat | bool](a: GVec4[T]): GVec4[T] =
   gvec4[T](-a.x, -a.y, -a.z, -a.w)
 
 func `-`*[T](a, b: GVec4[T]): GVec4[T] =

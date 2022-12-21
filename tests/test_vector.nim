@@ -69,6 +69,17 @@ test "Vector":
   check uvec2(4) * 0.5 == uvec2(2)
   check uvec2(4) * 2 == uvec2(8)
 
+  check bvec2(true, true) == BVec2(x: true, y: true)
+  check bvec2(true) == bvec2(true, true)
+  check bvec2() == bvec2(false)
+  check bvec2(true) + bvec2(false) == bvec2(true)
+  check -bvec2(true) == bvec2(false)
+  check bvec2(true) - bvec2(true) == bvec2(false)
+  check bvec2(true) * bvec2(false) == bvec2(false)
+  check bvec2(true) / bvec2(true) == bvec2(true)
+  check bvec2(true) div bvec2(false) == bvec2(false)
+  check bvec2(true) mod bvec2(true) == bvec2(false)
+
   var v2 = vec2(1)
   v2 += vec2(2)
   check v2 == vec2(3)

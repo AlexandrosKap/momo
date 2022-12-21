@@ -21,4 +21,5 @@ type
     points*: seq[GVec2[T]]
   Polygon* = GPolygon[float32]
 
-  SomeShape*[T] = GLine[T] | GCircle[T] | GRectangle[T] | GPolygon[T]
+  SomeShape*[T: SomeNumber] =
+    GLine[T] | GCircle[T] | GRectangle[T] | GPolygon[T]

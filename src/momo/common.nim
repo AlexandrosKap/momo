@@ -9,19 +9,19 @@ func `-`*(a: bool): bool =
   not a
 
 func `-`*(a, b: bool): bool =
-  a or not b
+  a and not b
 
 func `*`*(a, b: bool): bool =
   a and b
 
 func `/`*(a, b: bool): bool =
-  a and not b
+  a and a == b
 
 func `div`*(a, b: bool): bool =
   a / b
 
 func `mod`*(a, b: bool): bool =
-  a / b
+  a and not b
 
 # Functions for numbers
 
