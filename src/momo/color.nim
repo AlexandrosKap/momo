@@ -45,22 +45,52 @@ func `!=`*(a, b: Color): bool =
   not (a == b)
 
 func `+`*(a, b: Color): Color =
-  color(a.r + b.r, a.g + b.g, a.b + b.b, if a.a > b.a: a.a else: b.a)
+  let
+    cr = a.r + b.r
+    cg = a.g + b.g
+    cb = a.b + b.b
+    ca = a.a + b.a
+  color(
+    if cr < a.r: 255u8 else: cr,
+    if cg < a.g: 255u8 else: cg,
+    if cb < a.b: 255u8 else: cb,
+    if ca < a.a: 255u8 else: ca
+  )
 
 func `-`*(a, b: Color): Color =
-  color(a.r - b.r, a.g - b.g, a.b - b.b, if a.a > b.a: a.a else: b.a)
+  let
+    cr = a.r - b.r
+    cg = a.g - b.g
+    cb = a.b - b.b
+    ca = a.a - b.a
+  color(
+    if cr > a.r: 0u8 else: cr,
+    if cg > a.g: 0u8 else: cg,
+    if cb > a.b: 0u8 else: cb,
+    if ca > a.a: 0u8 else: ca
+  )
 
 func `*`*(a, b: Color): Color =
-  color(a.r * b.r, a.g * b.g, a.b * b.b, if a.a > b.a: a.a else: b.a)
+  let
+    cr = a.r * b.r
+    cg = a.g * b.g
+    cb = a.b * b.b
+    ca = a.a * b.a
+  color(
+    if cr < a.r: 255u8 else: cr,
+    if cg < a.g: 255u8 else: cg,
+    if cb < a.b: 255u8 else: cb,
+    if ca < a.a: 255u8 else: ca
+  )
 
 func `/`*(a, b: Color): Color =
-  color(a.r / b.r, a.g / b.g, a.b / b.b, if a.a > b.a: a.a else: b.a)
+  color(a.r / b.r, a.g / b.g, a.b / b.b, a.a / b.a)
 
 func `div`*(a, b: Color): Color =
-  color(a.r div b.r, a.g div b.g, a.b div b.b, if a.a > b.a: a.a else: b.a)
+  color(a.r div b.r, a.g div b.g, a.b div b.b, a.a div b.a)
 
 func `mod`*(a, b: Color): Color =
-  color(a.r mod b.r, a.g mod b.g, a.b mod b.b, if a.a > b.a: a.a else: b.a)
+  color(a.r mod b.r, a.g mod b.g, a.b mod b.b, a.a mod b.a)
 
 func `+=`*(a: var Color, b: Color) =
   a = a + b
@@ -81,10 +111,37 @@ func `mod=`*(a: var Color, b: Color) =
   a = a mod b
 
 func `*`*[T: SomeNumber](a: Color, b: T): Color =
-  when T is uint8:
-    color(a.r * b, a.g * b, a.b * b, a.a)
+  if b < 0:
+    a
+  elif b < 1:
+    when T is SomeFloat:
+      color(
+        (a.r.T * b).uint8,
+        (a.g.T * b).uint8,
+        (a.b.T * b).uint8,
+        (a.a.T * b).uint8
+      )
+    else:
+      color(0, 0, 0, 0)
   else:
-    color((a.r.T * b).uint8, (a.g.T * b).uint8, (a.b.T * b).uint8, a.a)
+    when T is uint8:
+      let
+        cr = a.r * b
+        cg = a.g * b
+        cb = a.b * b
+        ca = a.a * b
+    else:
+      let
+        cr = (a.r.T * b).uint8
+        cg = (a.g.T * b).uint8
+        cb = (a.b.T * b).uint8
+        ca = (a.a.T * b).uint8
+    color(
+      if cr < a.r: 255u8 else: cr,
+      if cg < a.g: 255u8 else: cg,
+      if cb < a.b: 255u8 else: cb,
+      if ca < a.a: 255u8 else: ca
+    )
 
 func `*`*[T: SomeFloat](a: T, b: Color): Color =
   b * a

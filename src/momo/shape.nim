@@ -1,5 +1,7 @@
 import vector
 
+# TODO: WORKING ON IT UWU
+
 type
   GLine*[T: SomeNumber] = object
     a*: GVec2[T]

@@ -16,7 +16,7 @@ type
   FGrid* = Grid[float32]
   DGrid* = Grid[float64]
 
-# Constructors for Point
+# Constructors for GridPoint
 
 func gridPoint*(x, y: int): GridPoint = gvec2(x, y)
 func gridPoint*(x: int): GridPoint = gvec2(x)

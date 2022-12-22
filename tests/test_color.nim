@@ -18,12 +18,12 @@ test "Color":
   check color("#5aff5d78") == color(255, 93, 120, 90)
 
   check color(4) + color(2) == color(6)
-  check color(4) - color(2) == color(2)
+  check color(4) - color(2) == color(2, 2, 2, 0)
   check color(4) * color(2) == color(8)
-  check color(4) / color(2) == color(2)
-  check color(4) div color(2) == color(2)
-  check color(4) mod color(2) == color(0)
-  check color(4) * 0.5 == color(2)
+  check color(4) / color(2) == color(2, 2, 2, 1)
+  check color(4) div color(2) == color(2, 2, 2, 1)
+  check color(4) mod color(2) == color(0, 0, 0, 0)
+  check color(4) * 0.5 == color(2, 2, 2, (255 * 0.5).uint8)
   check color(4) * 2 == color(8)
 
   var c = color(1)
