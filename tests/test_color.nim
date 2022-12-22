@@ -23,8 +23,10 @@ test "Color":
   check color(4) / color(2) == color(2, 2, 2, 1)
   check color(4) div color(2) == color(2, 2, 2, 1)
   check color(4) mod color(2) == color(0, 0, 0, 0)
-  check color(4) * 0.5 == color(2, 2, 2, (255 * 0.5).uint8)
   check color(4) * 2 == color(8)
+  check color(4) * 0.5 == color(2, 2, 2, (255 * 0.5).uint8)
+  check color(4) / 2 == color(2, 2, 2, (255 / 2).uint8)
+  check color(4) / 2.0 == color(2, 2, 2, (255 / 2.0).uint8)
 
   var c = color(1)
   c += color(2)

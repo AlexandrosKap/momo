@@ -128,6 +128,21 @@ func `*`*[T, V: SomeNumber](a: GVec2[T], b: V): GVec2[T] =
 func `*`*[T, V: SomeNumber](a: V, b: GVec2[T]): GVec2[T] =
   b * a
 
+func `/`*[T, V: SomeNumber](a: GVec2[T], b: V): GVec2[T] =
+  when T is V:
+    gvec2[T](a.x / b, a.y / b)
+  else:
+    gvec2[T]((a.x.V / b).T, (a.y.V / b).T)
+
+func `/`*[T, V: SomeNumber](a: V, b: GVec2[T]): GVec2[T] =
+  b / a
+
+func `*=`*[T, V: SomeNumber](a: var GVec2[T], b: V) =
+  a = a * b
+
+func `/=`*[T, V: SomeNumber](a: var GVec2[T], b: V) =
+  a = a / b
+
 func `$`*[T: SomeNumber](self: GVec2[T]): string =
   &"vec({self.x}, {self.y})"
 
@@ -233,6 +248,21 @@ func `*`*[T, V: SomeNumber](a: GVec3[T], b: V): GVec3[T] =
 
 func `*`*[T, V: SomeNumber](a: V, b: GVec3[T]): GVec3[T] =
   b * a
+
+func `/`*[T, V: SomeNumber](a: GVec3[T], b: V): GVec3[T] =
+  when T is V:
+    gvec3[T](a.x / b, a.y / b, a.z / b)
+  else:
+    gvec3[T]((a.x.V / b).T, (a.y.V / b).T, (a.z.V / b).T)
+
+func `/`*[T, V: SomeNumber](a: V, b: GVec3[T]): GVec3[T] =
+  b / a
+
+func `*=`*[T, V: SomeNumber](a: var GVec3[T], b: V) =
+  a = a * b
+
+func `/=`*[T, V: SomeNumber](a: var GVec3[T], b: V) =
+  a = a / b
 
 func `$`*[T: SomeNumber](self: GVec3[T]): string =
   &"vec({self.x}, {self.y}, {self.z})"
@@ -340,5 +370,27 @@ func `*`*[T, V: SomeNumber](a: GVec4[T], b: V): GVec4[T] =
 func `*`*[T, V: SomeNumber](a: V, b: GVec4[T]): GVec4[T] =
   b * a
 
+func `/`*[T, V: SomeNumber](a: GVec4[T], b: V): GVec4[T] =
+  when T is V:
+    gvec4[T](a.x / b, a.y / b, a.z / b, a.w / b)
+  else:
+    gvec4[T]((a.x.V / b).T, (a.y.V / b).T, (a.z.V / b).T, (a.w.V / b).T)
+
+func `/`*[T, V: SomeNumber](a: V, b: GVec4[T]): GVec4[T] =
+  b / a
+
+func `*=`*[T, V: SomeNumber](a: var GVec4[T], b: V) =
+  a = a * b
+
+func `/=`*[T, V: SomeNumber](a: var GVec4[T], b: V) =
+  a = a / b
+
 func `$`*[T: SomeNumber](self: GVec4[T]): string =
   &"vec({self.x}, {self.y}, {self.z}, {self.w})"
+
+const zero2* = vec2()
+const one2* = vec2(1)
+const left2* = vec2(-1, 0)
+const right2* = vec2(1, 0)
+const up2* = vec2(0, -1)
+const down2* = vec2(0, 1)

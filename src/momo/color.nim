@@ -143,8 +143,28 @@ func `*`*[T: SomeNumber](a: Color, b: T): Color =
       if ca < a.a: 255u8 else: ca
     )
 
-func `*`*[T: SomeFloat](a: T, b: Color): Color =
+func `*`*[T: SomeNumber](a: T, b: Color): Color =
   b * a
+
+func `/`*[T: SomeNumber](a: Color, b: T): Color =
+  when T is uint8:
+    color(a.r / b, a.g / b, a.b / b, a.a / b)
+  else:
+    color(
+      (a.r.T / b).uint8,
+      (a.g.T / b).uint8,
+      (a.b.T / b).uint8,
+      (a.a.T / b).uint8
+    )
+
+func `/`*[T: SomeNumber](a: T, b: Color): Color =
+  b / a
+
+func `*=`*[T: SomeNumber](a: var Color, b: T): Color =
+  a = a * b
+
+func `/=`*[T: SomeNumber](a: var Color, b: T): Color =
+  a = a / b
 
 func `$`*(self: Color): string =
   &"color({self.r}, {self.g}, {self.b}, {self.a})"

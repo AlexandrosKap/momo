@@ -27,3 +27,7 @@ then start coding the system.
 
 Maybe I can combine the animation module with the dialogue module.
 Dialogues are animations that usually await player input.
+
+### 22/12/2022
+
+Please (me) focus on the animation module and stop wasting time on the vector module...
