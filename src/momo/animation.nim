@@ -4,30 +4,36 @@ import easing
 # TODO: WORKING ON IT UWU
 
 type
-  Keyframe*[T] = object
+  Keyframe*[T: SomeEasingType] = object
     easingFunc*: EasingFunc
     value*: T
     time*: float
-  Animation*[T] = ref object
+  Animation*[T: SomeEasingType] = ref object
     keyframes*: seq[Keyframe[T]]
     index: uint
     time: float
 
-func keyframe*[T](easingFunc: EasingFunc, value: T, time: float): Keyframe[T] =
+func keyframe*[T: SomeEasingType](
+  easingFunc: EasingFunc, value: T, time: float
+): Keyframe[T] =
   Keyframe[T](
     easingFunc: easingFunc,
     value: value,
     time: if time < 0.0: 0.0 else: time,
   )
 
-func keyframe*[T](value: T, time: float): Keyframe[T] =
+func keyframe*[T: SomeEasingType](
+  value: T, time: float
+): Keyframe[T] =
   Keyframe[T](
     easingFunc: linear,
     value: value,
     time: time,
   )
 
-func ease*[T](self: Keyframe[T], last: Keyframe[T], time: float): T =
+func ease*[T: SomeEasingType](
+  self: Keyframe[T], last: Keyframe[T], time: float
+): T =
   if time < self.time: self.value
   elif time > last.time: last.value
   elif last.time < self.time: last.value
@@ -40,10 +46,12 @@ func ease*[T](self: Keyframe[T], last: Keyframe[T], time: float): T =
       last.time - self.time
     )
 
-func `$`*[T](self: Keyframe[T]): string =
+func `$`*[T: SomeEasingType](self: Keyframe[T]): string =
   &"keyframe({self.value}, {self.time})"
 
-func newAnimation*[T](keyframes: varargs[Keyframe[T]]): Animation[T] =
+func newAnimation*[T: SomeEasingType](
+  keyframes: varargs[Keyframe[T]]
+): Animation[T] =
   result = Animation[T]()
   for keyframe in keyframes:
     result.keyframes.add(keyframe)

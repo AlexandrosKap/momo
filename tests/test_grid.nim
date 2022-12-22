@@ -1,21 +1,20 @@
 import unittest
 import momo/grid
 
-const width = 4
-const height = 4
-const first = gridPoint()
-const last = gridPoint(width - 1, height - 1)
+const size = gridVec(4, 4)
+const first = gridVec()
+const last = gridVec(size.x - 1, size.y - 1)
 
 test "Grid":
-  check gridPoint(0, 0) == GridPoint(x: 0, y: 0)
-  check gridPoint(0) == gridPoint(0, 0)
-  check gridPoint() == gridPoint(0)
+  check gridVec(0, 0) == GridVec(x: 0, y: 0)
+  check gridVec(0) == gridVec(0, 0)
+  check gridVec() == gridVec(0)
 
-  var g = newBGrid(width, height)
-  check g.width == width
-  check g.height == height
-  check g.cells == newSeq[bool](width * height)
-  check g.len == width * height
+  var g = newBGrid(size)
+  check g.width == size.x
+  check g.height == size.y
+  check g.cells == newSeq[bool](size.x * size.y)
+  check g.len == size.x * size.y
   check g.id(first) == 0
   check g.point(0) == first
 
@@ -43,7 +42,7 @@ test "Grid":
   g.clear()
   check g.isEmpty(first) == true
   check g.isInside(first) == true
-  check g == newBGrid(width, height)
+  check g == newBGrid(size)
 
   for cell in g:
     check cell == false
