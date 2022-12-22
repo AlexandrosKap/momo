@@ -3,64 +3,46 @@ import momo/grid
 
 const width = 4
 const height = 4
+const first = gridPoint()
+const last = gridPoint(width - 1, height - 1)
 
 test "Grid":
   check gridPoint(0, 0) == GridPoint(x: 0, y: 0)
   check gridPoint(0) == gridPoint(0, 0)
   check gridPoint() == gridPoint(0)
 
-  check newBGrid(1, 1, true).cells == @[true]
-  check newBGrid(1, 1).cells == @[false]
-
   var g = newBGrid(width, height)
   check g.width == width
   check g.height == height
   check g.cells == newSeq[bool](width * height)
   check g.len == width * height
+  check g.id(first) == 0
+  check g.point(0) == first
 
-  check g.id(0, 0) == 0
-  check g.id(gridPoint()) == 0
+  g.set(first, true)
+  check g.get(first) == true
 
-  check g.point(0) == gridPoint()
-
-  g.set(0, true)
-  g.set(0, 0, true)
-  g.set(gridPoint(), true)
-  check g.get(0) == true
-  check g.get(0, 0) == true
-  check g.get(gridPoint()) == true
-
-  g.swap(0, g.len - 1)
-  g.swap(0, 0, g.width - 1, g.height - 1)
-  g.swap(gridPoint(), gridPoint(g.width - 1, g.height - 1))
-  check g.get(g.width - 1, g.height - 1) == true
+  g.swap(first, last)
+  check g.get(last) == true
 
   g.fill(false)
-  g.fill(0, 0, g.width - 1, g.height - 1, false)
-  g.fill(gridPoint(), gridPoint(g.width - 1, g.height - 1), false)
-  g.fill(0, g.len - 1, false)
-  check g.get(g.width - 1, g.height - 1) == false
-
-  g.enclose(true)
-  g.enclose(0, 0, g.width - 1, g.height - 1, true)
-  g.enclose(gridPoint(), gridPoint(g.width - 1, g.height - 1), true)
-  g.enclose(0, g.len - 1, true)
-  check g.get(0) == true
+  check g.get(last) == false
+  g.fill(first, last, false)
+  check g.get(last) == false
 
   g.clear()
-  g.clear(0, 0, g.width - 1, g.height - 1)
-  g.clear(gridPoint(), gridPoint(g.width - 1, g.height - 1))
-  g.clear(0, g.len - 1)
-  check g.get(0) == false
+  check g.get(last) == false
+  g.clear(first, last)
+  check g.get(last) == false
 
-  check g.isEmpty(0) == true
-  check g.isEmpty(0, 0) == true
-  check g.isEmpty(gridPoint()) == true
+  g.enclose(true)
+  check g.get(last) == true
+  g.enclose(first, last, true)
+  check g.get(last) == true
 
-  check g.isInside(0) == true
-  check g.isInside(0, 0) == true
-  check g.isInside(gridPoint()) == true
-
+  g.clear()
+  check g.isEmpty(first) == true
+  check g.isInside(first) == true
   check g == newBGrid(width, height)
 
   for cell in g:

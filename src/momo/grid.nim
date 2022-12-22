@@ -1,4 +1,3 @@
-from strformat import `&`
 import vector
 
 const falseChar = '-'
@@ -18,14 +17,9 @@ type
 
 # Constructors for GridPoint
 
-func gridPoint*(x, y: int): GridPoint = gvec2(x, y)
-func gridPoint*(x: int): GridPoint = gvec2(x)
-func gridPoint*(): GridPoint = gvec2(0)
-
-# Functions for GridPoint
-
-func `$`*(self: GridPoint): string =
-  &"gridPoint({self.x}, {self.y})"
+func gridPoint*(x, y: int): GridPoint = gvec2[int](x, y)
+func gridPoint*(x: int): GridPoint = gvec2[int](x)
+func gridPoint*(): GridPoint = gvec2[int](0)
 
 # Constructors for Grid
 
@@ -69,145 +63,122 @@ func newDGrid*(width, height: int): DGrid =
 
 # Functions for Grid
 
-func width*(self: Grid): int = self.width
-func height*(self: Grid): int = self.height
-func cells*[T](self: Grid[T]): seq[T] = self.cells
-func len*(self: Grid): int = self.width * self.height
+func width*[T](self: Grid[T]): int =
+  self.width
 
-func id*(self: Grid, x, y: int): int = y * self.width + x
-func id*(self: Grid, p: GridPoint): int = self.id(p.x, p.y)
+func height*[T](self: Grid[T]): int =
+  self.height
 
-func point*(self: Grid, id: int): GridPoint =
+func cells*[T](self: Grid[T]): seq[T] =
+  self.cells
+
+func len*[T](self: Grid[T]): int =
+  self.cells.len
+
+func id*[T](self: Grid[T], p: GridPoint): int =
+  p.y * self.width + p.x
+
+func point*[T](self: Grid[T], id: int): GridPoint =
   gridPoint(id mod self.width, id div self.width)
 
-func set*[T](self: Grid[T], id: int, value: T) = self.cells[id] = value
-func set*[T](self: Grid[T], x, y: int, value: T) = self.set(self.id(x, y), value)
-func set*[T](self: Grid[T], p: GridPoint, value: T) = self.set(p.x, p.y, value)
+func set*[T](self: Grid[T], p: GridPoint, value: T) =
+  self.cells[self.id(p)] = value
 
-func get*[T](self: Grid[T], id: int): T = self.cells[id]
-func get*[T](self: Grid[T], x, y: int): T = self.get(self.id(x, y))
-func get*[T](self: Grid[T], p: GridPoint): T = self.get(p.x, p.y)
+func get*[T](self: Grid[T], p: GridPoint): T =
+  self.cells[self.id(p)]
 
-func swap*(self: Grid, id1, id2: int) =
-  let temp = self.get(id1)
-  self.set(id1, self.get(id2))
-  self.set(id2, temp)
-
-func swap*(self: Grid, x1, y1, x2, y2: int) =
-  self.swap(self.id(x1, y1), self.id(x2, y2))
-
-func swap*(self: Grid, p1, p2: GridPoint) =
-  self.swap(p1.x, p1.y, p2.x, p2.y)
+func swap*[T](self: Grid[T], p1, p2: GridPoint) =
+  let temp = self.get(p1)
+  self.set(p1, self.get(p2))
+  self.set(p2, temp)
 
 func fill*[T](self: Grid[T], value: T) =
   for i in 0 ..< self.len:
     self.cells[i] = value
 
-func fill*[T](self: Grid[T], x1, y1, x2, y2: int, value: T) =
-  var xa, ya, xb, yb: int
-  if x1 < x2:
-    xa = x1
-    xb = x2
-  else:
-    xa = x2
-    xb = x1
-  if y1 < y2:
-    ya = y1
-    yb = y2
-  else:
-    ya = y2
-    yb = y1
-  for y in ya .. yb:
-    for x in xa .. xb:
-      self.set(x, y, value)
-
 func fill*[T](self: Grid[T], p1, p2: GridPoint, value: T) =
-  self.fill(p1.x, p1.y, p2.x, p2.y, value)
+  var x1, y1, x2, y2: int
+  if p1.x < p2.x:
+    x1 = p1.x
+    x2 = p2.x
+  else:
+    x1 = p2.x
+    x2 = p1.x
+  if p1.y < p2.y:
+    y1 = p1.y
+    y2 = p2.y
+  else:
+    y1 = p2.y
+    y2 = p1.y
+  for y in y1 .. y2:
+    for x in x1 .. x2:
+      self.set(gridPoint(x, y), value)
 
-func fill*[T](self: Grid[T], id1, id2: int, value: T) =
-  self.fill(self.point(id1), self.point(id2), value)
+func clear*[T](self: Grid[T]) =
+  self.fill(T.default)
+
+func clear*[T](self: Grid[T], p1, p2: GridPoint) =
+  self.fill(p1, p2, T.default)
 
 func enclose*[T](self: Grid[T], value: T) =
   for y in 0 ..< self.height:
     if y == 0 or y == self.height - 1:
       for x in 0 ..< self.width:
-        self.set(x, y, value)
+        self.set(gridPoint(x, y), value)
     else:
-      self.set(0, y, value)
-      self.set(self.width - 1, y, value)
-
-func enclose*[T](self: Grid[T], x1, y1, x2, y2: int, value: T) =
-  var xa, ya, xb, yb: int
-  if x1 < x2:
-    xa = x1
-    xb = x2
-  else:
-    xa = x2
-    xb = x1
-  if y1 < y2:
-    ya = y1
-    yb = y2
-  else:
-    ya = y2
-    yb = y1
-  for y in ya .. yb:
-    if y == ya or y == yb:
-      for x in xa .. xb:
-        self.set(x, y, value)
-    else:
-      self.set(xa, y, value)
-      self.set(xb, y, value)
+      self.set(gridPoint(0, y), value)
+      self.set(gridPoint(self.width - 1, y), value)
 
 func enclose*[T](self: Grid[T], p1, p2: GridPoint, value: T) =
-  self.enclose(p1.x, p1.y, p2.x, p2.y, value)
+  var x1, y1, x2, y2: int
+  if p1.x < p2.x:
+    x1 = p1.x
+    x2 = p2.x
+  else:
+    x1 = p2.x
+    x2 = p1.x
+  if p1.y < p2.y:
+    y1 = p1.y
+    y2 = p2.y
+  else:
+    y1 = p2.y
+    y2 = p1.y
+  for y in y1 .. y2:
+    if y == y1 or y == y2:
+      for x in x1 .. x2:
+        self.set(gridPoint(x, y), value)
+    else:
+      self.set(gridPoint(x1, y), value)
+      self.set(gridPoint(x2, y), value)
 
-func enclose*[T](self: Grid[T], id1, id2: int, value: T) =
-  self.enclose(self.point(id1), self.point(id2), value)
+func isEmpty*[T](self: Grid[T], p: GridPoint): bool =
+  self.get(p) == T.default
 
-func clear*[T](self: Grid[T]) =
-  self.fill(T.default)
-
-func clear*[T](self: Grid[T], x1, y1, x2, y2: int) =
-  self.fill(x1, y1, x2, y2, T.default)
-
-func clear*[T](self: Grid[T], p1, p2: GridPoint) =
-  self.fill(p1, p2, T.default)
-
-func clear*[T](self: Grid[T], id1, id2: int) =
-  self.fill(id1, id2, T.default)
-
-func isEmpty*[T](self: Grid[T], id: int): bool = self.get(id) == T.default
-func isEmpty*[T](self: Grid[T], x, y: int): bool = self.isEmpty(self.id(x, y))
-func isEmpty*[T](self: Grid[T], p: GridPoint): bool = self.isEmpty(p.x, p.y)
-
-func isInside*[T](self: Grid[T], id: int): bool = id >= 0 and id < self.len
-func isInside*[T](self: Grid[T], x, y: int): bool = self.isInside(self.id(x, y))
-func isInside*[T](self: Grid[T], p: GridPoint): bool = self.isInside(p.x, p.y)
+func isInside*[T](self: Grid[T], p: GridPoint): bool =
+  p.x >= 0 and p.x < self.width and p.y >= 0 and p.y < self.height
 
 func `$`*[T](self: Grid[T]): string =
   result = ""
-  for y in 0 ..< self.height:
-    for x in 0 ..< self.width:
-      let value = self.get(x, y)
-      when T is bool:
-        result.add(if value: trueChar else: falseChar)
-      else:
-        result.add($value)
-      if x != self.width - 1:
-        result.add(' ')
-    if y != self.height - 1:
+  for i, cell in self.cells:
+    if i != 0 and i mod self.width == 0:
       result.add('\n')
+    when T is bool:
+      result.add(if cell: trueChar else: falseChar)
+    else:
+      result.add($cell)
+    if i mod self.width != self.width - 1:
+      result.add(' ')
 
 func `==`*[T](a, b: Grid[T]): bool =
   a.cells == b.cells
 
 func `!=`*[T](a, b: Grid[T]): bool =
-  not a == b
+  not (a == b)
 
 iterator items*[T](self: Grid[T]): T =
   for a in self.cells:
     yield a
 
-iterator pairs*[T](self: Grid[T]): tuple[a: int, b: T] =
+iterator pairs*[T](self: Grid[T]): (int, T) =
   for a, b in self.cells:
     yield (a, b)

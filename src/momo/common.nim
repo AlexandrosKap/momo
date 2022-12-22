@@ -5,23 +5,8 @@ from math import `mod`, floor
 func `+`*(a, b: bool): bool =
   a or b
 
-func `-`*(a: bool): bool =
-  not a
-
-func `-`*(a, b: bool): bool =
-  a and not b
-
 func `*`*(a, b: bool): bool =
   a and b
-
-func `/`*(a, b: bool): bool =
-  a and a == b
-
-func `div`*(a, b: bool): bool =
-  a / b
-
-func `mod`*(a, b: bool): bool =
-  a and not b
 
 # Functions for numbers
 
