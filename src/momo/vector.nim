@@ -29,60 +29,183 @@ type
 
 template genCon(name, t: untyped) =
   func `name 2`*(x, y: t): GVec2[t] =
-    GVec2[t](x: x, y: y)
+    GVec2[t](
+      x: x,
+      y: y
+    )
 
   func `name 2`*(x: t): GVec2[t] =
-    GVec2[t](x: x, y: x)
+    GVec2[t](
+      x: x,
+      y: x
+    )
 
   func `name 2`*(): GVec2[t] =
-    GVec2[t](x: t.default, y: t.default)
+    GVec2[t](
+      x: t.default,
+      y: t.default
+    )
 
   func `name 3`*(x, y, z: t): GVec3[t] =
-    GVec3[t](x: x, y: y, z: z)
+    GVec3[t](
+      x: x,
+      y: y,
+      z: z
+    )
 
   func `name 3`*(x: t): GVec3[t] =
-    GVec3[t](x: x, y: x, z: x)
+    GVec3[t](
+      x: x,
+      y: x,
+      z: x
+    )
 
   func `name 3`*(): GVec3[t] =
-    GVec3[t](x: t.default, y: t.default, z: t.default)
+    GVec3[t](
+      x: t.default,
+      y: t.default,
+      z: t.default
+    )
 
   func `name 4`*(x, y, z, w: t): GVec4[t] =
-    GVec4[t](x: x, y: y, z: z, w: w)
+    GVec4[t](
+      x: x,
+      y: y,
+      z: z,
+      w: w
+    )
 
   func `name 4`*(x: t): GVec4[t] =
-    GVec4[t](x: x, y: x, z: x, w: x)
+    GVec4[t](
+      x: x,
+      y: x,
+      z: x,
+      w: x
+    )
 
   func `name 4`*(): GVec4[t] =
-    GVec4[t](x: t.default, y: t.default, z: t.default, w: t.default)
+    GVec4[t](
+      x: t.default,
+      y: t.default,
+      z: t.default,
+      w: t.default
+    )
 
-template genOp(op: untyped, isBool: static bool = false) =
-  when isBool:
-    func op*[T: SomeNumber](a, b: GVec2[T]): bool =
-      op(a.x, b.x) and op(a.y, b.y)
+template genOp(op: untyped) =
+  func op*[T: SomeNumber](a, b: GVec2[T]): GVec2[T] =
+    GVec2[T](
+      x: op(a.x, b.x),
+      y: op(a.y, b.y)
+    )
 
-    func op*[T: SomeNumber](a, b: GVec3[T]): bool =
-      op(a.x, b.x) and op(a.y, b.y) and op(a.z, b.z)
+  func op*[T, V: SomeNumber](a: GVec2[T], b: V): GVec2[T] =
+    when V is T:
+      GVec2[T](
+        x: op(a.x, b),
+        y: op(a.y, b)
+      )
+    else:
+      GVec2[T](
+        x: op(a.x.V, b).T,
+        y: op(a.y.V, b).T
+      )
 
-    func op*[T: SomeNumber](a, b: GVec4[T]): bool =
-      op(a.x, b.x) and op(a.y, b.y) and op(a.z, b.z) and op(a.w, b.w)
-  else:
-    func op*[T: SomeNumber](a, b: GVec2[T]): GVec2[T] =
-      GVec2[T](x: op(a.x, b.x), y: op(a.y, b.y))
+  func op*[T, V: SomeNumber](b: V, a: GVec2[T]): GVec2[T] =
+    when V is T:
+      GVec2[T](
+        x: op(a.x, b),
+        y: op(a.y, b)
+      )
+    else:
+      GVec2[T](
+        x: op(a.x.V, b).T,
+        y: op(a.y.V, b).T
+      )
 
-    func op*[T: SomeNumber](a: GVec2[T], b: T): GVec2[T] =
-      GVec2[T](x: op(a.x, b), y: op(a.y, b))
+  func op*[T: SomeNumber](a, b: GVec3[T]): GVec3[T] =
+    GVec3[T](
+      x: op(a.x, b.x),
+      y: op(a.y, b.y),
+      z: op(a.z, b.z)
+    )
 
-    func op*[T: SomeNumber](a, b: GVec3[T]): GVec3[T] =
-      GVec3[T](x: op(a.x, b.x), y: op(a.y, b.y), z: op(a.z, b.z))
+  func op*[T, V: SomeNumber](a: GVec3[T], b: V): GVec3[T] =
+    when V is T:
+      GVec3[T](
+        x: op(a.x, b),
+        y: op(a.y, b),
+        z: op(a.z, b)
+      )
+    else:
+      GVec3[T](
+        x: op(a.x.V, b).T,
+        y: op(a.y.V, b).T,
+        z: op(a.z.V, b).T
+      )
 
-    func op*[T: SomeNumber](a: GVec3[T], b: T): GVec3[T] =
-      GVec3[T](x: op(a.x, b), y: op(a.y, b), z: op(a.z, b))
+  func op*[T, V: SomeNumber](b: V, a: GVec3[T]): GVec3[T] =
+    when V is T:
+      GVec3[T](
+        x: op(a.x, b),
+        y: op(a.y, b),
+        z: op(a.z, b)
+      )
+    else:
+      GVec3[T](
+        x: op(a.x.V, b).T,
+        y: op(a.y.V, b).T,
+        z: op(a.z.V, b).T
+      )
 
-    func op*[T: SomeNumber](a, b: GVec4[T]): GVec4[T] =
-      GVec4[T](x: op(a.x, b.x), y: op(a.y, b.y), z: op(a.z, b.z), w: op(a.w, b.w))
+  func op*[T: SomeNumber](a, b: GVec4[T]): GVec4[T] =
+    GVec4[T](
+      x: op(a.x, b.x),
+      y: op(a.y, b.y),
+      z: op(a.z, b.z),
+      w: op(a.w, b.w)
+    )
 
-    func op*[T: SomeNumber](a: GVec4[T], b: T): GVec4[T] =
-      GVec4[T](x: op(a.x, b), y: op(a.y, b), z: op(a.z, b), w: op(a.w, b))
+  func op*[T, V: SomeNumber](a: GVec4[T], b: V): GVec4[T] =
+    when V is T:
+      GVec4[T](
+        x: op(a.x, b),
+        y: op(a.y, b),
+        z: op(a.z, b),
+        w: op(a.w, b)
+      )
+    else:
+      GVec4[T](
+        x: op(a.x.V, b).T,
+        y: op(a.y.V, b).T,
+        z: op(a.z.V, b).T,
+        w: op(a.w.V, b).T
+      )
+
+  func op*[T, V: SomeNumber](b: V, a: GVec4[T]): GVec4[T] =
+    when V is T:
+      GVec4[T](
+        x: op(a.x, b),
+        y: op(a.y, b),
+        z: op(a.z, b),
+        w: op(a.w, b)
+      )
+    else:
+      GVec4[T](
+        x: op(a.x.V, b).T,
+        y: op(a.y.V, b).T,
+        z: op(a.z.V, b).T,
+        w: op(a.w.V, b).T
+      )
+
+template genBoOp(op: untyped) =
+  func op*[T: SomeNumber](a, b: GVec2[T]): bool =
+    op(a.x, b.x) and op(a.y, b.y)
+
+  func op*[T: SomeNumber](a, b: GVec3[T]): bool =
+    op(a.x, b.x) and op(a.y, b.y) and op(a.z, b.z)
+
+  func op*[T: SomeNumber](a, b: GVec4[T]): bool =
+    op(a.x, b.x) and op(a.y, b.y) and op(a.z, b.z) and op(a.w, b.w)
 
 template genEqOp(op: untyped) =
   func op*[T: SomeNumber](a: var GVec2[T], b: GVec2[T]) =
@@ -120,14 +243,15 @@ genCon(uvec, uint32)
 genCon(vec, float32)
 genCon(dvec, float64)
 
-genOp(`==`, true)
-genOp(`!=`, true)
 genOp(`+`)
 genOp(`-`)
 genOp(`*`)
 genOp(`/`)
 genOp(`div`)
 genOp(`mod`)
+
+genBoOp(`==`)
+genBoOp(`!=`)
 
 genEqOp(`+=`)
 genEqOp(`-=`)
@@ -148,13 +272,13 @@ func `-`*[T: SomeSignedInt | SomeFloat](a: GVec4[T]): GVec4[T] =
   GVec4[T](x: -a.x, y: -a.y, z: -a.z, w: -a.w)
 
 func `$`*[T: SomeNumber](self: GVec2[T]): string =
-  &"vec({self.x}, {self.y})"
+  &"({self.x}, {self.y})"
 
 func `$`*[T: SomeNumber](self: GVec3[T]): string =
-  &"vec({self.x}, {self.y}, {self.z})"
+  &"({self.x}, {self.y}, {self.z})"
 
 func `$`*[T: SomeNumber](self: GVec4[T]): string =
-  &"vec({self.x}, {self.y}, {self.z}, {self.w})"
+  &"({self.x}, {self.y}, {self.z}, {self.w})"
 
 const zero2* = vec2()
 const one2* = vec2(1)

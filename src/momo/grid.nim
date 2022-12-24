@@ -16,9 +16,23 @@ type
 
 # Constructors for GridVec
 
-func gridVec*(x, y: int): GridVec = GVec2[int](x: x, y: y)
-func gridVec*(x: int): GridVec = GVec2[int](x: x, y: x)
-func gridVec*(): GridVec = GVec2[int](x: 0, y: 0)
+func gridVec*(x, y: int): GridVec =
+  GVec2[int](
+    x: x,
+    y: y
+  )
+
+func gridVec*(x: int): GridVec =
+  GVec2[int](
+    x: x,
+    y: x
+  )
+
+func gridVec*(): GridVec =
+  GVec2[int](
+    x: 0,
+    y: 0
+  )
 
 # Constructors for Grid
 
