@@ -12,7 +12,7 @@ no major functionality is missing and it has tests.
 * [ ] momo/dialogue
 * [x] momo/easing
 * [x] momo/grid
-* [ ] momo/shape2d
+* [x] momo/shape2d
 * [x] momo/vector
 
 ## Comments
