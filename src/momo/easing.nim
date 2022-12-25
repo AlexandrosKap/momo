@@ -1,43 +1,33 @@
 from math import PI, sqrt, pow, cos, sin
-import color, shape, vector
 
 type
-  SomeEasingType* = SomeNumber | SomeVec | SomeShape | Color
   EasingFunc* = proc(x: float): float {.noSideEffect.}
 
 func linear*(x: float): float = x
 
-func ease*[T: SomeEasingType](
-  function: EasingFunc, first, last: T, time: float
-): T =
+func ease*[T](f: EasingFunc, first, last: T, time: float): T =
   if time < 0.0:
     first
   elif time > 1.0:
     last
   else:
     when T is SomeInteger:
-      first + ((last - first).float * function(time)).T
+      first + ((last - first).float * f(time)).T
     else:
-      first + (last - first) * function(time)
+      first + (last - first) * f(time)
 
-func ease*[T: SomeEasingType](
-  function: EasingFunc, first, last: T, time, maxTime: float
-): T =
+func ease*[T](f: EasingFunc, first, last: T, time, maxTime: float): T =
   if time < 0.0:
-    ease[T](function, first, last, 0.0)
+    ease[T](f, first, last, 0.0)
   elif time > maxTime:
-    ease[T](function, first, last, 1.0)
+    ease[T](f, first, last, 1.0)
   else:
-    ease[T](function, first, last, time / maxTime)
+    ease[T](f, first, last, time / maxTime)
 
-func lerp*[T: SomeEasingType](
-  first, last: T, time: float
-): T =
+func lerp*[T](first, last: T, time: float): T =
   ease[T](linear, first, last, time)
 
-func lerp*[T: SomeEasingType](
-  first, last: T, time, maxTime: float
-): T =
+func lerp*[T](first, last: T, time, maxTime: float): T =
   ease[T](linear, first, last, time, maxTime)
 
 # Easing functions

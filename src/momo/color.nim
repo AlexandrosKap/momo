@@ -38,12 +38,6 @@ func color*(hex: string): Color =
   )
   else: color(0)
 
-func `==`*(a, b: Color): bool =
-  a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a
-
-func `!=`*(a, b: Color): bool =
-  not (a == b)
-
 func `+`*(a, b: Color): Color =
   let
     cr = a.r + b.r
@@ -110,6 +104,50 @@ func `div=`*(a: var Color, b: Color) =
 func `mod=`*(a: var Color, b: Color) =
   a = a mod b
 
+func `+`*[T: SomeNumber](a: Color, b: T): Color =
+  when T is uint8:
+    let
+      cr = a.r + b
+      cg = a.g + b
+      cb = a.b + b
+      ca = a.a + b
+  else:
+    cr = (a.r.T + b).uint8
+    cg = (a.g.T + b).uint8
+    cb = (a.b.T + b).uint8
+    ca = (a.a.T + b).uint8
+  color(
+    if cr < a.r: 255u8 else: cr,
+    if cg < a.g: 255u8 else: cg,
+    if cb < a.b: 255u8 else: cb,
+    if ca < a.a: 255u8 else: ca
+  )
+
+func `+`*[T: SomeNumber](b: T, a: Color): Color =
+  a + b
+
+func `-`*[T: SomeNumber](a: Color, b: T): Color =
+  when T is uint8:
+    let
+      cr = a.r - b
+      cg = a.g - b
+      cb = a.b - b
+      ca = a.a - b
+  else:
+    cr = (a.r.T - b).uint8
+    cg = (a.g.T - b).uint8
+    cb = (a.b.T - b).uint8
+    ca = (a.a.T - b).uint8
+  color(
+    if cr > a.r: 0u8 else: cr,
+    if cg > a.g: 0u8 else: cg,
+    if cb > a.b: 0u8 else: cb,
+    if ca > a.a: 0u8 else: ca
+  )
+
+func `-`*[T: SomeNumber](b: T, a: Color): Color =
+  a - b
+
 func `*`*[T: SomeNumber](a: Color, b: T): Color =
   if b < 0:
     a
@@ -143,8 +181,8 @@ func `*`*[T: SomeNumber](a: Color, b: T): Color =
       if ca < a.a: 255u8 else: ca
     )
 
-func `*`*[T: SomeNumber](a: T, b: Color): Color =
-  b * a
+func `*`*[T: SomeNumber](b: T, a: Color): Color =
+  a * b
 
 func `/`*[T: SomeNumber](a: Color, b: T): Color =
   when T is uint8:
@@ -157,8 +195,34 @@ func `/`*[T: SomeNumber](a: Color, b: T): Color =
       (a.a.T / b).uint8
     )
 
-func `/`*[T: SomeNumber](a: T, b: Color): Color =
-  b / a
+func `/`*[T: SomeNumber](b: T, a: Color): Color =
+  a / b
+
+func `div`*[T: SomeNumber](a: Color, b: T): Color =
+  a / b
+
+func `div`*[T: SomeNumber](b: T, a: Color): Color =
+  a / b
+
+func `mod`*[T: SomeNumber](a: Color, b: T): Color =
+  when T is uint8:
+    color(a.r mod b, a.g mod b, a.b mod b, a.a mod b)
+  else:
+    color(
+      (a.r.T mod b).uint8,
+      (a.g.T mod b).uint8,
+      (a.b.T mod b).uint8,
+      (a.a.T mod b).uint8
+    )
+
+func `mod`*[T: SomeNumber](b: T, a: Color): Color =
+  a mod b
+
+func `+=`*[T: SomeNumber](a: var Color, b: T): Color =
+  a = a + b
+
+func `-=`*[T: SomeNumber](a: var Color, b: T): Color =
+  a = a - b
 
 func `*=`*[T: SomeNumber](a: var Color, b: T): Color =
   a = a * b
@@ -166,8 +230,20 @@ func `*=`*[T: SomeNumber](a: var Color, b: T): Color =
 func `/=`*[T: SomeNumber](a: var Color, b: T): Color =
   a = a / b
 
+func `div=`*[T: SomeNumber](a: var Color, b: T): Color =
+  a = a div b
+
+func `mod=`*[T: SomeNumber](a: var Color, b: T): Color =
+  a = a mod b
+
+func `==`*(a, b: Color): bool =
+  a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a
+
+func `!=`*(a, b: Color): bool =
+  a.r != b.r or a.g != b.g or a.b != b.b or a.a != b.a
+
 func `$`*(self: Color): string =
-  &"color({self.r}, {self.g}, {self.b}, {self.a})"
+  &"({self.r}, {self.g}, {self.b}, {self.a})"
 
 const red* = color(255, 0, 0)
 const green* = color(0, 255, 0)
