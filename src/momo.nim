@@ -1,2 +1,3 @@
-import momo/[animation, color, dialogue, easing, grid, shape, vector]
-export animation, color, dialogue, easing, grid, shape, vector
+func letter*(): string =
+  ## A letter to Momo.
+  "\"Dear Momo\""

@@ -1,12 +1,12 @@
 import vector
+export vector
 
 const falseChar = '-'
 const trueChar = '#'
 
 type
-  GridVec* = GVec2[int]
   Grid*[T] = ref object
-    size: GridVec
+    size: IVec2
     cells: seq[T]
   BGrid* = Grid[bool]
   IGrid* = Grid[int32]
@@ -14,96 +14,83 @@ type
   FGrid* = Grid[float32]
   DGrid* = Grid[float64]
 
-# Constructors for GridVec
+# Constructors
 
-func gridVec*(x, y: int): GridVec =
-  GVec2[int](
-    x: x,
-    y: y
-  )
+func newGrid*[T](width, height: int32, value: T): Grid[T] =
+  result = Grid[T](size: ivec2(width, height))
+  for i in 0 ..< width * height:
+    result.cells.add(value)
 
-func gridVec*(x: int): GridVec =
-  GVec2[int](
-    x: x,
-    y: x
-  )
+func newGrid*[T](width, height: int32): Grid[T] =
+  result = Grid[T](size: ivec2(width, height))
+  for i in 0 ..< width * height:
+    result.cells.add(T.default)
 
-func gridVec*(): GridVec =
-  GVec2[int](
-    x: 0,
-    y: 0
-  )
-
-# Constructors for Grid
-
-func newGrid*[T](size: GridVec, value: T): Grid[T] =
+func newGrid*[T](size: IVec2, value: T): Grid[T] =
   result = Grid[T](size: size)
   for i in 0 ..< size.x * size.y:
     result.cells.add(value)
 
-func newGrid*[T](size: GridVec): Grid[T] =
-  newGrid[T](size, T.default)
+func newGrid*[T](size: IVec2): Grid[T] =
+  result = Grid[T](size: size)
+  for i in 0 ..< size.x * size.y:
+    result.cells.add(T.default)
 
-func newBGrid*(size: GridVec, value: bool): BGrid =
-  newGrid[bool](size, value)
+func newGrid*[T](): Grid[T] =
+  Grid[T]()
 
-func newIGrid*(size: GridVec, value: int32): IGrid =
-  newGrid[int32](size, value)
+template genCon[T](name: untyped) =
+  func name*(width, height: int32, value: T): Grid[T] =
+    newGrid[T](width, height, value)
 
-func newUGrid*(size: GridVec, value: uint32): UGrid =
-  newGrid[uint32](size, value)
+  func name*(width, height: int32): Grid[T] =
+    newGrid[T](width, height)
 
-func newFGrid*(size: GridVec, value: float32): FGrid =
-  newGrid[float32](size, value)
+  func name*(size: IVec2, value: T): Grid[T] =
+    newGrid[T](size, value)
 
-func newDGrid*(size: GridVec, value: float64): DGrid =
-  newGrid[float64](size, value)
+  func name*(size: IVec2): Grid[T] =
+    newGrid[T](size)
 
-func newBGrid*(size: GridVec): BGrid =
-  newGrid[bool](size)
+  func name*(): Grid[T] =
+    newGrid[T]()
 
-func newIGrid*(size: GridVec): IGrid =
-  newGrid[int32](size)
+genCon[bool](newBGrid)
+genCon[int32](newIGrid)
+genCon[uint32](newUGrid)
+genCon[float32](newFGrid)
+genCon[float64](newDGrid)
 
-func newUGrid*(size: GridVec): UGrid =
-  newGrid[uint32](size)
+# Functions
 
-func newFGrid*(size: GridVec): FGrid =
-  newGrid[float32](size)
-
-func newDGrid*(size: GridVec): DGrid =
-  newGrid[float64](size)
-
-# Functions for Grid
-
-func width*[T](self: Grid[T]): int =
+func width*[T](self: Grid[T]): int32 =
   self.size.x
 
-func height*[T](self: Grid[T]): int =
+func height*[T](self: Grid[T]): int32 =
   self.size.y
 
-func size*[T](self: Grid[T]): GridVec =
+func size*[T](self: Grid[T]): IVec2 =
   self.size
 
 func cells*[T](self: Grid[T]): seq[T] =
   self.cells
 
-func len*[T](self: Grid[T]): int =
-  self.cells.len
+func len*[T](self: Grid[T]): int32 =
+  self.size.x * self.size.y
 
-func id*[T](self: Grid[T], p: GridVec): int =
+func id*[T](self: Grid[T], p: IVec2): int32 =
   p.y * self.width + p.x
 
-func point*[T](self: Grid[T], id: int): GridVec =
-  gridVec(id mod self.size.x, id div self.size.y)
+func point*[T](self: Grid[T], id: int32): IVec2 =
+  ivec2(id mod self.size.x, id div self.size.y)
 
-func set*[T](self: Grid[T], p: GridVec, value: T) =
+func set*[T](self: Grid[T], p: IVec2, value: T) =
   self.cells[self.id(p)] = value
 
-func get*[T](self: Grid[T], p: GridVec): T =
+func get*[T](self: Grid[T], p: IVec2): T =
   self.cells[self.id(p)]
 
-func swap*[T](self: Grid[T], p1, p2: GridVec) =
+func swap*[T](self: Grid[T], p1, p2: IVec2) =
   let temp = self.get(p1)
   self.set(p1, self.get(p2))
   self.set(p2, temp)
@@ -112,8 +99,8 @@ func fill*[T](self: Grid[T], value: T) =
   for i in 0 ..< self.len:
     self.cells[i] = value
 
-func fill*[T](self: Grid[T], p1, p2: GridVec, value: T) =
-  var x1, y1, x2, y2: int
+func fill*[T](self: Grid[T], p1, p2: IVec2, value: T) =
+  var x1, y1, x2, y2: int32
   if p1.x < p2.x:
     x1 = p1.x
     x2 = p2.x
@@ -128,25 +115,25 @@ func fill*[T](self: Grid[T], p1, p2: GridVec, value: T) =
     y2 = p1.y
   for y in y1 .. y2:
     for x in x1 .. x2:
-      self.set(gridVec(x, y), value)
+      self.set(ivec2(x, y), value)
 
 func clear*[T](self: Grid[T]) =
   self.fill(T.default)
 
-func clear*[T](self: Grid[T], p1, p2: GridVec) =
+func clear*[T](self: Grid[T], p1, p2: IVec2) =
   self.fill(p1, p2, T.default)
 
 func enclose*[T](self: Grid[T], value: T) =
   for y in 0 ..< self.height:
     if y == 0 or y == self.height - 1:
       for x in 0 ..< self.width:
-        self.set(gridVec(x, y), value)
+        self.set(ivec2(x, y), value)
     else:
-      self.set(gridVec(0, y), value)
-      self.set(gridVec(self.width - 1, y), value)
+      self.set(ivec2(0, y), value)
+      self.set(ivec2(self.width - 1, y), value)
 
-func enclose*[T](self: Grid[T], p1, p2: GridVec, value: T) =
-  var x1, y1, x2, y2: int
+func enclose*[T](self: Grid[T], p1, p2: IVec2, value: T) =
+  var x1, y1, x2, y2: int32
   if p1.x < p2.x:
     x1 = p1.x
     x2 = p2.x
@@ -162,16 +149,22 @@ func enclose*[T](self: Grid[T], p1, p2: GridVec, value: T) =
   for y in y1 .. y2:
     if y == y1 or y == y2:
       for x in x1 .. x2:
-        self.set(gridVec(x, y), value)
+        self.set(ivec2(x, y), value)
     else:
-      self.set(gridVec(x1, y), value)
-      self.set(gridVec(x2, y), value)
+      self.set(ivec2(x1, y), value)
+      self.set(ivec2(x2, y), value)
 
-func isEmpty*[T](self: Grid[T], p: GridVec): bool =
+func isEmpty*[T](self: Grid[T], p: IVec2): bool =
   self.get(p) == T.default
 
-func isInside*[T](self: Grid[T], p: GridVec): bool =
+func isInside*[T](self: Grid[T], p: IVec2): bool =
   p.x >= 0 and p.x < self.width and p.y >= 0 and p.y < self.height
+
+func `==`*[T](a, b: Grid[T]): bool =
+  a.cells == b.cells
+
+func `!=`*[T](a, b: Grid[T]): bool =
+  a.cells != b.cells
 
 func `$`*[T](self: Grid[T]): string =
   result = ""
@@ -184,12 +177,6 @@ func `$`*[T](self: Grid[T]): string =
       result.add($cell)
     if i mod self.width != self.width - 1:
       result.add(' ')
-
-func `==`*[T](a, b: Grid[T]): bool =
-  a.cells == b.cells
-
-func `!=`*[T](a, b: Grid[T]): bool =
-  not (a == b)
 
 iterator items*[T](self: Grid[T]): T =
   for a in self.cells:

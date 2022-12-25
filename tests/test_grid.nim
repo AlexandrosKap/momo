@@ -1,15 +1,11 @@
 import unittest
 import momo/grid
 
-const size = gridVec(4, 4)
-const first = gridVec()
-const last = gridVec(size.x - 1, size.y - 1)
+const size = ivec2(4, 4)
+const first = ivec2()
+const last = ivec2(size.x - 1, size.y - 1)
 
 test "Grid":
-  check gridVec(0, 0) == GridVec(x: 0, y: 0)
-  check gridVec(0) == gridVec(0, 0)
-  check gridVec() == gridVec(0)
-
   var g = newBGrid(size)
   check g.width == size.x
   check g.height == size.y
