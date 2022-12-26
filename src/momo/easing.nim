@@ -33,7 +33,7 @@ func lerp*[T](first, last: T, time, maxTime: float): T =
 # Easing functions
 
 func easeInSine*(x: float): float =
-  1 - cos((x * PI) / 2.0)
+  1.0 - cos((x * PI) / 2.0)
 
 func easeOutSine*(x: float): float =
   sin((x * PI) / 2.0)

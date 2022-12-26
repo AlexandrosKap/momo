@@ -1,6 +1,6 @@
 from strformat import `&`
 from strutils import fromHex
-import common
+import private/common
 
 type
   Color* = object

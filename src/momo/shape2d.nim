@@ -1,5 +1,5 @@
 from strformat import `&`
-import common, vector
+import private/common, vector
 export vector
 
 type

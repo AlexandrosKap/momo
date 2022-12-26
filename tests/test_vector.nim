@@ -50,11 +50,14 @@ test "Vector":
   var v2 = vec2(1)
   v2 += vec2(2)
   check v2 == vec2(3)
+  check v2.ivec2 == ivec2(3)
 
   var v3 = vec3(1)
   v3 += vec3(2)
   check v3 == vec3(3)
+  check v3.ivec3 == ivec3(3)
 
   var v4 = vec4(1)
   v4 += vec4(2)
   check v4 == vec4(3)
+  check v4.ivec4 == ivec4(3)
