@@ -7,7 +7,7 @@ type
     r*, g*, b*, a*: uint8
 
   Palette* = seq[Color]
-  Grayscale* = seq[float32]
+  Grayscale* = seq[uint8]
 
 # Helper Templates
 
@@ -122,22 +122,22 @@ func color*(hex: string): Color =
 
 func colorf*(r, g, b, a: float32): Color =
   Color(
-    r: (r * 255).uint8,
-    g: (g * 255).uint8,
-    b: (b * 255).uint8,
-    a: (a * 255).uint8
+    r: clamp(r * 255, 0, 255).uint8,
+    g: clamp(g * 255, 0, 255).uint8,
+    b: clamp(b * 255, 0, 255).uint8,
+    a: clamp(a * 255, 0, 255).uint8
   )
 
 func colorf*(r, g, b: float32): Color =
   Color(
-    r: (r * 255).uint8,
-    g: (g * 255).uint8,
-    b: (b * 255).uint8,
+    r: clamp(r * 255, 0, 255).uint8,
+    g: clamp(g * 255, 0, 255).uint8,
+    b: clamp(b * 255, 0, 255).uint8,
     a: 255
   )
 
 func colorf*(r: float32): Color =
-  let c = (r * 255).uint8
+  let c = clamp(r * 255, 0, 255).uint8
   Color(r: c, g: c, b: c, a: 255)
 
 func colorf*(): Color =

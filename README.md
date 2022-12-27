@@ -1,4 +1,4 @@
-# 🐈 Momo
+# 🐤 Momo
 
 A cute game development toolkit for Nim.
 
