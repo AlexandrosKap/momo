@@ -1,9 +1,9 @@
 import unittest
 import momo/grid
 
-const size = ivec2(4, 4)
-const first = ivec2()
-const last = ivec2(size.x - 1, size.y - 1)
+let size = ivec2(4, 4)
+let first = ivec2()
+let last = ivec2(size.x - 1, size.y - 1)
 
 test "Grid":
   var g = newBGrid(size)

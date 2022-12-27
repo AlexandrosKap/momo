@@ -23,36 +23,11 @@ type
   Vec4* = GVec4[float32]
   DVec4* = GVec4[float64]
 
-  SomeVec*[T: SomeNumber] = GVec2[T] | GVec3[T] | GVec4[T]
+  SomeVec23*[T: SomeNumber] = GVec2[T] | GVec3[T]
+  SomeVec34*[T: SomeNumber] = GVec3[T] | GVec4[T]
+  SomeVec234*[T: SomeNumber] = GVec2[T] | GVec3[T] | GVec4[T]
 
-# Constructors and operators
-
-func gvec2*[T: SomeNumber](x, y: T): GVec2[T] =
-  GVec2[T](x: x, y: y)
-
-func gvec2*[T: SomeNumber](x: T): GVec2[T] =
-  GVec2[T](x: x, y: x)
-
-func gvec2*[T: SomeNumber](): GVec2[T] =
-  GVec2[T]()
-
-func gvec3*[T: SomeNumber](x, y, z: T): GVec3[T] =
-  GVec3[T](x: x, y: y, z: z)
-
-func gvec3*[T: SomeNumber](x: T): GVec3[T] =
-  GVec3[T](x: x, y: x, z: x)
-
-func gvec3*[T: SomeNumber](): GVec3[T] =
-  GVec3[T]()
-
-func gvec4*[T: SomeNumber](x, y, z, w: T): GVec4[T] =
-  GVec4[T](x: x, y: y, z: z, w: w)
-
-func gvec4*[T: SomeNumber](x: T): GVec4[T] =
-  GVec4[T](x: x, y: x, z: x, w: x)
-
-func gvec4*[T: SomeNumber](): GVec4[T] =
-  GVec4[T]()
+# Helper Templates
 
 template genCon[T: SomeNumber](name: untyped) =
   func `name 2`*(x, y: T): GVec2[T] =
@@ -217,6 +192,35 @@ template genBoolOp(op: untyped) =
   func op*[T: SomeNumber](a, b: GVec4[T]): bool =
     op(a.x, b.x) and op(a.y, b.y) and op(a.z, b.z) and op(a.w, b.w)
 
+# Constructors and Operators
+
+func gvec2*[T: SomeNumber](x, y: T): GVec2[T] =
+  GVec2[T](x: x, y: y)
+
+func gvec2*[T: SomeNumber](x: T): GVec2[T] =
+  GVec2[T](x: x, y: x)
+
+func gvec2*[T: SomeNumber](): GVec2[T] =
+  GVec2[T]()
+
+func gvec3*[T: SomeNumber](x, y, z: T): GVec3[T] =
+  GVec3[T](x: x, y: y, z: z)
+
+func gvec3*[T: SomeNumber](x: T): GVec3[T] =
+  GVec3[T](x: x, y: x, z: x)
+
+func gvec3*[T: SomeNumber](): GVec3[T] =
+  GVec3[T]()
+
+func gvec4*[T: SomeNumber](x, y, z, w: T): GVec4[T] =
+  GVec4[T](x: x, y: y, z: z, w: w)
+
+func gvec4*[T: SomeNumber](x: T): GVec4[T] =
+  GVec4[T](x: x, y: x, z: x, w: x)
+
+func gvec4*[T: SomeNumber](): GVec4[T] =
+  GVec4[T]()
+
 genCon[int32](ivec)
 genCon[uint32](uvec)
 genCon[float32](vec)
@@ -258,10 +262,3 @@ func `$`*[T: SomeNumber](self: GVec3[T]): string =
 
 func `$`*[T: SomeNumber](self: GVec4[T]): string =
   &"({self.x}, {self.y}, {self.z}, {self.w})"
-
-const zero2* = vec2()
-const one2* = vec2(1)
-const left2* = vec2(-1, 0)
-const right2* = vec2(1, 0)
-const up2* = vec2(0, -1)
-const down2* = vec2(0, 1)

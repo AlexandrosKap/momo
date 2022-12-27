@@ -14,6 +14,32 @@ type
   FGrid* = Grid[float32]
   DGrid* = Grid[float64]
 
+# Helper Templates
+
+template genCon[T](name: untyped) =
+  func name*(width, height: int32, value: T): Grid[T] =
+    result = Grid[T](size: ivec2(width, height))
+    for i in 0 ..< width * height:
+      result.cells.add(value)
+
+  func name*(width, height: int32): Grid[T] =
+    result = Grid[T](size: ivec2(width, height))
+    for i in 0 ..< width * height:
+      result.cells.add(T.default)
+
+  func name*(size: IVec2, value: T): Grid[T] =
+    result = Grid[T](size: size)
+    for i in 0 ..< size.x * size.y:
+      result.cells.add(value)
+
+  func name*(size: IVec2): Grid[T] =
+    result = Grid[T](size: size)
+    for i in 0 ..< size.x * size.y:
+      result.cells.add(T.default)
+
+  func name*(): Grid[T] =
+    Grid[T]()
+
 # Constructors
 
 func newGrid*[T](width, height: int32, value: T): Grid[T] =
@@ -38,22 +64,6 @@ func newGrid*[T](size: IVec2): Grid[T] =
 
 func newGrid*[T](): Grid[T] =
   Grid[T]()
-
-template genCon[T](name: untyped) =
-  func name*(width, height: int32, value: T): Grid[T] =
-    newGrid[T](width, height, value)
-
-  func name*(width, height: int32): Grid[T] =
-    newGrid[T](width, height)
-
-  func name*(size: IVec2, value: T): Grid[T] =
-    newGrid[T](size, value)
-
-  func name*(size: IVec2): Grid[T] =
-    newGrid[T](size)
-
-  func name*(): Grid[T] =
-    newGrid[T]()
 
 genCon[bool](newBGrid)
 genCon[int32](newIGrid)

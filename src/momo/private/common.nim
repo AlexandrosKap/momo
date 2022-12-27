@@ -1,6 +1,7 @@
 from math import `mod`, floor
+export `mod`
 
-# Functions for bool
+# Boolean Functions
 
 func `+`*(a, b: bool): bool =
   a or b
@@ -8,13 +9,10 @@ func `+`*(a, b: bool): bool =
 func `*`*(a, b: bool): bool =
   a and b
 
-# Functions for numbers
+# Number Functions
 
 func `/`*[T: SomeInteger](a, b: T): T =
   a div b
 
 func `div`*[T: SomeFloat](a, b: T): T =
-  (a / b).floor
-
-func `mod`*[T: SomeFloat](a, b: T): T =
-  a mod b
+  floor(a / b)
