@@ -7,7 +7,65 @@ type
     r*, g*, b*, a*: uint8
 
   Palette* = seq[Color]
-  Grayscale* = seq[uint8]
+  Grayscale* = seq[float32]
+
+# Helper Templates
+
+template genOp(op: untyped) =
+  func op*(a, b: Color): Color =
+    let
+      (ar, ag, ab, aa) = (a.r.int32, a.g.int32, a.b.int32, a.a.int32)
+      (br, bg, bb, ba) = (b.r.int32, b.g.int32, b.b.int32, b.a.int32)
+    Color(
+      r: clamp(op(ar, br), 0, 255).uint8,
+      g: clamp(op(ag, bg), 0, 255).uint8,
+      b: clamp(op(ab, bb), 0, 255).uint8,
+      a: clamp(op(aa, ba), 0, 255).uint8
+    )
+
+  func op*[T: SomeNumber](a: Color, b: T): Color =
+    when T is uint8:
+      let
+        (ar, ag, ab, aa) = (a.r.int32, a.g.int32, a.b.int32, a.a.int32)
+        br = b.int32
+      Color(
+        r: clamp(op(ar, br), 0, 255).uint8,
+        g: clamp(op(ag, br), 0, 255).uint8,
+        b: clamp(op(ab, br), 0, 255).uint8,
+        a: clamp(op(aa, br), 0, 255).uint8
+      )
+    else:
+      Color(
+        r: clamp(op(a.r.T, b), 0, 255).uint8,
+        g: clamp(op(a.g.T, b), 0, 255).uint8,
+        b: clamp(op(a.b.T, b), 0, 255).uint8,
+        a: clamp(op(a.a.T, b), 0, 255).uint8
+      )
+
+  func op*[T: SomeNumber](b: T, a: Color): Color =
+    when T is uint8:
+      let
+        (ar, ag, ab, aa) = (a.r.int32, a.g.int32, a.b.int32, a.a.int32)
+        br = b.int32
+      Color(
+        r: clamp(op(ar, br), 0, 255).uint8,
+        g: clamp(op(ag, br), 0, 255).uint8,
+        b: clamp(op(ab, br), 0, 255).uint8,
+        a: clamp(op(aa, br), 0, 255).uint8
+      )
+    else:
+      Color(
+        r: clamp(op(a.r.T, b), 0, 255).uint8,
+        g: clamp(op(a.g.T, b), 0, 255).uint8,
+        b: clamp(op(a.b.T, b), 0, 255).uint8,
+        a: clamp(op(a.a.T, b), 0, 255).uint8
+      )
+
+template genBoolOp(op: untyped) =
+  func op*(a, b: Color): bool =
+    op(a.r, b.r) and op(a.g, b.g) and op(a.b, b.b) and op(a.a, b.a)
+
+# Helper Functions
 
 func toByte*(hex: string): uint8 =
   try:
@@ -17,237 +75,97 @@ func toByte*(hex: string): uint8 =
 
 # Constructors and Operators
 
-func color*(r, g, b, a: uint8): Color = Color(r: r, g: g, b: b, a: a)
-func color*(r, g, b: uint8): Color = color(r, g, b, 255)
-func color*(gray: uint8): Color = color(gray, gray, gray)
-func color*(): Color = color(0)
+func color*(r, g, b, a: uint8): Color =
+  Color(r: r, g: g, b: b, a: a)
+
+func color*(r, g, b: uint8): Color =
+  Color(r: r, g: g, b: b, a: 255)
+
+func color*(r: uint8): Color =
+  Color(r: r, g: r, b: r, a: 255)
+
+func color*(): Color =
+  Color(a: 255)
 
 func color*(hex: string): Color =
-  let str =
-    if hex.len > 1 and hex[0] == '#': hex[1 ..< hex.len]
-    else: hex
-  case str.len:
+  case hex.len:
   of 6:
-    color(
-      str[0 .. 1].toByte,
-      str[2 .. 3].toByte,
-      str[4 .. 5].toByte
+    Color(
+      r: hex[0 .. 1].toByte,
+      g: hex[2 .. 3].toByte,
+      b: hex[4 .. 5].toByte,
+      a: 255
+    )
+  of 7:
+    Color(
+      r: hex[1 .. 2].toByte,
+      g: hex[3 .. 4].toByte,
+      b: hex[5 .. 6].toByte,
+      a: 255
     )
   of 8:
-    color(
-      str[2 .. 3].toByte,
-      str[4 .. 5].toByte,
-      str[6 .. 7].toByte,
-      str[0 .. 1].toByte
+    Color(
+      r: hex[2 .. 3].toByte,
+      g: hex[4 .. 5].toByte,
+      b: hex[6 .. 7].toByte,
+      a: hex[0 .. 1].toByte
+    )
+  of 9:
+    Color(
+      r: hex[3 .. 4].toByte,
+      g: hex[5 .. 6].toByte,
+      b: hex[7 .. 8].toByte,
+      a: hex[1 .. 2].toByte
     )
   else:
-    color(0)
+    Color(a: 255)
 
-func `+`*(a, b: Color): Color =
-  let
-    cr = a.r + b.r
-    cg = a.g + b.g
-    cb = a.b + b.b
-    ca = a.a + b.a
-  color(
-    if cr < a.r: 255u8 else: cr,
-    if cg < a.g: 255u8 else: cg,
-    if cb < a.b: 255u8 else: cb,
-    if ca < a.a: 255u8 else: ca
+func colorf*(r, g, b, a: float32): Color =
+  Color(
+    r: (r * 255).uint8,
+    g: (g * 255).uint8,
+    b: (b * 255).uint8,
+    a: (a * 255).uint8
   )
 
-func `-`*(a, b: Color): Color =
-  let
-    cr = a.r - b.r
-    cg = a.g - b.g
-    cb = a.b - b.b
-    ca = a.a - b.a
-  color(
-    if cr > a.r: 0u8 else: cr,
-    if cg > a.g: 0u8 else: cg,
-    if cb > a.b: 0u8 else: cb,
-    if ca > a.a: 0u8 else: ca
+func colorf*(r, g, b: float32): Color =
+  Color(
+    r: (r * 255).uint8,
+    g: (g * 255).uint8,
+    b: (b * 255).uint8,
+    a: 255
   )
 
-func `*`*(a, b: Color): Color =
-  let
-    cr = a.r * b.r
-    cg = a.g * b.g
-    cb = a.b * b.b
-    ca = a.a * b.a
-  color(
-    if cr < a.r: 255u8 else: cr,
-    if cg < a.g: 255u8 else: cg,
-    if cb < a.b: 255u8 else: cb,
-    if ca < a.a: 255u8 else: ca
-  )
+func colorf*(r: float32): Color =
+  let c = (r * 255).uint8
+  Color(r: c, g: c, b: c, a: 255)
 
-func `/`*(a, b: Color): Color =
-  color(a.r / b.r, a.g / b.g, a.b / b.b, a.a / b.a)
+func colorf*(): Color =
+  Color(a: 255)
 
-func `div`*(a, b: Color): Color =
-  color(a.r div b.r, a.g div b.g, a.b div b.b, a.a div b.a)
+genOp(`+`)
+genOp(`-`)
+genOp(`*`)
+genOp(`/`)
+genOp(`div`)
+genOp(`mod`)
 
-func `mod`*(a, b: Color): Color =
-  color(a.r mod b.r, a.g mod b.g, a.b mod b.b, a.a mod b.a)
-
-func `+=`*(a: var Color, b: Color) =
-  a = a + b
-
-func `-=`*(a: var Color, b: Color) =
-  a = a - b
-
-func `*=`*(a: var Color, b: Color) =
-  a = a * b
-
-func `/=`*(a: var Color, b: Color) =
-  a = a / b
-
-func `div=`*(a: var Color, b: Color) =
-  a = a div b
-
-func `mod=`*(a: var Color, b: Color) =
-  a = a mod b
-
-func `+`*[T: SomeNumber](a: Color, b: T): Color =
-  when T is uint8:
-    let
-      cr = a.r + b
-      cg = a.g + b
-      cb = a.b + b
-      ca = a.a + b
-  else:
-    cr = (a.r.T + b).uint8
-    cg = (a.g.T + b).uint8
-    cb = (a.b.T + b).uint8
-    ca = (a.a.T + b).uint8
-  color(
-    if cr < a.r: 255u8 else: cr,
-    if cg < a.g: 255u8 else: cg,
-    if cb < a.b: 255u8 else: cb,
-    if ca < a.a: 255u8 else: ca
-  )
-
-func `+`*[T: SomeNumber](b: T, a: Color): Color =
-  a + b
-
-func `-`*[T: SomeNumber](a: Color, b: T): Color =
-  when T is uint8:
-    let
-      cr = a.r - b
-      cg = a.g - b
-      cb = a.b - b
-      ca = a.a - b
-  else:
-    cr = (a.r.T - b).uint8
-    cg = (a.g.T - b).uint8
-    cb = (a.b.T - b).uint8
-    ca = (a.a.T - b).uint8
-  color(
-    if cr > a.r: 0u8 else: cr,
-    if cg > a.g: 0u8 else: cg,
-    if cb > a.b: 0u8 else: cb,
-    if ca > a.a: 0u8 else: ca
-  )
-
-func `-`*[T: SomeNumber](b: T, a: Color): Color =
-  a - b
-
-func `*`*[T: SomeNumber](a: Color, b: T): Color =
-  if b < 0:
-    a
-  elif b < 1:
-    when T is SomeFloat:
-      color(
-        (a.r.T * b).uint8,
-        (a.g.T * b).uint8,
-        (a.b.T * b).uint8,
-        (a.a.T * b).uint8
-      )
-    else:
-      color(0, 0, 0, 0)
-  else:
-    when T is uint8:
-      let
-        cr = a.r * b
-        cg = a.g * b
-        cb = a.b * b
-        ca = a.a * b
-    else:
-      let
-        cr = (a.r.T * b).uint8
-        cg = (a.g.T * b).uint8
-        cb = (a.b.T * b).uint8
-        ca = (a.a.T * b).uint8
-    color(
-      if cr < a.r: 255u8 else: cr,
-      if cg < a.g: 255u8 else: cg,
-      if cb < a.b: 255u8 else: cb,
-      if ca < a.a: 255u8 else: ca
-    )
-
-func `*`*[T: SomeNumber](b: T, a: Color): Color =
-  a * b
-
-func `/`*[T: SomeNumber](a: Color, b: T): Color =
-  when T is uint8:
-    color(a.r / b, a.g / b, a.b / b, a.a / b)
-  else:
-    color(
-      (a.r.T / b).uint8,
-      (a.g.T / b).uint8,
-      (a.b.T / b).uint8,
-      (a.a.T / b).uint8
-    )
-
-func `/`*[T: SomeNumber](b: T, a: Color): Color =
-  a / b
-
-func `div`*[T: SomeNumber](a: Color, b: T): Color =
-  a / b
-
-func `div`*[T: SomeNumber](b: T, a: Color): Color =
-  a / b
-
-func `mod`*[T: SomeNumber](a: Color, b: T): Color =
-  when T is uint8:
-    color(a.r mod b, a.g mod b, a.b mod b, a.a mod b)
-  else:
-    color(
-      (a.r.T mod b).uint8,
-      (a.g.T mod b).uint8,
-      (a.b.T mod b).uint8,
-      (a.a.T mod b).uint8
-    )
-
-func `mod`*[T: SomeNumber](b: T, a: Color): Color =
-  a mod b
-
-func `+=`*[T: SomeNumber](a: var Color, b: T): Color =
-  a = a + b
-
-func `-=`*[T: SomeNumber](a: var Color, b: T): Color =
-  a = a - b
-
-func `*=`*[T: SomeNumber](a: var Color, b: T): Color =
-  a = a * b
-
-func `/=`*[T: SomeNumber](a: var Color, b: T): Color =
-  a = a / b
-
-func `div=`*[T: SomeNumber](a: var Color, b: T): Color =
-  a = a div b
-
-func `mod=`*[T: SomeNumber](a: var Color, b: T): Color =
-  a = a mod b
-
-func `==`*(a, b: Color): bool =
-  a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a
-
-func `!=`*(a, b: Color): bool =
-  a.r != b.r or a.g != b.g or a.b != b.b or a.a != b.a
+genBoolOp(`==`)
+genBoolOp(`!=`)
 
 # Functions
+
+func rf*(self: Color): float32 =
+  self.r.float32 / 255
+
+func gf*(self: Color): float32 =
+  self.g.float32 / 255
+
+func bf*(self: Color): float32 =
+  self.b.float32 / 255
+
+func af*(self: Color): float32 =
+  self.a.float32 / 255
 
 func `$`*(self: Color): string =
   &"({self.r}, {self.g}, {self.b}, {self.a})"
