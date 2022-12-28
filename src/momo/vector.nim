@@ -71,31 +71,19 @@ template genOp(op: untyped) =
     GVec2[T](x: op(a.x, b.x), y: op(a.y, b.y))
 
   func op*[T, V: SomeNumber](a: GVec2[T], b: V): GVec2[T] =
-    when V is T:
-      GVec2[T](x: op(a.x, b), y: op(a.y, b))
-    else:
-      GVec2[T](x: op(a.x.V, b).T, y: op(a.y.V, b).T)
+    GVec2[T](x: op(a.x.V, b).T, y: op(a.y.V, b).T)
 
   func op*[T, V: SomeNumber](b: V, a: GVec2[T]): GVec2[T] =
-    when V is T:
-      GVec2[T](x: op(a.x, b), y: op(a.y, b))
-    else:
-      GVec2[T](x: op(a.x.V, b).T, y: op(a.y.V, b).T)
+    GVec2[T](x: op(a.x.V, b).T, y: op(a.y.V, b).T)
 
   func op*[T: SomeNumber](a, b: GVec3[T]): GVec3[T] =
     GVec3[T](x: op(a.x, b.x), y: op(a.y, b.y), z: op(a.z, b.z))
 
   func op*[T, V: SomeNumber](a: GVec3[T], b: V): GVec3[T] =
-    when V is T:
-      GVec3[T](x: op(a.x, b), y: op(a.y, b), z: op(a.z, b))
-    else:
-      GVec3[T](x: op(a.x.V, b).T, y: op(a.y.V, b).T, z: op(a.z.V, b).T)
+    GVec3[T](x: op(a.x.V, b).T, y: op(a.y.V, b).T, z: op(a.z.V, b).T)
 
   func op*[T, V: SomeNumber](b: V, a: GVec3[T]): GVec3[T] =
-    when V is T:
-      GVec3[T](x: op(a.x, b), y: op(a.y, b), z: op(a.z, b))
-    else:
-      GVec3[T](x: op(a.x.V, b).T, y: op(a.y.V, b).T, z: op(a.z.V, b).T)
+    GVec3[T](x: op(a.x.V, b).T, y: op(a.y.V, b).T, z: op(a.z.V, b).T)
 
   func op*[T: SomeNumber](a, b: GVec4[T]): GVec4[T] =
     GVec4[T](
@@ -106,36 +94,20 @@ template genOp(op: untyped) =
     )
 
   func op*[T, V: SomeNumber](a: GVec4[T], b: V): GVec4[T] =
-    when V is T:
-      GVec4[T](
-        x: op(a.x, b),
-        y: op(a.y, b),
-        z: op(a.z, b),
-        w: op(a.w, b)
-      )
-    else:
-      GVec4[T](
-        x: op(a.x.V, b).T,
-        y: op(a.y.V, b).T,
-        z: op(a.z.V, b).T,
-        w: op(a.w.V, b).T
-      )
+    GVec4[T](
+      x: op(a.x.V, b).T,
+      y: op(a.y.V, b).T,
+      z: op(a.z.V, b).T,
+      w: op(a.w.V, b).T
+    )
 
   func op*[T, V: SomeNumber](b: V, a: GVec4[T]): GVec4[T] =
-    when V is T:
-      GVec4[T](
-        x: op(a.x, b),
-        y: op(a.y, b),
-        z: op(a.z, b),
-        w: op(a.w, b)
-      )
-    else:
-      GVec4[T](
-        x: op(a.x.V, b).T,
-        y: op(a.y.V, b).T,
-        z: op(a.z.V, b).T,
-        w: op(a.w.V, b).T
-      )
+    GVec4[T](
+      x: op(a.x.V, b).T,
+      y: op(a.y.V, b).T,
+      z: op(a.z.V, b).T,
+      w: op(a.w.V, b).T
+    )
 
 template genEqOp(op: untyped) =
   func op*[T: SomeNumber](a: var GVec2[T], b: GVec2[T]) =
@@ -143,12 +115,8 @@ template genEqOp(op: untyped) =
     op(a.y, b.y)
 
   func op*[T, V: SomeNumber](a: var GVec2[T], b: V) =
-    when V is T:
-      op(a.x, b)
-      op(a.y, b)
-    else:
-      a.x = op(a.x.V, b).T
-      a.y = op(a.y.V, b).T
+    a.x = op(a.x.V, b).T
+    a.y = op(a.y.V, b).T
 
   func op*[T: SomeNumber](a: var GVec3[T], b: GVec3[T]) =
     op(a.x, b.x)
@@ -156,14 +124,9 @@ template genEqOp(op: untyped) =
     op(a.z, b.z)
 
   func op*[T, V: SomeNumber](a: var GVec3[T], b: V) =
-    when V is T:
-      op(a.x, b)
-      op(a.y, b)
-      op(a.z, b)
-    else:
-      a.x = op(a.x.V, b).T
-      a.y = op(a.y.V, b).T
-      a.z = op(a.z.V, b).T
+    a.x = op(a.x.V, b).T
+    a.y = op(a.y.V, b).T
+    a.z = op(a.z.V, b).T
 
   func op*[T: SomeNumber](a: var GVec4[T], b: GVec4[T]) =
     op(a.x, b.x)
@@ -172,15 +135,10 @@ template genEqOp(op: untyped) =
     op(a.w, b.w)
 
   func op*[T, V: SomeNumber](a: var GVec4[T], b: V) =
-    when V is T:
-      op(a.x, b)
-      op(a.y, b)
-      op(a.z, b)
-    else:
-      a.x = op(a.x.V, b).T
-      a.y = op(a.y.V, b).T
-      a.z = op(a.z.V, b).T
-      a.w = op(a.w.V, b).T
+    a.x = op(a.x.V, b).T
+    a.y = op(a.y.V, b).T
+    a.z = op(a.z.V, b).T
+    a.w = op(a.w.V, b).T
 
 template genBoolOp(op: untyped) =
   func op*[T: SomeNumber](a, b: GVec2[T]): bool =
@@ -244,6 +202,48 @@ genBoolOp(`==`)
 genBoolOp(`!=`)
 
 # Functions
+
+proc neighbors*[T: SomeNumber](self: GVec2[T]): array[9, GVec2[T]] =
+  # 3^2
+  result = array[9, GVec2[T]].default
+  var i = 0
+  for y in -1 .. 1:
+    for x in -1 .. 1:
+      result[i] = GVec2[T](
+        x: self.x + x.T,
+        y: self.y + y.T
+      )
+      i += 1
+
+func neighbors*[T: SomeNumber](self: GVec3[T]): array[27, GVec3[T]] =
+  # 3^3
+  result = array[27, GVec3[T]].default
+  var i = 0
+  for z in -1 .. 1:
+    for y in -1 .. 1:
+      for x in -1 .. 1:
+        result[i] = GVec3[T](
+          x: self.x + x.T,
+          y: self.y + y.T,
+          z: self.z + z.T
+        )
+        i += 1
+
+func neighbors*[T: SomeNumber](self: GVec4[T]): array[81, GVec4[T]] =
+  # 3^4
+  result = array[81, GVec4[T]].default
+  var i = 0
+  for w in -1 .. 1:
+    for z in -1 .. 1:
+      for y in -1 .. 1:
+        for x in -1 .. 1:
+          result[i] = GVec4[T](
+            x: self.x + x.T,
+            y: self.y + y.T,
+            z: self.z + z.T,
+            w: self.w + w.T
+          )
+          i += 1
 
 func `-`*[T: SomeSignedInt | SomeFloat](a: GVec2[T]): GVec2[T] =
   GVec2[T](x: -a.x, y: -a.y)

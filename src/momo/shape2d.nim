@@ -88,16 +88,10 @@ template genOp(op: untyped) =
     )
 
   func op*[T, V: SomeNumber](a: GCirc2[T], b: V): GCirc2[T] =
-    when V is T:
-      GCirc2[T](position: op(a.position, b), radius: op(a.radius, b))
-    else:
-      GCirc2[T](position: op(a.position, b), radius: op(a.radius.V, b).T)
+    GCirc2[T](position: op(a.position, b), radius: op(a.radius.V, b).T)
 
   func op*[T, V: SomeNumber](b: V, a: GCirc2[T]): GCirc2[T] =
-    when V is T:
-      GCirc2[T](position: op(a.position, b), radius: op(a.radius, b))
-    else:
-      GCirc2[T](position: op(a.position, b), radius: op(a.radius.V, b).T)
+    GCirc2[T](position: op(a.position, b), radius: op(a.radius.V, b).T)
 
   func op*[T: SomeNumber](a, b: GRect2[T]): GRect2[T] =
     GRect2[T](
@@ -126,12 +120,8 @@ template genEqOp(op: untyped) =
     op(a.radius, b.radius)
 
   func op*[T, V: SomeNumber](a: var GCirc2[T], b: V) =
-    when V is T:
-      op(a.position, b)
-      op(a.radius, b)
-    else:
-      op(a.position, b)
-      a.radius = op(a.radius.V, b).T
+    op(a.position, b)
+    a.radius = op(a.radius.V, b).T
 
   func op*[T: SomeNumber](a: var GRect2[T], b: GRect2[T]) =
     op(a.position, b.position)
