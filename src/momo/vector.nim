@@ -203,7 +203,7 @@ genBoolOp(`!=`)
 
 # Functions
 
-proc neighbors*[T: SomeNumber](self: GVec2[T]): array[9, GVec2[T]] =
+func neighbors*[T: SomeNumber](self: GVec2[T]): array[9, GVec2[T]] =
   # 3^2
   result = array[9, GVec2[T]].default
   var i = 0

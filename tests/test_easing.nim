@@ -10,7 +10,7 @@ test "Easing":
 
     check lerp(0, 100, f * 0.25) == i * 25
     check lerp(0.0, 100.0, f * 0.25) == f * 25
-    check lerp(color(), color(100), f * 0.25) == color(nc * 25)
+    check lerp(color8(), color8(100), f * 0.25) == color8(nc * 25)
     check lerp(ivec2(), ivec2(100), f * 0.25) == ivec2(ni * 25)
     check lerp(vec2(), vec2(100), f * 0.25) == vec2(nf * 25)
     check lerp(
@@ -20,7 +20,7 @@ test "Easing":
 
     check lerp(0, 100, f * 25, 100) == i * 25
     check lerp(0.0, 100.0, f * 25, 100) == f * 25
-    check lerp(color(), color(100), f * 25, 100) == color(nc * 25)
+    check lerp(color8(), color8(100), f * 25, 100) == color8(nc * 25)
     check lerp(ivec2(), ivec2(100), f * 25, 100) == ivec2(ni * 25)
     check lerp(vec2(), vec2(100), f * 25, 100) == vec2(nf * 25)
     check lerp(
