@@ -168,7 +168,7 @@ func isEmpty*[T](self: Grid[T], p: IVec2): bool =
   self.get(p) == T.default
 
 func isInside*[T](self: Grid[T], p: IVec2): bool =
-  p.x >= 0 and p.x < self.width and p.y >= 0 and p.y < self.height
+  p.x >= 0 and p.x < self.size.x and p.y >= 0 and p.y < self.size.y
 
 func `==`*[T](a, b: Grid[T]): bool =
   a.cells == b.cells
@@ -192,6 +192,6 @@ iterator items*[T](self: Grid[T]): T =
   for a in self.cells:
     yield a
 
-iterator pairs*[T](self: Grid[T]): (int, T) =
+iterator pairs*[T](self: Grid[T]): (IVec2, T) =
   for a, b in self.cells:
-    yield (a, b)
+    yield (self.point(a.int32), b)

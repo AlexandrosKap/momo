@@ -140,16 +140,6 @@ template genEqOp(op: untyped) =
     a.z = op(a.z.V, b).T
     a.w = op(a.w.V, b).T
 
-template genBoolOp(op: untyped) =
-  func op*[T: SomeNumber](a, b: GVec2[T]): bool =
-    op(a.x, b.x) and op(a.y, b.y)
-
-  func op*[T: SomeNumber](a, b: GVec3[T]): bool =
-    op(a.x, b.x) and op(a.y, b.y) and op(a.z, b.z)
-
-  func op*[T: SomeNumber](a, b: GVec4[T]): bool =
-    op(a.x, b.x) and op(a.y, b.y) and op(a.z, b.z) and op(a.w, b.w)
-
 # Constructors and Operators
 
 func gvec2*[T: SomeNumber](x, y: T): GVec2[T] =
@@ -197,9 +187,6 @@ genEqOp(`*=`)
 genEqOp(`/=`)
 genEqOp(`div=`)
 genEqOp(`mod=`)
-
-genBoolOp(`==`)
-genBoolOp(`!=`)
 
 # Functions
 
@@ -253,6 +240,24 @@ func `-`*[T: SomeSignedInt | SomeFloat](a: GVec3[T]): GVec3[T] =
 
 func `-`*[T: SomeSignedInt | SomeFloat](a: GVec4[T]): GVec4[T] =
   GVec4[T](x: -a.x, y: -a.y, z: -a.z, w: -a.w)
+
+func `==`*[T: SomeNumber](a, b: GVec2[T]): bool =
+  a.x == b.x and a.y == b.y
+
+func `==`*[T: SomeNumber](a, b: GVec3[T]): bool =
+  a.x == b.x and a.y == b.y and a.z == b.z
+
+func `==`*[T: SomeNumber](a, b: GVec4[T]): bool =
+  a.x == b.x and a.y == b.y and a.z == b.z and a.w == b.w
+
+func `!=`*[T: SomeNumber](a, b: GVec2[T]): bool =
+  a.x != b.x or a.y != b.y
+
+func `!=`*[T: SomeNumber](a, b: GVec3[T]): bool =
+  a.x != b.x or a.y != b.y or a.z != b.z
+
+func `!=`*[T: SomeNumber](a, b: GVec4[T]): bool =
+  a.x != b.x or a.y != b.y or a.z != b.z or a.w != b.w
 
 func `$`*[T: SomeNumber](self: GVec2[T]): string =
   &"({self.x}, {self.y})"
