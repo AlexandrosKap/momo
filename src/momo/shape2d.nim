@@ -139,19 +139,6 @@ template genEqOp(op: untyped) =
     op(a.a, b)
     op(a.b, b)
 
-template genBoolOp(op: untyped) =
-  func op*[T: SomeNumber](a, b: GCirc2[T]): bool =
-    op(a.position, b.position) and op(a.radius, b.radius)
-
-  func op*[T: SomeNumber](a, b: GRect2[T]): bool =
-    op(a.position, b.position) and op(a.size, b.size)
-
-  func op*[T: SomeNumber](a, b: GLine2[T]): bool =
-    op(a.a, b.a) and op(a.b, b.b)
-
-  func op*[T: SomeNumber](a, b: GPoly2[T]): bool =
-    op(a.position, b.position) and op(a.points, b.points)
-
 # Constructors and Operators
 
 func gcirc2*[T: SomeNumber](x, y, radius: T): GCirc2[T] =
@@ -224,10 +211,31 @@ genEqOp(`/=`)
 genEqOp(`div=`)
 genEqOp(`mod=`)
 
-genBoolOp(`==`)
-genBoolOp(`!=`)
-
 # Functions
+
+func `==`*[T: SomeNumber](a, b: GCirc2[T]): bool =
+  a.position == b.position and a.radius == b.radius
+
+func `==`*[T: SomeNumber](a, b: GRect2[T]): bool =
+  a.position == b.position and a.size == b.size
+
+func `==`*[T: SomeNumber](a, b: GLine2[T]): bool =
+  a.a == b.a and a.b == b.b
+
+func `==`*[T: SomeNumber](a, b: GPoly2[T]): bool =
+  a.position == b.position and a.points == b.points
+
+func `!=`*[T: SomeNumber](a, b: GCirc2[T]): bool =
+  a.position != b.position or a.radius != b.radius
+
+func `!=`*[T: SomeNumber](a, b: GRect2[T]): bool =
+  a.position != b.position or a.size != b.size
+
+func `!=`*[T: SomeNumber](a, b: GLine2[T]): bool =
+  a.a != b.a or a.b != b.b
+
+func `!=`*[T: SomeNumber](a, b: GPoly2[T]): bool =
+  a.position != b.position or a.points != b.points
 
 func `$`*[T: SomeNumber](self: GCirc2[T]): string =
   &"({self.position}, {self.radius})"

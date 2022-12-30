@@ -191,7 +191,9 @@ genEqOp(`mod=`)
 # Functions
 
 func neighbors*[T: SomeNumber](self: GVec2[T]): array[9, GVec2[T]] =
-  # 3^2
+  ## Returns the adjacent vectors of the given vector as an array.
+  ## The array is 3 ** 2 in length
+  ## and contains the given vector so it can be used as a 2D array.
   result = array[9, GVec2[T]].default
   var i = 0
   for y in -1 .. 1:
@@ -203,7 +205,9 @@ func neighbors*[T: SomeNumber](self: GVec2[T]): array[9, GVec2[T]] =
       i += 1
 
 func neighbors*[T: SomeNumber](self: GVec3[T]): array[27, GVec3[T]] =
-  # 3^3
+  ## Returns the adjacent vectors of the given vector as an array.
+  ## The array is 3 ** 3 in length
+  ## and contains the given vector so it can be used as a 3D array.
   result = array[27, GVec3[T]].default
   var i = 0
   for z in -1 .. 1:
@@ -217,7 +221,9 @@ func neighbors*[T: SomeNumber](self: GVec3[T]): array[27, GVec3[T]] =
         i += 1
 
 func neighbors*[T: SomeNumber](self: GVec4[T]): array[81, GVec4[T]] =
-  # 3^4
+  ## Returns the adjacent vectors of the given vector as an array.
+  ## The array is 3 ** 4 in length
+  ## and contains the given vector so it can be used as a 4D array.
   result = array[81, GVec4[T]].default
   var i = 0
   for w in -1 .. 1:

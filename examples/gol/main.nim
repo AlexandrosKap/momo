@@ -1,4 +1,6 @@
-## The Game of Life made with the grid module.
+## The Game of Life in Nim.
+## 
+## An application that uses the momo/grid module.
 
 from os import sleep
 import momo/grid
