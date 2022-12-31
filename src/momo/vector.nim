@@ -30,6 +30,7 @@ type
 # Helper Templates
 
 template genCon[T: SomeNumber](name: untyped) =
+  ## Generates constructors for a specific type for every vector type.
   func `name 2`*(x, y: T): GVec2[T] =
     GVec2[T](x: x, y: y)
 
@@ -67,6 +68,7 @@ template genCon[T: SomeNumber](name: untyped) =
     GVec4[T](x: T(vec.x), y: T(vec.y), z: T(vec.z), w: T(vec.w))
 
 template genOp(op: untyped) =
+  ## Generates operator functions for every vector type.
   func op*[T: SomeNumber](a, b: GVec2[T]): GVec2[T] =
     GVec2[T](x: op(a.x, b.x), y: op(a.y, b.y))
 
@@ -110,6 +112,7 @@ template genOp(op: untyped) =
     )
 
 template genEqOp(op: untyped) =
+  ## Generates equality operator functions for every vector type.
   func op*[T: SomeNumber](a: var GVec2[T], b: GVec2[T]) =
     op(a.x, b.x)
     op(a.y, b.y)

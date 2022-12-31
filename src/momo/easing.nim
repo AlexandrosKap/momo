@@ -10,6 +10,8 @@ func linear*(x: float): float = x
 func ease*[T: SomeEasingType](
   f: EasingFunc, first, last: T, time: float
 ): T =
+  ## Interpolates between two values by the factor time.
+  ## Time should be between 0.0 and 1.0 (inclusive).
   if time < 0.0:
     first
   elif time > 1.0:
@@ -23,6 +25,8 @@ func ease*[T: SomeEasingType](
 func ease*[T: SomeEasingType](
   f: EasingFunc, first, last: T, time, maxTime: float
 ): T =
+  ## Interpolates between two values by the factor time.
+  ## Time should be between 0.0 and maxTime (inclusive).
   if time < 0.0:
     first
   elif time > maxTime:
@@ -34,9 +38,13 @@ func ease*[T: SomeEasingType](
       first + (last - first) * f(time / maxTime)
 
 func lerp*[T: SomeEasingType](first, last: T, time: float): T =
+  ## Linearly interpolates between two values by the factor time.
+  ## Time should be between 0.0 and 1.0 (inclusive).
   ease[T](linear, first, last, time)
 
 func lerp*[T: SomeEasingType](first, last: T, time, maxTime: float): T =
+  ## Linearly interpolates between two values by the factor time.
+  ## Time should be between 0.0 and maxTime (inclusive).
   ease[T](linear, first, last, time, maxTime)
 
 # Easing functions

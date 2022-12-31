@@ -41,6 +41,7 @@ type
 # Helper Templates
 
 template genGCirc2Con[T: SomeNumber](name: untyped) =
+  ## Generates circle constructors for a specific type.
   func name*(x, y, radius: T): GCirc2[T] =
     GCirc2[T](position: gvec2[T](x, y), radius: radius)
 
@@ -51,6 +52,7 @@ template genGCirc2Con[T: SomeNumber](name: untyped) =
     GCirc2[T]()
 
 template genGRect2Con[T: SomeNumber](name: untyped) =
+  ## Generates rectangle constructors for a specific type.
   func name*(x, y, width, height: T): GRect2[T] =
     GRect2[T](position: gvec2[T](x, y), size: gvec2[T](width, height))
 
@@ -61,6 +63,7 @@ template genGRect2Con[T: SomeNumber](name: untyped) =
     GRect2[T]()
 
 template genGLine2Con[T: SomeNumber](name: untyped) =
+  ## Generates line constructors for a specific type.
   func name*(x1, y1, x2, y2: T): GLine2[T] =
     GLine2[T](a: gvec2[T](x1, y1), b: gvec2[T](x2, y2))
 
@@ -71,6 +74,7 @@ template genGLine2Con[T: SomeNumber](name: untyped) =
     GLine2[T]()
 
 template genGPoly2Con[T: SomeNumber](name: untyped) =
+  ## Generates polygon constructors for a specific type.
   func name*(x, y: T, points: varargs[GVec2[T]]): GPoly2[T] =
     GPoly2[T](position: gvec2[T](x, y), points: points.toSeq)
 
@@ -81,6 +85,7 @@ template genGPoly2Con[T: SomeNumber](name: untyped) =
     GPoly2[T]()
 
 template genOp(op: untyped) =
+  ## Generates operator functions for every shape2 type.
   func op*[T: SomeNumber](a, b: GCirc2[T]): GCirc2[T] =
     GCirc2[T](
       position: op(a.position, b.position),
@@ -115,6 +120,7 @@ template genOp(op: untyped) =
     GLine2[T](a: op(a.a, b), b: op(a.b, b))
 
 template genEqOp(op: untyped) =
+  ## Generates equality operator functions for every shape2 type.
   func op*[T: SomeNumber](a: var GCirc2[T], b: GCirc2[T]) =
     op(a.position, b.position)
     op(a.radius, b.radius)

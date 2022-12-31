@@ -11,6 +11,8 @@ type
 # Helper Functions
 
 func toByte*(hex: string): uint8 =
+  ## Returns a byte from a hex string.
+  ## If the string is not a valid hex string, 0 is returned.
   try:
     fromHex[uint8](hex)
   except ValueError:
@@ -127,15 +129,19 @@ func color8*(hex: string): Color =
 # Functions
 
 func x8*(self: Color): uint8 =
+  ## Returns x as a byte.
   (self.x * 255).uint8
 
 func y8*(self: Color): uint8 =
+  ## Returns y as a byte.
   (self.y * 255).uint8
 
 func z8*(self: Color): uint8 =
+  ## Returns z as a byte.
   (self.z * 255).uint8
 
 func w8*(self: Color): uint8 =
+  ## Returns w as a byte.
   (self.w * 255).uint8
 
 func `$`*(self: Color): string =
