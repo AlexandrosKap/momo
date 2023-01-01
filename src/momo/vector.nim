@@ -194,17 +194,38 @@ genEqOp(`mod=`)
 
 # Functions
 
-func length*[T: SomeFloat](self: GVec2[T]): T =
+func length*[T: SomeNumber](self: GVec2[T]): T =
   ## Returns the length (magnitude) of the vector.
-  sqrt(self.x * self.x + self.y * self.y)
+  when T is SomeInteger:
+    sqrt(
+      (self.x * self.x).float32 +
+      (self.y * self.y).float32
+    ).T
+  else:
+    sqrt(self.x * self.x + self.y * self.y)
 
-func length*[T: SomeFloat](self: GVec3[T]): T =
+func length*[T: SomeNumber](self: GVec3[T]): T =
   ## Returns the length (magnitude) of the vector.
-  sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+  when T is SomeInteger:
+    sqrt(
+      (self.x * self.x).float32 +
+      (self.y * self.y).float32 +
+      (self.z * self.z).float32
+    ).T
+  else:
+    sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
 
-func length*[T: SomeFloat](self: GVec4[T]): T =
+func length*[T: SomeNumber](self: GVec4[T]): T =
   ## Returns the length (magnitude) of the vector.
-  sqrt(self.x * self.x + self.y * self.y + self.z * self.z, + self.w * self.w)
+  when T is SomeInteger:
+    sqrt(
+      (self.x * self.x).float32 +
+      (self.y * self.y).float32 +
+      (self.z * self.z).float32 +
+      (self.w * self.w).float32
+    ).T
+  else:
+    sqrt(self.x * self.x + self.y * self.y + self.z * self.z, + self.w * self.w)
 
 func normalized*[T: SomeFloat](self: GVec2[T]): GVec2[T] =
   ## Returns the vector scaled to unit length.
@@ -218,61 +239,61 @@ func normalized*[T: SomeFloat](self: GVec4[T]): GVec4[T] =
   ## Returns the vector scaled to unit length.
   self / self.length()
 
-func neighbors*[T: SomeNumber](self: GVec2[T]): array[9, GVec2[T]] =
+func neighbors*[T: SomeSignedNumber](self: GVec2[T]): array[9, GVec2[T]] =
   ## Returns the adjacent vectors of the given vector as an array.
   ## The array is 3 ** 2 in length
   ## and contains the given vector so it can be used as a 2D array.
   result = array[9, GVec2[T]].default
   var i = 0
-  for y in -1 .. 1:
-    for x in -1 .. 1:
+  for y in -1.T .. 1.T:
+    for x in -1.T .. 1.T:
       result[i] = GVec2[T](
-        x: self.x + x.T,
-        y: self.y + y.T
+        x: self.x + x,
+        y: self.y + y
       )
       i += 1
 
-func neighbors*[T: SomeNumber](self: GVec3[T]): array[27, GVec3[T]] =
+func neighbors*[T: SomeSignedNumber](self: GVec3[T]): array[27, GVec3[T]] =
   ## Returns the adjacent vectors of the given vector as an array.
   ## The array is 3 ** 3 in length
   ## and contains the given vector so it can be used as a 3D array.
   result = array[27, GVec3[T]].default
   var i = 0
-  for z in -1 .. 1:
-    for y in -1 .. 1:
-      for x in -1 .. 1:
+  for z in -1.T .. 1.T:
+    for y in -1.T .. 1.T:
+      for x in -1.T .. 1.T:
         result[i] = GVec3[T](
-          x: self.x + x.T,
-          y: self.y + y.T,
-          z: self.z + z.T
+          x: self.x + x,
+          y: self.y + y,
+          z: self.z + z
         )
         i += 1
 
-func neighbors*[T: SomeNumber](self: GVec4[T]): array[81, GVec4[T]] =
+func neighbors*[T: SomeSignedNumber](self: GVec4[T]): array[81, GVec4[T]] =
   ## Returns the adjacent vectors of the given vector as an array.
   ## The array is 3 ** 4 in length
   ## and contains the given vector so it can be used as a 4D array.
   result = array[81, GVec4[T]].default
   var i = 0
-  for w in -1 .. 1:
-    for z in -1 .. 1:
-      for y in -1 .. 1:
-        for x in -1 .. 1:
+  for w in -1.T .. 1.T:
+    for z in -1.T .. 1.T:
+      for y in -1.T .. 1.T:
+        for x in -1.T .. 1.T:
           result[i] = GVec4[T](
-            x: self.x + x.T,
-            y: self.y + y.T,
-            z: self.z + z.T,
-            w: self.w + w.T
+            x: self.x + x,
+            y: self.y + y,
+            z: self.z + z,
+            w: self.w + w
           )
           i += 1
 
-func `-`*[T: SomeSignedInt | SomeFloat](a: GVec2[T]): GVec2[T] =
+func `-`*[T: SomeSignedNumber](a: GVec2[T]): GVec2[T] =
   GVec2[T](x: -a.x, y: -a.y)
 
-func `-`*[T: SomeSignedInt | SomeFloat](a: GVec3[T]): GVec3[T] =
+func `-`*[T: SomeSignedNumber](a: GVec3[T]): GVec3[T] =
   GVec3[T](x: -a.x, y: -a.y, z: -a.z)
 
-func `-`*[T: SomeSignedInt | SomeFloat](a: GVec4[T]): GVec4[T] =
+func `-`*[T: SomeSignedNumber](a: GVec4[T]): GVec4[T] =
   GVec4[T](x: -a.x, y: -a.y, z: -a.z, w: -a.w)
 
 func `==`*[T: SomeNumber](a, b: GVec2[T]): bool =

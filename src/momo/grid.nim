@@ -41,6 +41,11 @@ template genCon[T](name: untyped) =
   func name*(): Grid[T] =
     Grid[T]()
 
+  func name*(grid: Grid[T]): Grid[T] =
+    result = Grid[T](size: grid.size)
+    for i in 0 ..< grid.cells.len:
+      result.cells.add(grid.cells[i])
+
 # Constructors
 
 func newGrid*[T](width, height: int32, value: T): Grid[T] =
@@ -65,6 +70,11 @@ func newGrid*[T](size: IVec2): Grid[T] =
 
 func newGrid*[T](): Grid[T] =
   Grid[T]()
+
+func newGrid*[T](grid: Grid[T]): Grid[T] =
+  result = Grid[T](size: grid.size)
+  for i in 0 ..< grid.cells.len:
+    result.cells.add(grid.cells[i])
 
 genCon[bool](newBGrid)
 genCon[int32](newIGrid)

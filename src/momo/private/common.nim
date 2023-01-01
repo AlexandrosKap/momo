@@ -1,6 +1,9 @@
 from math import `mod`, floor
 export `mod`
 
+type
+  SomeSignedNumber* = SomeSignedInt | SomeFloat
+
 # Boolean Functions
 
 func `+`*(a, b: bool): bool =
