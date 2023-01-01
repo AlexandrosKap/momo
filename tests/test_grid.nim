@@ -10,7 +10,7 @@ test "Grid":
   check g.width == size.x
   check g.height == size.y
   check g.cells == newSeq[bool](size.x * size.y)
-  check g.len == size.x * size.y
+  check g.area == size.x * size.y
   check g.id(first) == 0
   check g.point(0) == first
 

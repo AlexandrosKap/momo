@@ -1,4 +1,5 @@
 from strformat import `&`
+from math import sqrt
 import private/common
 
 type
@@ -192,6 +193,30 @@ genEqOp(`div=`)
 genEqOp(`mod=`)
 
 # Functions
+
+func length*[T: SomeFloat](self: GVec2[T]): T =
+  ## Returns the length (magnitude) of the vector.
+  sqrt(self.x * self.x + self.y * self.y)
+
+func length*[T: SomeFloat](self: GVec3[T]): T =
+  ## Returns the length (magnitude) of the vector.
+  sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+
+func length*[T: SomeFloat](self: GVec4[T]): T =
+  ## Returns the length (magnitude) of the vector.
+  sqrt(self.x * self.x + self.y * self.y + self.z * self.z, + self.w * self.w)
+
+func normalized*[T: SomeFloat](self: GVec2[T]): GVec2[T] =
+  ## Returns the vector scaled to unit length.
+  self / self.length()
+
+func normalized*[T: SomeFloat](self: GVec3[T]): GVec3[T] =
+  ## Returns the vector scaled to unit length.
+  self / self.length()
+
+func normalized*[T: SomeFloat](self: GVec4[T]): GVec4[T] =
+  ## Returns the vector scaled to unit length.
+  self / self.length()
 
 func neighbors*[T: SomeNumber](self: GVec2[T]): array[9, GVec2[T]] =
   ## Returns the adjacent vectors of the given vector as an array.

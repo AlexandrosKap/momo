@@ -90,9 +90,8 @@ func cells*[T](self: Grid[T]): seq[T] =
   ## Returns the cells of the grid.
   self.cells
 
-func len*[T](self: Grid[T]): int32 =
-  ## Returns the length of the grid.
-  ## Length is the width multiplied by the height of the grid.
+func area*[T](self: Grid[T]): int32 =
+  ## Returns the area of the grid.
   self.size.x * self.size.y
 
 func id*[T](self: Grid[T], p: IVec2): int32 =
@@ -120,7 +119,7 @@ func swap*[T](self: Grid[T], p1, p2: IVec2) =
 
 func fill*[T](self: Grid[T], value: T) =
   ## Fills the grid with one value.
-  for i in 0 ..< self.len:
+  for i in 0 ..< self.cells.len:
     self.cells[i] = value
 
 func fill*[T](self: Grid[T], p1, p2: IVec2, value: T) =

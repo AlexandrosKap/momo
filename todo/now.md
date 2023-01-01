@@ -6,7 +6,7 @@ A file to keep track of what needs to be done right now.
 
 * [ ] Make animation module
 * [ ] Make dialogue module
-* [ ] Make a dungeon crawler horror game with Momo
+* [ ] Make a game with Momo
 
 ## DONE
 
