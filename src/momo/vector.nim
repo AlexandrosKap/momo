@@ -197,47 +197,77 @@ genEqOp(`mod=`)
 func length*[T: SomeNumber](self: GVec2[T]): T =
   ## Returns the length (magnitude) of the vector.
   when T is SomeInteger:
-    sqrt(
-      (self.x * self.x).float32 +
-      (self.y * self.y).float32
-    ).T
+    sqrt((
+      self.x * self.x + self.y * self.y
+    ).float32).T
   else:
     sqrt(self.x * self.x + self.y * self.y)
 
 func length*[T: SomeNumber](self: GVec3[T]): T =
   ## Returns the length (magnitude) of the vector.
   when T is SomeInteger:
-    sqrt(
-      (self.x * self.x).float32 +
-      (self.y * self.y).float32 +
-      (self.z * self.z).float32
-    ).T
+    sqrt((
+      self.x * self.x + self.y * self.y + self.z * self.z
+    ).float32).T
   else:
     sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
 
 func length*[T: SomeNumber](self: GVec4[T]): T =
   ## Returns the length (magnitude) of the vector.
   when T is SomeInteger:
-    sqrt(
-      (self.x * self.x).float32 +
-      (self.y * self.y).float32 +
-      (self.z * self.z).float32 +
-      (self.w * self.w).float32
-    ).T
+    sqrt((
+      self.x * self.x + self.y * self.y + self.z * self.z + self.w *self.w
+    ).float32).T
   else:
     sqrt(self.x * self.x + self.y * self.y + self.z * self.z, + self.w * self.w)
 
-func normalized*[T: SomeFloat](self: GVec2[T]): GVec2[T] =
-  ## Returns the vector scaled to unit length.
-  self / self.length()
+func abs*[T: SomeSignedNumber](self: GVec2[T]): GVec2[T] =
+  ## Returns the vector with all components in absolute values.
+  GVec2[T](x: abs(self.x), y: abs(self.y))
 
-func normalized*[T: SomeFloat](self: GVec3[T]): GVec3[T] =
-  ## Returns the vector scaled to unit length.
-  self / self.length()
+func abs*[T: SomeSignedNumber](self: GVec3[T]): GVec3[T] =
+  ## Returns the vector with all components in absolute values.
+  GVec3[T](x: abs(self.x), y: abs(self.y), z: abs(self.z))
 
-func normalized*[T: SomeFloat](self: GVec4[T]): GVec4[T] =
+func abs*[T: SomeSignedNumber](self: GVec4[T]): GVec4[T] =
+  ## Returns the vector with all components in absolute values.
+  GVec4[T](x: abs(self.x), y: abs(self.y), z: abs(self.z), w: abs(self.w))
+
+func normalized*[T: SomeNumber](self: GVec2[T]): GVec2[T] =
   ## Returns the vector scaled to unit length.
-  self / self.length()
+  when T is SomeInteger:
+    var vec = self.vec2 / self.length.float32
+    GVec2[T](
+      x: if vec.x > 0.5: 1 elif vec.x < -0.5: -1 else: 0,
+      y: if vec.y > 0.5: 1 elif vec.y < -0.5: -1 else: 0,
+    )
+  else:
+    self / self.length()
+
+func normalized*[T: SomeNumber](self: GVec3[T]): GVec3[T] =
+  ## Returns the vector scaled to unit length.
+  when T is SomeInteger:
+    var vec = self.vec3 / self.length.float32
+    GVec3[T](
+      x: if vec.x > 0.5: 1 elif vec.x < -0.5: -1 else: 0,
+      y: if vec.y > 0.5: 1 elif vec.y < -0.5: -1 else: 0,
+      z: if vec.z > 0.5: 1 elif vec.z < -0.5: -1 else: 0
+    )
+  else:
+    self / self.length()
+
+func normalized*[T: SomeNumber](self: GVec4[T]): GVec4[T] =
+  ## Returns the vector scaled to unit length.
+  when T is SomeInteger:
+    var vec = self.vec4 / self.length.float32
+    GVec4[T](
+      x: if vec.x > 0.5: 1 elif vec.x < -0.5: -1 else: 0,
+      y: if vec.y > 0.5: 1 elif vec.y < -0.5: -1 else: 0,
+      z: if vec.z > 0.5: 1 elif vec.z < -0.5: -1 else: 0,
+      w: if vec.w > 0.5: 1 elif vec.w < -0.5: -1 else: 0,
+    )
+  else:
+    self / self.length()
 
 func neighbors*[T: SomeSignedNumber](self: GVec2[T]): array[9, GVec2[T]] =
   ## Returns the adjacent vectors of the given vector as an array.
