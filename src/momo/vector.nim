@@ -1,5 +1,5 @@
 from strformat import `&`
-from math import sqrt
+from math import floor, ceil, sqrt, arctan2
 import private/common
 
 type
@@ -194,32 +194,37 @@ genEqOp(`mod=`)
 
 # Functions
 
-func length*[T: SomeNumber](self: GVec2[T]): T =
-  ## Returns the length (magnitude) of the vector.
-  when T is SomeInteger:
-    sqrt((
-      self.x * self.x + self.y * self.y
-    ).float32).T
-  else:
-    sqrt(self.x * self.x + self.y * self.y)
+func angle*[T: SomeFloat](self: GVec2[T]): T =
+  ## Returns the angle of the vector, in radians.
+  arctan2(self.y, self.x)
 
-func length*[T: SomeNumber](self: GVec3[T]): T =
-  ## Returns the length (magnitude) of the vector.
-  when T is SomeInteger:
-    sqrt((
-      self.x * self.x + self.y * self.y + self.z * self.z
-    ).float32).T
-  else:
-    sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+func angle*[T: SomeFloat](self, vec: GVec2[T]): T =
+  ## Returns the angle between two vectors, in radians.
+  arctan2(self.y - vec.y, self.x - vec.x)
 
-func length*[T: SomeNumber](self: GVec4[T]): T =
+func length*[T: SomeFloat](self: GVec2[T]): T =
   ## Returns the length (magnitude) of the vector.
-  when T is SomeInteger:
-    sqrt((
-      self.x * self.x + self.y * self.y + self.z * self.z + self.w *self.w
-    ).float32).T
-  else:
-    sqrt(self.x * self.x + self.y * self.y + self.z * self.z, + self.w * self.w)
+  sqrt(self.x * self.x + self.y * self.y)
+
+func length*[T: SomeFloat](self: GVec3[T]): T =
+  ## Returns the length (magnitude) of the vector.
+  sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+
+func length*[T: SomeFloat](self: GVec4[T]): T =
+  ## Returns the length (magnitude) of the vector.
+  sqrt(self.x * self.x + self.y * self.y + self.z * self.z, + self.w * self.w)
+
+func dot*[T: SomeNumber](self, vec: GVec2[T]): T =
+  ## Returns the dot product of two vectors.
+  self.x * vec.x + self.y * vec.y
+
+func dot*[T: SomeNumber](self, vec: GVec3[T]): T =
+  ## Returns the dot product of two vectors.
+  self.x * vec.x + self.y * vec.y + self.z * vec.z
+
+func dot*[T: SomeNumber](self, vec: GVec4[T]): T =
+  ## Returns the dot product of two vectors.
+  self.x * vec.x + self.y * vec.y + self.z * vec.z + self.w * vec.w
 
 func abs*[T: SomeSignedNumber](self: GVec2[T]): GVec2[T] =
   ## Returns the vector with all components in absolute values.
@@ -233,41 +238,41 @@ func abs*[T: SomeSignedNumber](self: GVec4[T]): GVec4[T] =
   ## Returns the vector with all components in absolute values.
   GVec4[T](x: abs(self.x), y: abs(self.y), z: abs(self.z), w: abs(self.w))
 
-func normalized*[T: SomeNumber](self: GVec2[T]): GVec2[T] =
-  ## Returns the vector scaled to unit length.
-  when T is SomeInteger:
-    var vec = self.vec2 / self.length.float32
-    GVec2[T](
-      x: if vec.x > 0.5: 1 elif vec.x < -0.5: -1 else: 0,
-      y: if vec.y > 0.5: 1 elif vec.y < -0.5: -1 else: 0,
-    )
-  else:
-    self / self.length()
+func floor*[T: SomeFloat](self: GVec2[T]): GVec2[T] =
+  ## Returns the vector with all components rounded down.
+  GVec2[T](x: floor(self.x), y: floor(self.y))
 
-func normalized*[T: SomeNumber](self: GVec3[T]): GVec3[T] =
-  ## Returns the vector scaled to unit length.
-  when T is SomeInteger:
-    var vec = self.vec3 / self.length.float32
-    GVec3[T](
-      x: if vec.x > 0.5: 1 elif vec.x < -0.5: -1 else: 0,
-      y: if vec.y > 0.5: 1 elif vec.y < -0.5: -1 else: 0,
-      z: if vec.z > 0.5: 1 elif vec.z < -0.5: -1 else: 0
-    )
-  else:
-    self / self.length()
+func floor*[T: SomeFloat](self: GVec3[T]): GVec3[T] =
+  ## Returns the vector with all components rounded down.
+  GVec3[T](x: floor(self.x), y: floor(self.y), z: floor(self.z))
 
-func normalized*[T: SomeNumber](self: GVec4[T]): GVec4[T] =
+func floor*[T: SomeFloat](self: GVec4[T]): GVec4[T] =
+  ## Returns the vector with all components rounded down.
+  GVec4[T](x: floor(self.x), y: floor(self.y), z: floor(self.z), w: floor(self.w))
+
+func ceil*[T: SomeFloat](self: GVec2[T]): GVec2[T] =
+  ## Returns the vector with all components rounded up.
+  GVec2[T](x: ceil(self.x), y: ceil(self.y))
+
+func ceil*[T: SomeFloat](self: GVec3[T]): GVec3[T] =
+  ## Returns the vector with all components rounded up.
+  GVec3[T](x: ceil(self.x), y: ceil(self.y), z: ceil(self.z))
+
+func ceil*[T: SomeFloat](self: GVec4[T]): GVec4[T] =
+  ## Returns the vector with all components rounded up.
+  GVec4[T](x: ceil(self.x), y: ceil(self.y), z: ceil(self.z), w: ceil(self.w))
+
+func normalized*[T: SomeFloat, V: SomeVec234[T]](self: V): V =
   ## Returns the vector scaled to unit length.
-  when T is SomeInteger:
-    var vec = self.vec4 / self.length.float32
-    GVec4[T](
-      x: if vec.x > 0.5: 1 elif vec.x < -0.5: -1 else: 0,
-      y: if vec.y > 0.5: 1 elif vec.y < -0.5: -1 else: 0,
-      z: if vec.z > 0.5: 1 elif vec.z < -0.5: -1 else: 0,
-      w: if vec.w > 0.5: 1 elif vec.w < -0.5: -1 else: 0,
-    )
-  else:
-    self / self.length()
+  self / self.length()
+
+func distance*[T: SomeFloat, V: SomeVec234[T]](self, vec: V): V =
+  ## Returns the distance between two vectors.
+  (vec - self).abs()
+
+func direction*[T: SomeFloat, V: SomeVec234[T]](self, vec: V): V =
+  ## Returns the normalized vector pointing from self to vec.
+  (vec - self).normalized()
 
 func neighbors*[T: SomeSignedNumber](self: GVec2[T]): array[9, GVec2[T]] =
   ## Returns the adjacent vectors of the given vector as an array.

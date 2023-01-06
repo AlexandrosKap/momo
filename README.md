@@ -1,6 +1,6 @@
 # 🐤 Momo
 
-A cute game development toolkit for Nim.
+A cute (work in progress) game development toolkit for Nim.
 
 Momo is a collection
 of useful modules related to game development.
