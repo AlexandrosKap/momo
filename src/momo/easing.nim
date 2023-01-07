@@ -1,5 +1,5 @@
 from math import PI, sqrt, pow, cos, sin
-import vector, shape2d
+import vector, shape2
 
 type
   EasingFunc* = proc(x: float): float {.noSideEffect.}

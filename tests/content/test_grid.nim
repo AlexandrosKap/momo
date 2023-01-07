@@ -1,12 +1,12 @@
 import unittest
 import momo/grid
 
-let size = ivec2(4, 4)
-let first = ivec2()
-let last = ivec2(size.x - 1, size.y - 1)
-
-test "Grid":
+proc testGrid*() =
+  let size = ivec2(4, 4)
+  let first = ivec2()
+  let last = ivec2(size.x - 1, size.y - 1)
   var g = newBGrid(size)
+
   check g.width == size.x
   check g.height == size.y
   check g.cells == newSeq[bool](size.x * size.y)

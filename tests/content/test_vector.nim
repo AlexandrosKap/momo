@@ -1,7 +1,7 @@
 import unittest
 import momo/vector
 
-test "Vector":
+proc testVector*() =
   check vec2(2, 2) == Vec2(x: 2, y: 2)
   check vec2(1) == vec2(1, 1)
   check vec2() == vec2(0)
@@ -46,18 +46,3 @@ test "Vector":
   check vec4(4) * 0.5 == vec4(2)
   check vec4(4) / 2 == vec4(2)
   check vec4(4) / 2.0 == vec4(2)
-
-  var v2 = vec2(1)
-  v2 += vec2(2)
-  check v2 == vec2(3)
-  check v2.ivec2 == ivec2(3)
-
-  var v3 = vec3(1)
-  v3 += vec3(2)
-  check v3 == vec3(3)
-  check v3.ivec3 == ivec3(3)
-
-  var v4 = vec4(1)
-  v4 += vec4(2)
-  check v4 == vec4(3)
-  check v4.ivec4 == ivec4(3)

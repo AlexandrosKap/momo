@@ -15,7 +15,7 @@ by almost anyone regardless of skill level.
 * momo/dialogue
 * momo/easing
 * momo/grid
-* momo/shape2d
+* momo/shape2
 * momo/vector
 
 ## Documentation

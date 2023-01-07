@@ -1,7 +1,7 @@
 import unittest
 import momo/color
 
-test "Color":
+proc testColor*() =
   check toByte("") == 0
   check toByte("-") == 0
   check toByte("67") != 0
