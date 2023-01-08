@@ -20,16 +20,16 @@ func toByte*(hex: string): uint8 =
 
 # Constructors and Operators
 
-func color*(r, g, b, a: float32): Color =
+func color*(r, g, b, a: float32): Color {.inline.} =
   Color(x: r, y: g, z: b, w: a)
 
-func color*(r, g, b: float32): Color =
+func color*(r, g, b: float32): Color {.inline.} =
   Color(x: r, y: g, z: b, w: 1)
 
-func color*(r: float32): Color =
+func color*(r: float32): Color {.inline.} =
   Color(x: r, y: r, z: r, w: 1)
 
-func color*(): Color =
+func color*(): Color {.inline.} =
   Color(w: 1)
 
 func color*(hex: string): Color =
@@ -65,7 +65,7 @@ func color*(hex: string): Color =
   else:
     Color(w: 1)
 
-func color8*(r, g, b, a: uint8): Color =
+func color8*(r, g, b, a: uint8): Color {.inline.} =
   Color(
     x: r.float32 / 255,
     y: g.float32 / 255,
@@ -73,7 +73,7 @@ func color8*(r, g, b, a: uint8): Color =
     w: a.float32 / 255
   )
 
-func color8*(r, g, b: uint8): Color =
+func color8*(r, g, b: uint8): Color {.inline.} =
   Color(
     x: r.float32 / 255,
     y: g.float32 / 255,
@@ -81,7 +81,7 @@ func color8*(r, g, b: uint8): Color =
     w: 1
   )
 
-func color8*(r: uint8): Color =
+func color8*(r: uint8): Color {.inline.} =
   let c = r.float32 / 255
   Color(
     x: c,
@@ -90,57 +90,21 @@ func color8*(r: uint8): Color =
     w: 1
   )
 
-func color8*(): Color =
-  Color(w: 1)
-
-func color8*(hex: string): Color =
-  case hex.len:
-  of 6:
-    Color(
-      x: hex[0 .. 1].toByte.float32 / 255,
-      y: hex[2 .. 3].toByte.float32 / 255,
-      z: hex[4 .. 5].toByte.float32 / 255,
-      w: 1
-    )
-  of 7:
-    Color(
-      x: hex[1 .. 2].toByte.float32 / 255,
-      y: hex[3 .. 4].toByte.float32 / 255,
-      z: hex[5 .. 6].toByte.float32 / 255,
-      w: 1
-    )
-  of 8:
-    Color(
-      x: hex[2 .. 3].toByte.float32 / 255,
-      y: hex[4 .. 5].toByte.float32 / 255,
-      z: hex[6 .. 7].toByte.float32 / 255,
-      w: hex[0 .. 1].toByte.float32 / 255
-    )
-  of 9:
-    Color(
-      x: hex[3 .. 4].toByte.float32 / 255,
-      y: hex[5 .. 6].toByte.float32 / 255,
-      z: hex[7 .. 8].toByte.float32 / 255,
-      w: hex[1 .. 2].toByte.float32 / 255
-    )
-  else:
-    Color(w: 1)
-
 # Functions
 
-func x8*(self: Color): uint8 =
+func x8*(self: Color): uint8 {.inline.} =
   ## Returns x as a byte.
   (self.x * 255).uint8
 
-func y8*(self: Color): uint8 =
+func y8*(self: Color): uint8 {.inline.} =
   ## Returns y as a byte.
   (self.y * 255).uint8
 
-func z8*(self: Color): uint8 =
+func z8*(self: Color): uint8 {.inline.} =
   ## Returns z as a byte.
   (self.z * 255).uint8
 
-func w8*(self: Color): uint8 =
+func w8*(self: Color): uint8 {.inline.} =
   ## Returns w as a byte.
   (self.w * 255).uint8
 
@@ -149,12 +113,12 @@ func `$`*(self: Color): string =
 
 # Constants
 
-const red* = color8(255, 0, 0)
-const green* = color8(0, 255, 0)
-const blue* = color8(0, 0, 255)
-const blank* = color8(0, 0, 0, 0)
-const black* = color8(0)
-const white* = color8(255)
+const red* = color(1, 0, 0)
+const green* = color(0, 1, 0)
+const blue* = color(0, 0, 1)
+const blank* = color(0, 0, 0, 0)
+const black* = color(0)
+const white* = color(1)
 
 # Palette: Colors from Playdate game screenshots.
 const playdate* = static([

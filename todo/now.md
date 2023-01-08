@@ -4,8 +4,8 @@ A file to keep track of what needs to be done right now.
 
 ## TODO
 
-* [ ] Make animation module
 * [ ] Make dialogue module
+* [ ] Make animation module
 * [ ] Make a game with Momo
 
 ## DONE
