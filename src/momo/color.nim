@@ -156,14 +156,14 @@ const blank* = color8(0, 0, 0, 0)
 const black* = color8(0)
 const white* = color8(255)
 
+# Palette: Colors from Playdate game screenshots.
+const playdate* = static([
+  color("322f29"), color("dbd7d1")
+])
+
 # Palette: https://lospec.com/palette-list/2-bit-grayscale
 const bitbit* = static([
   color("000000"), color("676767"), color("b6b6b6"), color("ffffff"),
-])
-
-# Palette: https://lospec.com/palette-list/grafxkid-gameboy-pocket-gray
-const pocket* = static([
-  color("2b2b26"), color("706b66"), color("a89f94"), color("e0dbcd"),
 ])
 
 # Palette: https://lospec.com/palette-list/nintendo-gameboy-bgb

@@ -226,6 +226,18 @@ func dot*[T: SomeNumber](self, vec: GVec4[T]): T =
   ## Returns the dot product of two vectors.
   self.x * vec.x + self.y * vec.y + self.z * vec.z + self.w * vec.w
 
+func cross*[T: SomeNumber](self, vec: GVec2[T]): T =
+  ## Returns the cross product of two vectors.
+  self.x * vec.y - self.y * vec.x;
+
+func cross*[T: SomeNumber](self, vec: GVec3[T]): GVec3[T] =
+  ## Returns the cross product of two vectors.
+  GVec3[T](
+    x: self.y * vec.z - self.z * vec.y,
+    y: self.z * vec.x - self.x * vec.z,
+    z: self.x * vec.y - self.y * vec.x
+  )
+
 func abs*[T: SomeSignedNumber](self: GVec2[T]): GVec2[T] =
   ## Returns the vector with all components in absolute values.
   GVec2[T](x: abs(self.x), y: abs(self.y))
