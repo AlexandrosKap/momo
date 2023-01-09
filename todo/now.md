@@ -10,6 +10,7 @@ A file to keep track of what needs to be done right now.
 
 ## DONE
 
+* [x] Add clamp to vector module
 * [x] Write comments
 * [x] Fix == and != bug in modules with genBoolOp templates
 * [x] Make game of life with Momo

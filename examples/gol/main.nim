@@ -6,14 +6,14 @@ import momo/grid
 const genCount = 20
 const sleepTime = 500
 
-func newPreBoard(): BGrid =
+proc newPreBoard(): BGrid =
   ## Creates a new predefined board.
   result = newBGrid(8, 8)
   result.fill(ivec2(2, 0), ivec2(2, 2), true)
   result.set(ivec2(0, 1), true)
   result.set(ivec2(1, 2), true)
 
-func update(self: BGrid) =
+proc update(self: BGrid) =
   ## Updates the state of the board.
   var temp = newBGrid(self)
   for p, cell in temp:
@@ -26,11 +26,17 @@ func update(self: BGrid) =
     elif hp == 3:
       self.set(p, true)
 
+proc pause() =
+  ## Pauses the terminal.
+  echo ""
+  sleep(sleepTime)
+
 when isMainModule:
   var board = newPreBoard()
+  echo board
+  pause()
   for i in 1 .. genCount:
     board.update()
     echo board
     if i != genCount:
-      echo ""
-      sleep(sleepTime)
+      pause()

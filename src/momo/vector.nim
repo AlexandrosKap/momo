@@ -274,21 +274,76 @@ func ceil*[T: SomeFloat](self: GVec4[T]): GVec4[T] {.inline.} =
   ## Returns the vector with all components rounded up.
   GVec4[T](x: ceil(self.x), y: ceil(self.y), z: ceil(self.z), w: ceil(self.w))
 
-func normalized*[T: SomeFloat, V: SomeVec234[T]](self: V): V {.inline.} =
-  ## Returns the vector scaled to unit length.
-  self / self.length()
+func round*[T: SomeFloat](self: GVec2[T]): GVec2[T] {.inline.} =
+  ## Returns the vector with all components rounded.
+  GVec2[T](x: round(self.x), y: round(self.y))
 
-func distance*[T: SomeFloat, V: SomeVec234[T]](self, vec: V): V {.inline.} =
-  ## Returns the distance between two vectors.
-  (vec - self).abs()
+func round*[T: SomeFloat](self: GVec3[T]): GVec3[T] {.inline.} =
+  ## Returns the vector with all components rounded.
+  GVec3[T](x: round(self.x), y: round(self.y), z: round(self.z))
+
+func round*[T: SomeFloat](self: GVec4[T]): GVec4[T] {.inline.} =
+  ## Returns the vector with all components rounded.
+  GVec4[T](x: round(self.x), y: round(self.y), z: round(self.z), w: round(self.w))
+
+func clamp*[T: SomeNumber](self, a, b: GVec2[T]): GVec2[T] {.inline.} =
+  ## Returns the vector with all components clamped within the interval a and b.
+  GVec2[T](
+    x: clamp(self.x, a.x, b.x),
+    y: clamp(self.y, a.y, b.y)
+  )
+
+func clamp*[T: SomeNumber](self, a, b: GVec3[T]): GVec3[T] {.inline.} =
+  ## Returns the vector with all components clamped within the interval a and b.
+  GVec3[T](
+    x: clamp(self.x, a.x, b.x),
+    y: clamp(self.y, a.y, b.y),
+    z: clamp(self.z, a.z, b.z)
+  )
+
+func clamp*[T: SomeNumber](self, a, b: GVec4[T]): GVec4[T] {.inline.} =
+  ## Returns the vector with all components clamped within the interval a and b.
+  GVec4[T](
+    x: clamp(self.x, a.x, b.x),
+    y: clamp(self.y, a.y, b.y),
+    z: clamp(self.z, a.z, b.z),
+    w: clamp(self.w, a.w, b.w)
+  )
+
+func normalize*[T: SomeFloat](self: GVec2[T]): GVec2[T] {.inline.} =
+  ## Returns the vector scaled to unit length.
+  GVec2[T](
+    x: self.x / self.length(),
+    y: self.y / self.length()
+  )
+
+func normalize*[T: SomeFloat](self: GVec3[T]): GVec3[T] {.inline.} =
+  ## Returns the vector scaled to unit length.
+  GVec3[T](
+    x: self.x / self.length(),
+    y: self.y / self.length(),
+    z: self.z / self.length()
+  )
+
+func normalize*[T: SomeFloat](self: GVec4[T]): GVec4[T] {.inline.} =
+  ## Returns the vector scaled to unit length.
+  GVec4[T](
+    x: self.x / self.length(),
+    y: self.y / self.length(),
+    z: self.z / self.length(),
+    w: self.w / self.length()
+  )
 
 func direction*[T: SomeFloat, V: SomeVec234[T]](self, vec: V): V {.inline.} =
   ## Returns the normalized vector pointing from self to vec.
   (vec - self).normalized()
 
-func neighbors*[T: SomeSignedNumber](
-  self: GVec2[T]
-): array[9, GVec2[T]] {.inline.} =
+func distance*[T: SomeSignedNumber, V: SomeVec234[T]](self,
+    vec: V): V {.inline.} =
+  ## Returns the distance between two vectors.
+  (vec - self).abs()
+
+func neighbors*[T: SomeSignedNumber](self: GVec2[T]): array[9, GVec2[T]] =
   ## Returns the adjacent vectors of the given vector as an array.
   ## The array is 3 ** 2 in length
   ## and contains the given vector so it can be used as a 2D array.
@@ -302,9 +357,7 @@ func neighbors*[T: SomeSignedNumber](
       )
       i += 1
 
-func neighbors*[T: SomeSignedNumber](
-  self: GVec3[T]
-): array[27, GVec3[T]] {.inline.} =
+func neighbors*[T: SomeSignedNumber](self: GVec3[T]): array[27, GVec3[T]] =
   ## Returns the adjacent vectors of the given vector as an array.
   ## The array is 3 ** 3 in length
   ## and contains the given vector so it can be used as a 3D array.
@@ -320,9 +373,7 @@ func neighbors*[T: SomeSignedNumber](
         )
         i += 1
 
-func neighbors*[T: SomeSignedNumber](
-  self: GVec4[T]
-): array[81, GVec4[T]] {.inline.} =
+func neighbors*[T: SomeSignedNumber](self: GVec4[T]): array[81, GVec4[T]] =
   ## Returns the adjacent vectors of the given vector as an array.
   ## The array is 3 ** 4 in length
   ## and contains the given vector so it can be used as a 4D array.
